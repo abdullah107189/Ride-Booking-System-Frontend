@@ -1,7 +1,8 @@
-// RegistrationForm.tsx
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import registerImage from "@/assets/Journey-pana.png";
 import {
   Form,
   FormControl,
@@ -28,13 +29,14 @@ import { useEffect, useState } from "react";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { formSchema } from "./reg.schema";
 import type z from "zod/v3";
+import { Link } from "react-router";
+
 export function RegistrationForm() {
   type FormValues = z.infer<typeof formSchema>;
   const [userType, setUserType] = useState<"rider" | "driver">("rider");
 
   const [register, { isLoading }] = useRegisterMutation();
 
-  // 🔥 Separate default values for each role
   const riderDefaultValues = {
     role: "rider" as const,
     name: "",
@@ -58,24 +60,16 @@ export function RegistrationForm() {
   };
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: riderDefaultValues, // 🔥 Initially rider values
+    defaultValues: riderDefaultValues,
   });
 
-  // Watch role changes
   const selectedRole = form.watch("role");
   useEffect(() => {
-    if (selectedRole === "rider") {
-      form.reset(riderDefaultValues);
-    } else {
-      form.reset(driverDefaultValues);
-    }
+    form.setValue("role", selectedRole);
   }, [selectedRole, form]);
 
   const onSubmit = async (data: FormValues) => {
     try {
-      console.log("Registration data:", data);
-
-      // Prepare API data based on role
       const apiData = {
         name: data.name,
         email: data.email,
@@ -91,15 +85,16 @@ export function RegistrationForm() {
           currentLocation: {
             location: {
               type: "Point",
-              coordinates: [90.412518, 23.810331], // Default Dhaka coordinates
+              coordinates: [90.412518, 23.810331],
             },
             address: data.address,
           },
         }),
       };
+
       console.log(apiData);
-      // Call RTK Query mutation
-      //   const result = await register(apiData).unwrap();
+
+      const result = await register(apiData).unwrap();
 
       toast.success("Registration successful! 🎉", {
         description: `Welcome aboard, ${data.name}!`,
@@ -118,17 +113,16 @@ export function RegistrationForm() {
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
-          <a href="#" className="flex items-center gap-2 font-medium">
+          <Link to={"/"} className="flex items-center gap-2 font-medium">
             <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
               <GalleryVerticalEnd className="size-4" />
             </div>
             RideShare
-          </a>
+          </Link>
         </div>
 
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-md">
-            {/* Role Selection Toggle */}
             <div className="mb-8">
               <h1 className="text-2xl font-bold text-center mb-6">
                 Create Your Account
@@ -176,7 +170,6 @@ export function RegistrationForm() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-4"
               >
-                {/* Common Fields */}
                 <FormField
                   control={form.control}
                   name="name"
@@ -247,7 +240,6 @@ export function RegistrationForm() {
                   )}
                 />
 
-                {/* Driver Specific Fields - Only show when driver is selected */}
                 {selectedRole === "driver" && (
                   <div className="space-y-4 p-4 border border-primary/20 rounded-lg bg-primary/5">
                     <h3 className="font-semibold text-primary flex items-center gap-2">
@@ -345,7 +337,6 @@ export function RegistrationForm() {
                   </div>
                 )}
 
-                {/* Password Fields */}
                 <FormField
                   control={form.control}
                   name="password"
@@ -427,7 +418,7 @@ export function RegistrationForm() {
 
       <div className="bg-muted relative hidden lg:block">
         <img
-          src="/placeholder.svg"
+          src={registerImage}
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
