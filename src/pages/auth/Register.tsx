@@ -92,8 +92,6 @@ export function RegistrationForm() {
         }),
       };
 
-      console.log(apiData);
-
       const result = await register(apiData).unwrap();
 
       toast.success("Registration successful! 🎉", {
