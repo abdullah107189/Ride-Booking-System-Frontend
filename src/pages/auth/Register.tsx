@@ -12,6 +12,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import {
   Calendar,
@@ -260,6 +267,11 @@ export function RegistrationForm() {
                                 placeholder="DHA-12345"
                                 className="pl-10 bg-background border-input transition-all focus:border-primary"
                                 {...field}
+                                onChange={(e) => {
+                                  // Convert to uppercase and only allow A-Z, 0-9, and -
+                                  const value = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+                                  field.onChange(value);
+                                }}
                               />
                             </div>
                           </FormControl>
@@ -298,11 +310,16 @@ export function RegistrationForm() {
                               Car Type
                             </FormLabel>
                             <FormControl>
-                              <Input
-                                placeholder="Sedan, SUV, etc."
-                                className="bg-background border-input transition-all focus:border-primary"
-                                {...field}
-                              />
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <SelectTrigger className="bg-background border-input transition-all focus:border-primary">
+                                  <SelectValue placeholder="Select vehicle type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="car">Car</SelectItem>
+                                  <SelectItem value="bike">Bike</SelectItem>
+                                  <SelectItem value="cng">CNG</SelectItem>
+                                </SelectContent>
+                              </Select>
                             </FormControl>
                             <FormMessage />
                           </FormItem>

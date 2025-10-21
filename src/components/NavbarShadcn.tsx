@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/popover";
 import ThemeToggle from "./theme-toggle";
 import UserMenu from "./user-menu";
+import { useGetMeQuery } from "@/redux/features/auth/auth.api";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -22,7 +23,8 @@ const navigationLinks = [
 ];
 
 export default function NavbarOrigin() {
-  // const {data: }
+  const { data: userInfo } = useGetMeQuery(undefined);
+  console.log("userInfo", userInfo);
   return (
     <header className="border-b px-4 md:px-6">
       <div className="wmx flex h-16 items-center justify-between gap-4">

@@ -34,7 +34,12 @@ const commonSchema = z.object({
 
 const driverSchema = commonSchema.extend({
   role: z.literal("driver"),
-  licensePlate: z.string().min(3),
+  licensePlate: z
+    .string()
+    .min(3)
+    .regex(/^[A-Z0-9-]*$/, {
+      message: "License plate must contain only uppercase letters, numbers, and hyphens",
+    }),
   model: z.string().min(2),
   carType: z.string().min(2),
   address: z.string().min(5),
