@@ -1,4 +1,4 @@
-import NavbarOrigin from "../comp-577";
+import NavbarOrigin from "../NavbarShadcn";
 
 export default function Navbar() {
   return <NavbarOrigin></NavbarOrigin>;

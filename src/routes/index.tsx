@@ -1,6 +1,7 @@
 import App from "@/App";
 import AdminLayout from "@/components/layout/AdminLayout";
 import AddRide from "@/pages/admin/AddRide";
+import { LoginForm } from "@/pages/auth/Login";
 import { RegistrationForm } from "@/pages/auth/Register";
 import Home from "@/pages/public/Home";
 import { createBrowserRouter } from "react-router";
@@ -29,5 +30,9 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     Component: RegistrationForm,
+  },
+  {
+    path: "/login",
+    Component: LoginForm,
   },
 ]);

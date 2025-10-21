@@ -29,7 +29,8 @@ import { useEffect, useState } from "react";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { formSchema } from "./reg.schema";
 import type z from "zod/v3";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import PasswordInput from "@/components/passwordInput";
 
 export function RegistrationForm() {
   type FormValues = z.infer<typeof formSchema>;
@@ -67,7 +68,7 @@ export function RegistrationForm() {
   useEffect(() => {
     form.setValue("role", selectedRole);
   }, [selectedRole, form]);
-
+  const navigate = useNavigate();
   const onSubmit = async (data: FormValues) => {
     try {
       const apiData = {
@@ -91,9 +92,8 @@ export function RegistrationForm() {
           },
         }),
       };
-
       const result = await register(apiData).unwrap();
-
+      navigate("/");
       toast.success("Registration successful! 🎉", {
         description: `Welcome aboard, ${data.name}!`,
       });
@@ -345,11 +345,9 @@ export function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            type="password"
+                          <PasswordInput
                             placeholder="••••••••"
-                            className="pl-10 bg-background border-input transition-all focus:border-primary"
+                            className=" bg-background border-input transition-all focus:border-primary"
                             {...field}
                           />
                         </div>
@@ -369,11 +367,9 @@ export function RegistrationForm() {
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            type="password"
+                          <PasswordInput
                             placeholder="••••••••"
-                            className="pl-10 bg-background border-input transition-all focus:border-primary"
+                            className=" bg-background border-input transition-all focus:border-primary"
                             {...field}
                           />
                         </div>
@@ -401,12 +397,13 @@ export function RegistrationForm() {
 
                 <p className="text-center text-sm text-muted-foreground">
                   Already have an account?
-                  <a
-                    href="#"
+                  <Link
+                    to="/login"
                     className="text-primary hover:underline font-medium transition-colors"
                   >
+                    {" "}
                     Sign in here
-                  </a>
+                  </Link>
                 </p>
               </form>
             </Form>
