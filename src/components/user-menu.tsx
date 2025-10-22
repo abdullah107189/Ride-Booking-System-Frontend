@@ -9,7 +9,9 @@ import {
   UserIcon,
   LogInIcon,
 } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useLogoutMutation } from "@/redux/features/auth/auth.api";
+import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -31,8 +33,25 @@ export default function UserMenu({
   isLoading: boolean;
 }) {
   console.log("data", data);
+  const navigate = useNavigate();
+  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 
   if (isLoading) return <div>Loading...</div>;
+
+  const handleLogout = async () => {
+    try {
+      await logout(undefined).unwrap();
+      toast.success("Logged out successfully!", {
+        description: "You have been logged out.",
+      });
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      toast.error("Logout failed", {
+        description: "Please try again.",
+      });
+    }
+  };
 
   // Generate user initials from name
   const getUserInitials = (name: string) => {
@@ -112,9 +131,9 @@ export default function UserMenu({
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut}>
           <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
-          <span>Logout</span>
+          <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
