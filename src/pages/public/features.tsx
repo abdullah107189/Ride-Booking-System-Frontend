@@ -1,4 +1,3 @@
-// src/app/features/page.tsx
 "use client";
 
 import {
@@ -15,7 +14,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-// ফিচার ডেটা (আগের আলোচনা অনুযায়ী)
 const featureData = {
   rider: [
     {
@@ -97,7 +95,6 @@ const featureData = {
   ],
 };
 
-// ফিচার কার্ড কম্পোনেন্ট
 interface FeatureCardProps {
   icon: React.ElementType;
   title: string;
@@ -124,7 +121,6 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   </Card>
 );
 
-// প্রধান কম্পোনেন্ট
 export default function FeaturesPage() {
   return (
     <section className="py-16 md:py-24 bg-background">

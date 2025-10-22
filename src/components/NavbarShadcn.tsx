@@ -82,8 +82,8 @@ export default function NavbarOrigin() {
                         to={link.href}
                         className={`block w-full py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
                           isActive(link.href)
-                            ? "bg-primary text-primary-foreground"
-                            : "text-muted-foreground hover:text-primary hover:bg-muted"
+                            ? "bg-muted text-primary"
+                            : "text-muted-foreground hover:text-primary bg-muted"
                         }`}
                       >
                         {link.label}
@@ -111,7 +111,7 @@ export default function NavbarOrigin() {
                       to={link.href}
                       className={`py-1.5 px-3 rounded-md font-medium transition-colors ${
                         isActive(link.href)
-                          ? "bg-primary text-primary-foreground"
+                          ? "bg-muted text-primary"
                           : "text-muted-foreground hover:text-primary hover:bg-muted"
                       }`}
                     >
