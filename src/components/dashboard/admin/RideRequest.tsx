@@ -42,6 +42,7 @@ import {
   DollarSign,
   Users,
   Coins,
+  Caravan,
 } from "lucide-react";
 
 // Validation Schema
@@ -148,17 +149,17 @@ export function RideRequestForm() {
       price: "80-120 BDT",
     },
     {
+      value: "cng",
+      label: "cng",
+      icon: Caravan,
+      description: "Cheap & convenient",
+      price: "250-350 BDT",
+    },
+    {
       value: "car",
       label: "Car",
       icon: Car,
       description: "Comfortable & safe",
-      price: "150-200 BDT",
-    },
-    {
-      value: "premium",
-      label: "Premium",
-      icon: Crown,
-      description: "Luxury experience",
       price: "250-350 BDT",
     },
   ];
@@ -201,320 +202,314 @@ export function RideRequestForm() {
   }, [watchPickup, watchDestination, watchVehicleType]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            Book Your Ride
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Safe, reliable, and affordable rides across the city
-          </p>
-        </div>
+    <div className="  py-5">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-foreground mb-4">
+          Book Your Ride
+        </h1>
+        <p className="text-xl text-muted-foreground">
+          Safe, reliable, and affordable rides across the city
+        </p>
+      </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Form */}
-          <div className="lg:col-span-2">
-            <Card className="border border-border shadow-2xl">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-2xl flex items-center gap-2 text-card-foreground">
-                  <Navigation className="h-6 w-6 text-primary" />
-                  Where to?
-                </CardTitle>
-                <CardDescription className="text-muted-foreground">
-                  Enter your pickup and destination locations
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
-                  >
-                    {/* Pickup Location */}
-                    <FormField
-                      control={form.control}
-                      name="pickupAddress"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-card-foreground flex items-center gap-2">
-                            <MapPin className="h-4 w-4 text-chart-2" />
-                            Pickup Location
-                          </FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Enter pickup address..."
-                                className="pl-10 border-2 border-input focus:border-primary transition-colors bg-background"
-                                {...field}
-                              />
-                              <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                                <div className="w-2 h-2 bg-chart-2 rounded-full"></div>
-                              </div>
+      <div className="grid lg:grid-cols-3 gap-8">
+        {/* Main Form */}
+        <div className="lg:col-span-2">
+          <Card className="border border-border shadow-2xl">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-2xl flex items-center gap-2 text-card-foreground">
+                <Navigation className="h-6 w-6 text-primary" />
+                Where to?
+              </CardTitle>
+              <CardDescription className="text-muted-foreground">
+                Enter your pickup and destination locations
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-6"
+                >
+                  {/* Pickup Location */}
+                  <FormField
+                    control={form.control}
+                    name="pickupAddress"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-card-foreground flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-chart-2" />
+                          Pickup Location
+                        </FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              placeholder="Enter pickup address..."
+                              className="pl-10 border-2 border-input focus:border-primary transition-colors bg-background"
+                              {...field}
+                            />
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                              <div className="w-2 h-2 bg-chart-2 rounded-full"></div>
                             </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                    {/* Destination Location */}
-                    <FormField
-                      control={form.control}
-                      name="destinationAddress"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-card-foreground flex items-center gap-2">
-                            <MapPin className="h-4 w-4 text-chart-1" />
-                            Destination
-                          </FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Where do you want to go?"
-                                className="pl-10 border-2 border-input focus:border-primary transition-colors bg-background"
-                                {...field}
-                              />
-                              <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                                <div className="w-2 h-2 bg-chart-1 rounded-full"></div>
-                              </div>
+                  {/* Destination Location */}
+                  <FormField
+                    control={form.control}
+                    name="destinationAddress"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-card-foreground flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-chart-1" />
+                          Destination
+                        </FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              placeholder="Where do you want to go?"
+                              className="pl-10 border-2 border-input focus:border-primary transition-colors bg-background"
+                              {...field}
+                            />
+                            <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                              <div className="w-2 h-2 bg-chart-1 rounded-full"></div>
                             </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                    {/* Vehicle Type Selection */}
-                    <FormField
-                      control={form.control}
-                      name="vehicleType"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-card-foreground">
-                            Vehicle Type
-                          </FormLabel>
-                          <FormControl>
-                            <div className="grid grid-cols-3 gap-4">
-                              {vehicleTypes.map((vehicle) => (
-                                <div
-                                  key={vehicle.value}
-                                  className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                                    field.value === vehicle.value
-                                      ? "border-primary bg-primary/10"
-                                      : "border-border hover:border-primary/50 bg-card"
-                                  }`}
-                                  onClick={() => field.onChange(vehicle.value)}
-                                >
-                                  <div className="flex items-center gap-3 mb-2">
-                                    <vehicle.icon
-                                      className={`h-6 w-6 ${
-                                        field.value === vehicle.value
-                                          ? "text-primary"
-                                          : "text-muted-foreground"
-                                      }`}
-                                    />
-                                    <span className="font-semibold text-card-foreground">
-                                      {vehicle.label}
-                                    </span>
-                                  </div>
-                                  <p className="text-sm text-muted-foreground mb-1">
-                                    {vehicle.description}
-                                  </p>
-                                  <p className="text-sm font-medium text-primary">
-                                    {vehicle.price}
-                                  </p>
+                  {/* Vehicle Type Selection */}
+                  <FormField
+                    control={form.control}
+                    name="vehicleType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-card-foreground">
+                          Vehicle Type
+                        </FormLabel>
+                        <FormControl>
+                          <div className="grid grid-cols-3 gap-4">
+                            {vehicleTypes.map((vehicle) => (
+                              <div
+                                key={vehicle.value}
+                                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                                  field.value === vehicle.value
+                                    ? "border-primary bg-primary/10"
+                                    : "border-border hover:border-primary/50 bg-card"
+                                }`}
+                                onClick={() => field.onChange(vehicle.value)}
+                              >
+                                <div className="flex items-center gap-3 mb-2">
+                                  <vehicle.icon
+                                    className={`h-6 w-6 ${
+                                      field.value === vehicle.value
+                                        ? "text-primary"
+                                        : "text-muted-foreground"
+                                    }`}
+                                  />
+                                  <span className="font-semibold text-card-foreground">
+                                    {vehicle.label}
+                                  </span>
                                 </div>
-                              ))}
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                                <p className="text-sm text-muted-foreground mb-1">
+                                  {vehicle.description}
+                                </p>
+                                <p className="text-sm font-medium text-primary">
+                                  {vehicle.price}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                    {/* Payment Method */}
-                    <FormField
-                      control={form.control}
-                      name="paymentMethod"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-card-foreground">
-                            Payment Method
-                          </FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="border-2 border-input focus:border-primary bg-background">
-                                <SelectValue placeholder="Select payment method" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {paymentMethods.map((method) => (
-                                <SelectItem
-                                  key={method.value}
-                                  value={method.value}
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <method.icon className="h-4 w-4 text-muted-foreground" />
-                                    <div>
-                                      <div className="font-medium text-foreground">
-                                        {method.label}
-                                      </div>
-                                      <div className="text-sm text-muted-foreground">
-                                        {method.description}
-                                      </div>
+                  {/* Payment Method */}
+                  <FormField
+                    control={form.control}
+                    name="paymentMethod"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-card-foreground">
+                          Payment Method
+                        </FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="border-2 border-input focus:border-primary bg-background">
+                              <SelectValue placeholder="Select payment method" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {paymentMethods.map((method) => (
+                              <SelectItem
+                                key={method.value}
+                                value={method.value}
+                              >
+                                <div className="flex items-center gap-3">
+                                  <method.icon className="h-4 w-4 text-muted-foreground" />
+                                  <div>
+                                    <div className="font-medium text-foreground">
+                                      {method.label}
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">
+                                      {method.description}
                                     </div>
                                   </div>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    {/* Submit Button */}
-                    <Button
-                      type="submit"
-                      disabled={form.formState.isSubmitting || !estimatedFare}
-                      className="w-full bg-primary hover:bg-primary/90 py-6 text-lg font-semibold text-primary-foreground"
-                    >
-                      {form.formState.isSubmitting ? (
-                        <>
-                          <Clock className="mr-2 h-5 w-5 animate-spin" />
-                          Booking Your Ride...
-                        </>
-                      ) : (
-                        <>
-                          <Car className="mr-2 h-5 w-5" />
-                          Confirm & Book Ride
-                        </>
-                      )}
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Ride Summary */}
-          <div className="space-y-6">
-            {/* Fare Estimate */}
-            <Card className="border border-border shadow-2xl">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-card-foreground">
-                  <DollarSign className="h-5 w-5 text-chart-2" />
-                  Fare Estimate
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {isCalculating ? (
-                  <div className="text-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-muted-foreground">
-                      Calculating your fare...
-                    </p>
-                  </div>
-                ) : estimatedFare ? (
-                  <>
-                    <div className="text-center py-4">
-                      <div className="text-3xl font-bold text-card-foreground mb-2">
-                        ৳{estimatedFare}
-                      </div>
-                      <p className="text-muted-foreground">Estimated fare</p>
-                    </div>
-
-                    <div className="space-y-3 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Base fare</span>
-                        <span className="text-card-foreground">
-                          ৳
-                          {
-                            vehicleTypes
-                              .find((v) => v.value === watchVehicleType)
-                              ?.price.split("-")[0]
-                          }
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Distance</span>
-                        <span className="text-card-foreground">
-                          ৳{Math.floor(estimatedFare * 0.6)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Time</span>
-                        <span className="text-card-foreground">
-                          ৳{Math.floor(estimatedFare * 0.4)}
-                        </span>
-                      </div>
-                      <div className="border-t border-border pt-2 flex justify-between font-semibold text-card-foreground">
-                        <span>Total</span>
-                        <span>৳{estimatedFare}</span>
-                      </div>
-                    </div>
-
-                    {estimatedTime && (
-                      <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mt-4">
-                        <Clock className="h-4 w-4" />
-                        <span>Est. {estimatedTime} minutes</span>
-                      </div>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
                     )}
-                  </>
-                ) : (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Navigation className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                    <p>Enter locations to see fare estimate</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                  />
 
-            {/* Safety Features */}
-            <Card className="border border-border shadow-2xl">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-card-foreground">
-                  <Users className="h-5 w-5 text-chart-3" />
-                  Safety First
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 text-sm">
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-chart-3/20 rounded-full flex items-center justify-center">
-                    <span className="text-chart-3 text-xs">✓</span>
-                  </div>
-                  <span className="text-card-foreground">Verified drivers</span>
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    disabled={form.formState.isSubmitting || !estimatedFare}
+                    className="w-full bg-primary hover:bg-primary/90 py-6 text-lg font-semibold text-primary-foreground"
+                  >
+                    {form.formState.isSubmitting ? (
+                      <>
+                        <Clock className="mr-2 h-5 w-5 animate-spin" />
+                        Booking Your Ride...
+                      </>
+                    ) : (
+                      <>
+                        <Car className="mr-2 h-5 w-5" />
+                        Confirm & Book Ride
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Ride Summary */}
+        <div className="space-y-6">
+          {/* Fare Estimate */}
+          <Card className="border border-border shadow-2xl">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-card-foreground">
+                <DollarSign className="h-5 w-5 text-chart-2" />
+                Fare Estimate
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {isCalculating ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                  <p className="text-muted-foreground">
+                    Calculating your fare...
+                  </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-chart-3/20 rounded-full flex items-center justify-center">
-                    <span className="text-chart-3 text-xs">✓</span>
+              ) : estimatedFare ? (
+                <>
+                  <div className="text-center py-4">
+                    <div className="text-3xl font-bold text-card-foreground mb-2">
+                      ৳{estimatedFare}
+                    </div>
+                    <p className="text-muted-foreground">Estimated fare</p>
                   </div>
-                  <span className="text-card-foreground">
-                    Real-time tracking
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-chart-3/20 rounded-full flex items-center justify-center">
-                    <span className="text-chart-3 text-xs">✓</span>
+
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Base fare</span>
+                      <span className="text-card-foreground">
+                        ৳
+                        {
+                          vehicleTypes
+                            .find((v) => v.value === watchVehicleType)
+                            ?.price.split("-")[0]
+                        }
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Distance</span>
+                      <span className="text-card-foreground">
+                        ৳{Math.floor(estimatedFare * 0.6)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Time</span>
+                      <span className="text-card-foreground">
+                        ৳{Math.floor(estimatedFare * 0.4)}
+                      </span>
+                    </div>
+                    <div className="border-t border-border pt-2 flex justify-between font-semibold text-card-foreground">
+                      <span>Total</span>
+                      <span>৳{estimatedFare}</span>
+                    </div>
                   </div>
-                  <span className="text-card-foreground">24/7 support</span>
+
+                  {estimatedTime && (
+                    <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mt-4">
+                      <Clock className="h-4 w-4" />
+                      <span>Est. {estimatedTime} minutes</span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Navigation className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p>Enter locations to see fare estimate</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-chart-3/20 rounded-full flex items-center justify-center">
-                    <span className="text-chart-3 text-xs">✓</span>
-                  </div>
-                  <span className="text-card-foreground">
-                    Emergency contact
-                  </span>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Safety Features */}
+          <Card className="border border-border shadow-2xl">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-card-foreground">
+                <Users className="h-5 w-5 text-chart-3" />
+                Safety First
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm">
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-chart-3/20 rounded-full flex items-center justify-center">
+                  <span className="text-chart-3 text-xs">✓</span>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+                <span className="text-card-foreground">Verified drivers</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-chart-3/20 rounded-full flex items-center justify-center">
+                  <span className="text-chart-3 text-xs">✓</span>
+                </div>
+                <span className="text-card-foreground">Real-time tracking</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-chart-3/20 rounded-full flex items-center justify-center">
+                  <span className="text-chart-3 text-xs">✓</span>
+                </div>
+                <span className="text-card-foreground">24/7 support</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-chart-3/20 rounded-full flex items-center justify-center">
+                  <span className="text-chart-3 text-xs">✓</span>
+                </div>
+                <span className="text-card-foreground">Emergency contact</span>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
