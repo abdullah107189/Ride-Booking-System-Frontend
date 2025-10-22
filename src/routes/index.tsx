@@ -4,6 +4,7 @@ import AddRide from "@/pages/admin/AddRide";
 import { LoginForm } from "@/pages/auth/Login";
 import { RegistrationForm } from "@/pages/auth/Register";
 import About from "@/pages/public/About";
+import FeaturesPage from "@/pages/public/features";
 import Home from "@/pages/public/Home";
 import { createBrowserRouter } from "react-router";
 
@@ -19,6 +20,10 @@ export const router = createBrowserRouter([
       {
         path: "/about",
         Component: About,
+      },
+      {
+        path: "/features",
+        Component: FeaturesPage,
       },
     ],
   },

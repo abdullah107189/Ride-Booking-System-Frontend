@@ -17,7 +17,8 @@ import { Link, useLocation } from "react-router";
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
+  { href: "/about", label: "About Us" },
+  { href: "/features", label: "Features" },
   { href: "/login", label: "Login" },
   { href: "/register", label: "Register" },
 ];
