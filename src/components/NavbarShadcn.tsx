@@ -23,8 +23,7 @@ const navigationLinks = [
 ];
 
 export default function NavbarOrigin() {
-  const { data: userInfo } = useGetMeQuery(undefined);
-  console.log("userInfo", userInfo);
+  const { data: userInfo, isLoading } = useGetMeQuery(undefined);
   return (
     <header className="border-b px-4 md:px-6">
       <div className="wmx flex h-16 items-center justify-between gap-4">
@@ -112,7 +111,7 @@ export default function NavbarOrigin() {
           <ThemeToggle />
 
           {/* User menu */}
-          <UserMenu />
+          <UserMenu data={userInfo} isLoading={isLoading} />
         </div>
       </div>
     </header>
