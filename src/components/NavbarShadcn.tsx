@@ -13,18 +13,48 @@ import UserMenu from "./user-menu";
 import { useGetMeQuery } from "@/redux/features/auth/auth.api";
 import { ModeToggle } from "./mode-toggle";
 import { Link, useLocation } from "react-router";
+import { role } from "@/const";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About Us" },
-  { href: "/features", label: "Features" },
-  { href: "/login", label: "Login" },
-  { href: "/register", label: "Register" },
+  { href: "/", label: "Home", role: role.PUBLIC },
+  { href: "/about", label: "About", role: role.PUBLIC },
+  { href: "/features", label: "Features", role: role.PUBLIC },
+  { href: "/login", label: "Login", role: role.PUBLIC },
+  { href: "/register", label: "Register", role: role.PUBLIC },
+  // dashboard
+  { href: "/admin", label: "Dashboard", role: role.ADMIN },
+  { href: "/rider", label: "Dashboard", role: role.RIDER },
+  { href: "/driver", label: "Dashboard", role: role.DRIVER },
 ];
 
 export default function NavbarOrigin() {
   const { data: userInfo, isLoading } = useGetMeQuery(undefined);
+
+  const filteredNavigationLinks = navigationLinks.filter((link) => {
+    const userIsLoggedIn = !!userInfo?.role;
+    const userRole = userInfo?.role;
+    if (link.role === role.PUBLIC) {
+      if (
+        userIsLoggedIn &&
+        (link.href === "/login" || link.href === "/register")
+      ) {
+        return false;
+      }
+      return true;
+    }
+
+    if (!userIsLoggedIn) {
+      return false;
+    }
+
+    if (link.role === userRole) {
+      return true;
+    }
+
+    return false;
+  });
+
   const location = useLocation();
 
   const isActive = (path: string) => {
@@ -73,14 +103,15 @@ export default function NavbarOrigin() {
                 </svg>
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-36 p-1 md:hidden">
+
+            <PopoverContent align="start" className=" p-1 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
-                <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, index) => (
-                    <NavigationMenuItem key={index} className="w-full">
+                <NavigationMenuList className="flex-col items-start gap-2 md:gap-2">
+                  {filteredNavigationLinks.map((link, index) => (
+                    <NavigationMenuItem className="w-full" key={index}>
                       <Link
                         to={link.href}
-                        className={`block w-full py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
+                        className={` py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
                           isActive(link.href)
                             ? "bg-muted text-primary"
                             : "text-muted-foreground hover:text-primary bg-muted"
@@ -104,15 +135,15 @@ export default function NavbarOrigin() {
             </Link>
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
-                  <NavigationMenuItem key={index}>
+              <NavigationMenuList className="flex-row items-center gap-4">
+                {filteredNavigationLinks.map((link, index) => (
+                  <NavigationMenuItem className="w-full" key={index}>
                     <Link
                       to={link.href}
-                      className={`py-1.5 px-3 rounded-md font-medium transition-colors ${
+                      className={`py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
                         isActive(link.href)
                           ? "bg-muted text-primary"
-                          : "text-muted-foreground hover:text-primary hover:bg-muted"
+                          : "text-muted-foreground hover:text-primary bg-muted"
                       }`}
                     >
                       {link.label}
