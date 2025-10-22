@@ -3,7 +3,7 @@ import UnauthorizedPage from "@/components/shared/UnauthorizedPage";
 import { role } from "@/const";
 import AdminDashboard from "@/dashboard/AdminDashboard";
 import DriverDashboard from "@/dashboard/DriverDashboard";
-import RiderDashboard from "@/dashboard/RiderDashboard";
+import { RiderDashboard } from "@/dashboard/RiderDashboard";
 import AddRide from "@/pages/admin/AddRide";
 import { LoginForm } from "@/pages/auth/Login";
 import { RegistrationForm } from "@/pages/auth/Register";
