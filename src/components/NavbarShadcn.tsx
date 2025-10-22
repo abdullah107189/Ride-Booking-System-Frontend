@@ -32,7 +32,7 @@ const navigationLinks = [
 
 export default function NavbarOrigin() {
   const { data: userInfo, isLoading } = useGetMeQuery(undefined);
-
+console.log(userInfo);
   const filteredNavigationLinks = navigationLinks.filter((link) => {
     const userIsLoggedIn = !!userInfo?.role;
     const userRole = userInfo?.role;

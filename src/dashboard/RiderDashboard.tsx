@@ -26,7 +26,7 @@ import {
   Calendar,
   ArrowUpDown,
 } from "lucide-react";
-import { RideRequestForm } from "@/components/dashboard/admin/RideRequest";
+import { SimpleRideRequestForm } from "@/components/dashboard/admin/RideRequest";
 
 // Mock data
 const ongoingRide = {
@@ -379,7 +379,7 @@ export function RiderDashboard() {
                 </Card>
               </TabsContent> */}
               <TabsContent value="book">
-                <RideRequestForm></RideRequestForm>
+                <SimpleRideRequestForm></SimpleRideRequestForm>
               </TabsContent>
               {/* Ride History Tab */}
               <TabsContent value="history">
