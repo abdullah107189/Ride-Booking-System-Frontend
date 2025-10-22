@@ -25,7 +25,7 @@ const navigationLinks = [
 export default function NavbarOrigin() {
   const { data: userInfo, isLoading } = useGetMeQuery(undefined);
   return (
-    <header className="border-b md:px-6">
+    <header className="border-b md:px-6 sticky top-0 z-50 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
       <div className="mxw flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex items-center gap-2">
