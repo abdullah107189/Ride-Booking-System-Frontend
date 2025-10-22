@@ -25,8 +25,8 @@ const navigationLinks = [
 export default function NavbarOrigin() {
   const { data: userInfo, isLoading } = useGetMeQuery(undefined);
   return (
-    <header className="border-b px-4 md:px-6">
-      <div className="wmx flex h-16 items-center justify-between gap-4">
+    <header className="border-b md:px-6">
+      <div className="mxw flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex items-center gap-2">
           {/* Mobile menu trigger */}
