@@ -10,7 +10,7 @@ import {
   LogInIcon,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router";
-import { useLogoutMutation } from "@/redux/features/auth/auth.api";
+import { authApi, useLogoutMutation } from "@/redux/features/auth/auth.api";
 import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,6 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDispatch } from "react-redux";
 
 export default function UserMenu({
   data,
@@ -34,6 +35,7 @@ export default function UserMenu({
 }) {
   console.log("data", data);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 
   if (isLoading) return <div>Loading...</div>;
@@ -41,6 +43,7 @@ export default function UserMenu({
   const handleLogout = async () => {
     try {
       await logout(undefined).unwrap();
+      dispatch(authApi.util.resetApiState());
       toast.success("Logged out successfully!", {
         description: "You have been logged out.",
       });
