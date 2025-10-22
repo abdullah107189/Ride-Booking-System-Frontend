@@ -20,6 +20,8 @@ const navigationLinks = [
   { href: "/", label: "Home", role: role.PUBLIC },
   { href: "/about", label: "About", role: role.PUBLIC },
   { href: "/features", label: "Features", role: role.PUBLIC },
+  { href: "/contact", label: "Contact", role: role.PUBLIC },
+  { href: "/faq", label: "FAQ", role: role.PUBLIC },
   { href: "/login", label: "Login", role: role.PUBLIC },
   { href: "/register", label: "Register", role: role.PUBLIC },
   // dashboard
