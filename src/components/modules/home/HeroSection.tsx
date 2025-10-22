@@ -11,10 +11,10 @@ export function HeroSection() {
           <div className="space-y-6 sm:space-y-8">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight sm:leading-tight">
               Ride With
-              <span className="text-accent block sm:inline"> Confidence</span>&
+              <span className="text-background block sm:inline"> Confidence</span>&
               Comfort
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-lg leading-relaxed">
+            <p className="sm:text-lg md:text-xl text-foreground max-w-lg leading-relaxed">
               Book your ride in seconds. Experience premium transportation
               services with verified drivers and real-time tracking.
             </p>
@@ -37,19 +37,19 @@ export function HeroSection() {
             <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-4 sm:gap-6 md:gap-8 text-sm">
               <div className="text-center">
                 <div className="text-xl sm:text-2xl font-bold">10K+</div>
-                <div className="text-muted-foreground text-xs sm:text-sm">
+                <div className="text-foreground text-xs sm:text-sm">
                   Happy Riders
                 </div>
               </div>
               <div className="text-center">
                 <div className="text-xl sm:text-2xl font-bold">500+</div>
-                <div className="text-muted-foreground text-xs sm:text-sm">
+                <div className="text-foreground text-xs sm:text-sm">
                   Verified Drivers
                 </div>
               </div>
               <div className="text-center">
                 <div className="text-xl sm:text-2xl font-bold">50+</div>
-                <div className="text-muted-foreground text-xs sm:text-sm">
+                <div className="text-foreground text-xs sm:text-sm">
                   Cities
                 </div>
               </div>

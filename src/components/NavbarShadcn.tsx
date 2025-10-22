@@ -10,9 +10,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import ThemeToggle from "./theme-toggle";
 import UserMenu from "./user-menu";
 import { useGetMeQuery } from "@/redux/features/auth/auth.api";
+import { ModeToggle } from "./mode-toggle";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -108,7 +108,7 @@ export default function NavbarOrigin() {
         {/* Right side */}
         <div className="flex items-center gap-2">
           {/* Theme toggle */}
-          <ThemeToggle />
+          <ModeToggle></ModeToggle>
 
           {/* User menu */}
           <UserMenu data={userInfo} isLoading={isLoading} />
