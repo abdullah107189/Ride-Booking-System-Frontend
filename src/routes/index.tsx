@@ -1,11 +1,15 @@
 import App from "@/App";
-import AdminLayout from "@/components/layout/AdminLayout";
+import { role } from "@/const";
+import AdminDashboard from "@/dashboard/AdminDashboard";
+import DriverDashboard from "@/dashboard/DriverDashboard";
+import RiderDashboard from "@/dashboard/RiderDashboard";
 import AddRide from "@/pages/admin/AddRide";
 import { LoginForm } from "@/pages/auth/Login";
 import { RegistrationForm } from "@/pages/auth/Register";
 import About from "@/pages/public/About";
 import FeaturesPage from "@/pages/public/features";
 import Home from "@/pages/public/Home";
+import { withAuth } from "@/utils/withAuth";
 import { createBrowserRouter } from "react-router";
 
 export const router = createBrowserRouter([
@@ -28,8 +32,28 @@ export const router = createBrowserRouter([
     ],
   },
   {
+    path: "/rider",
+    Component: withAuth(RiderDashboard, role.RIDER),
+    children: [
+      {
+        path: "add-ride",
+        Component: AddRide,
+      },
+    ],
+  },
+  {
+    path: "/driver",
+    Component: withAuth(DriverDashboard, role.DRIVER),
+    children: [
+      {
+        path: "add-ride",
+        Component: AddRide,
+      },
+    ],
+  },
+  {
     path: "/admin",
-    Component: AdminLayout,
+    Component: withAuth(AdminDashboard, role.ADMIN),
     children: [
       {
         path: "add-ride",
