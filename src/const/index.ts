@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import type { ComponentType } from "react";
 
 export const enum role {
@@ -11,9 +12,7 @@ export type TRole = "admin" | "driver" | "rider" | "guest" | "public";
 
 export interface ISidebarItem {
   title: string;
-  items: {
-    title: string;
-    url: string;
-    component: ComponentType;
-  }[];
+  url: string;
+  icon: LucideIcon;
+  component: ComponentType;
 }

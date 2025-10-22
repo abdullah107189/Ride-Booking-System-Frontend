@@ -16,40 +16,33 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link } from "react-router";
-
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Ride Overview",
-      url: "/rider/overview ",
-      icon: SquareTerminal,
-    },
-    {
-      title: "Ride Requests",
-      url: "/rider/ride-requests",
-      icon: Receipt,
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-};
+import { riderSidBarItems } from "@/routes/riderSideBarItem";
+import { getSidebarItems } from "@/utils/getSidebarItems";
+import { useGetMeQuery } from "@/redux/features/auth/auth.api";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: userInfo } = useGetMeQuery(undefined);
+  const data = {
+    user: {
+      name: "shadcn",
+      email: "m@example.com",
+      avatar: "/avatars/shadcn.jpg",
+    },
+    navMain: getSidebarItems(userInfo.role) || riderSidBarItems,
+    navSecondary: [
+      {
+        title: "Support",
+        url: "#",
+        icon: LifeBuoy,
+      },
+      {
+        title: "Feedback",
+        url: "#",
+        icon: Send,
+      },
+    ],
+  };
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>

@@ -545,7 +545,7 @@ import {
 import { Separator } from "@radix-ui/react-separator";
 import { Outlet } from "react-router";
 
-export default function Page() {
+export default function RiderDashboard() {
   return (
     <SidebarProvider>
       <AppSidebar />

@@ -17,6 +17,10 @@ import RiderOverview from "@/pages/rider/RiderOverview";
 import { generateRoutes } from "@/utils/genarateRoute";
 import { withAuth } from "@/utils/withAuth";
 import { createBrowserRouter, Navigate } from "react-router";
+import { riderSidBarItems } from "./riderSideBarItem";
+import { driverSidBarItems } from "./driverSideBarItem";
+import { adminSidBarItems } from "./adminSideBarItem";
+import CommonDashboard from "@/dashboard/CommontDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -47,35 +51,18 @@ export const router = createBrowserRouter([
   },
   {
     path: "/rider",
-    Component: withAuth(RiderDashboard, role.RIDER),
-    children: [
-      { path: "/rider/overview", Component: RiderOverview },
-      {
-        path: "/rider/ride-requests",
-        Component: RideRequest,
-      },
-      // ...generateRoutes(userSidebarItems),
-    ],
+    Component: withAuth(CommonDashboard, role.RIDER),
+    children: [...generateRoutes(riderSidBarItems)],
   },
   {
     path: "/driver",
-    Component: withAuth(DriverDashboard, role.DRIVER),
-    children: [
-      {
-        path: "add-ride",
-        Component: AddRide,
-      },
-    ],
+    Component: withAuth(CommonDashboard, role.DRIVER),
+    children: [...generateRoutes(driverSidBarItems)],
   },
   {
     path: "/admin",
-    Component: withAuth(AdminDashboard, role.ADMIN),
-    children: [
-      {
-        path: "add-ride",
-        Component: AddRide,
-      },
-    ],
+    Component: withAuth(CommonDashboard, role.ADMIN),
+    children: [...generateRoutes(adminSidBarItems)],
   },
   {
     path: "/register",
