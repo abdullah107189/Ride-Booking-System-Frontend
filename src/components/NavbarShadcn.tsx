@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import {
@@ -13,17 +12,26 @@ import {
 import UserMenu from "./user-menu";
 import { useGetMeQuery } from "@/redux/features/auth/auth.api";
 import { ModeToggle } from "./mode-toggle";
+import { Link, useLocation } from "react-router";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "#", label: "Home", active: true },
-  { href: "#", label: "Features" },
-  { href: "#", label: "Pricing" },
-  { href: "#", label: "About" },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/login", label: "Login" },
+  { href: "/register", label: "Register" },
 ];
 
 export default function NavbarOrigin() {
   const { data: userInfo, isLoading } = useGetMeQuery(undefined);
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return location.pathname === "/";
+    }
+    return location.pathname.startsWith(path);
+  };
   return (
     <header className="border-b md:px-6 sticky top-0 z-50 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
       <div className="mxw flex h-16 items-center justify-between gap-4">
@@ -69,13 +77,16 @@ export default function NavbarOrigin() {
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink
-                        href={link.href}
-                        className="py-1.5"
-                        active={link.active}
+                      <Link
+                        to={link.href}
+                        className={`block w-full py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
+                          isActive(link.href)
+                            ? "bg-primary text-primary-foreground"
+                            : "text-muted-foreground hover:text-primary hover:bg-muted"
+                        }`}
                       >
                         {link.label}
-                      </NavigationMenuLink>
+                      </Link>
                     </NavigationMenuItem>
                   ))}
                 </NavigationMenuList>
@@ -84,21 +95,27 @@ export default function NavbarOrigin() {
           </Popover>
           {/* Main nav */}
           <div className="flex items-center gap-6">
-            <a href="#" className="text-primary hover:text-primary/90">
-              Logo
-            </a>
+            <Link
+              to="/"
+              className="text-primary hover:text-primary/90 font-bold text-xl"
+            >
+              RideShare
+            </Link>
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
-                    <NavigationMenuLink
-                      active={link.active}
-                      href={link.href}
-                      className="py-1.5 font-medium text-muted-foreground hover:text-primary"
+                    <Link
+                      to={link.href}
+                      className={`py-1.5 px-3 rounded-md font-medium transition-colors ${
+                        isActive(link.href)
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-primary hover:bg-muted"
+                      }`}
                     >
                       {link.label}
-                    </NavigationMenuLink>
+                    </Link>
                   </NavigationMenuItem>
                 ))}
               </NavigationMenuList>
