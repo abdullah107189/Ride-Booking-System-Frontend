@@ -3,7 +3,7 @@ import UnauthorizedPage from "@/components/shared/UnauthorizedPage";
 import { role } from "@/const";
 import AdminDashboard from "@/dashboard/AdminDashboard";
 import DriverDashboard from "@/dashboard/DriverDashboard";
-import { RiderDashboard } from "@/dashboard/RiderDashboard";
+import RiderDashboard from "@/dashboard/RiderDashboard";
 import AddRide from "@/pages/admin/AddRide";
 import { LoginForm } from "@/pages/auth/Login";
 import { RegistrationForm } from "@/pages/auth/Register";
@@ -12,8 +12,11 @@ import { ContactForm } from "@/pages/public/Contact";
 import { FAQSection } from "@/pages/public/FAQ";
 import FeaturesPage from "@/pages/public/features";
 import Home from "@/pages/public/Home";
+import RideRequest from "@/pages/rider/RideRequest";
+import RiderOverview from "@/pages/rider/RiderOverview";
+import { generateRoutes } from "@/utils/genarateRoute";
 import { withAuth } from "@/utils/withAuth";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 
 export const router = createBrowserRouter([
   {
@@ -46,10 +49,12 @@ export const router = createBrowserRouter([
     path: "/rider",
     Component: withAuth(RiderDashboard, role.RIDER),
     children: [
+      { path: "/rider/overview", Component: RiderOverview },
       {
-        path: "add-ride",
-        Component: AddRide,
+        path: "/rider/ride-requests",
+        Component: RideRequest,
       },
+      // ...generateRoutes(userSidebarItems),
     ],
   },
   {
