@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RideCard } from "@/components/modules/driver/RideCard";
+import { PageHeader } from "@/components/shared/PageHeader";
 import {
   useAcceptRideMutation,
   useGetAvailableRidesQuery,
 } from "@/redux/features/driver/driver.api";
 import type { IRide } from "@/types/ride";
+import { Car, MapPin } from "lucide-react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
@@ -70,28 +72,40 @@ export default function AvailableRides() {
 
   return (
     <div className=" bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
-            Available Rides
-          </h1>
-          <p className="text-muted-foreground">
-            {availableRides.length}{" "}
-            {availableRides.length === 1 ? "ride" : "rides"} available
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {availableRides.map((ride: IRide) => (
-            <RideCard
-              key={ride._id}
-              acceptRideLoading={acceptRideLoading}
-              ride={ride}
-              onAccept={handleAcceptRide}
-            />
-          ))}
+      <PageHeader title="Available Rides"></PageHeader>
+      <div className="flex items-center justify-end mt-2 mb-6">
+        <div className="flex items-center gap-2 rounded-2xl bg-primary/10 px-4 py-2">
+          <MapPin className="h-5 w-5 text-primary" />
+          <span>{availableRides.length}</span>
+          Available
         </div>
       </div>
+      <main className="container mx-auto px-4 py-8">
+        {availableRides.length === 0 ? (
+          <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
+            <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-muted">
+              <Car className="h-10 w-10 text-muted-foreground" />
+            </div>
+            <h2 className="mb-2 text-2xl font-bold text-foreground">
+              No rides available
+            </h2>
+            <p className="text-muted-foreground">
+              Check back soon for new ride requests in your area
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {availableRides.map((ride: IRide) => (
+              <RideCard
+                key={ride._id}
+                acceptRideLoading={acceptRideLoading}
+                ride={ride}
+                onAccept={handleAcceptRide}
+              />
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   );
 }

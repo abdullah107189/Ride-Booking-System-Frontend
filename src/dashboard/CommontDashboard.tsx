@@ -22,7 +22,7 @@ export default function CommonDashboard() {
             />
           </div>
         </header>
-        <div className="p-4">
+        <div className="px-4 pb-4">
           <Outlet></Outlet>
         </div>
       </SidebarInset>

@@ -12,7 +12,7 @@ export const driverSidBarItems: ISidebarItem[] = [
     component: AvailableRide,
   },
   {
-    title: "Tracked Rides",
+    title: "Ride Tracking",
     url: "/driver/tracked-rides",
     icon: Car,
     component: DriverTracking,

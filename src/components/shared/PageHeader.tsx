@@ -120,7 +120,7 @@ export function PageHeader({
           <div className="">
             {/* Title & Subtitle */}
             <div className="flex items-center gap-3 mb-3">
-              <h1 className="text-4xl font-bold text-foreground tracking-tight">
+              <h1 className="text-4xl font-bold text-foreground tracking-tight mr-5">
                 {title}
               </h1>
               {status && (

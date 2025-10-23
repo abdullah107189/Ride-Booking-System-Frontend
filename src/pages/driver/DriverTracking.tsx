@@ -26,6 +26,7 @@ import {
 } from "@/redux/features/driver/driver.api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 type RideStatus =
   | "requested"
@@ -106,149 +107,143 @@ export function DriverTracking() {
 
   if (!ride) {
     return (
-      <div className="  ">
-        <div className="px-4">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-foreground mb-4">
-              Ready for your next ride
-            </h1>
-          </div>
+      <div className="">
+        {/* Header */}
+        <PageHeader title="Ride Tracking"></PageHeader>
 
-          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {/* Left Side - Illustration & Main Message */}
-            <div className="flex flex-col items-center justify-center text-center space-y-6">
-              <div className="relative">
-                <div className="w-48 h-48 bg-primary/10 rounded-full flex items-center justify-center">
-                  <Car className="h-24 w-24 text-primary/60" />
-                </div>
-                <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center">
-                  <Clock className="h-8 w-8 text-yellow-600" />
-                </div>
+        <div className="grid lg:grid-cols-2 gap-8 mt-4">
+          {/* Left Side - Illustration & Main Message */}
+          <div className="flex flex-col items-center justify-center text-center space-y-6">
+            <div className="relative">
+              <div className="w-48 h-48 bg-primary/10 rounded-full flex items-center justify-center">
+                <Car className="h-24 w-24 text-primary/60" />
               </div>
-
-              <div className="space-y-4">
-                <h2 className="text-3xl font-bold text-foreground">
-                  No Active Rides
-                </h2>
-                <p className="text-xl text-muted-foreground max-w-md">
-                  You're online and ready to accept ride requests
-                </p>
-                <div className="flex items-center justify-center gap-2 text-green-600">
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="font-medium">Online and Available</span>
-                </div>
+              <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center">
+                <Clock className="h-8 w-8 text-yellow-600" />
               </div>
-
-              <Button
-                size="lg"
-                className="mt-4"
-                onClick={() => navigate("/driver/available-rides")}
-              >
-                <User className="h-5 w-5 mr-2" />
-                Go to Available Rides
-              </Button>
             </div>
 
-            {/* Right Side - Stats & Quick Actions */}
-            <div className="space-y-6">
-              {/* Quick Actions */}
-              <Card className="border border-border">
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold text-card-foreground mb-4">
-                    Quick Actions
-                  </h3>
-                  <div className="space-y-3">
-                    <Button
-                      onClick={() => navigate("/driver/ride-history")}
-                      variant="outline"
-                      className="w-full justify-start"
-                    >
-                      <Clock className="h-4 w-4 mr-2" />
-                      View Earnings History
-                    </Button>
-                    <Button
-                      onClick={() => navigate("/updateProfile")}
-                      variant="outline"
-                      className="w-full justify-start"
-                    >
-                      <User className="h-4 w-4 mr-2" />
-                      Update Profile
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Tips Card */}
-              <Card className="border border-dashed border-yellow-200 bg-yellow-50">
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold text-yellow-800 mb-2">
-                    💡 Tips for More Rides
-                  </h3>
-                  <ul className="space-y-2 text-sm text-yellow-700">
-                    <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
-                      Stay in high-demand areas during peak hours
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
-                      Keep your vehicle clean and well-maintained
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
-                      Maintain a high rating for better matching
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
+            <div className="space-y-4">
+              <h2 className="text-3xl font-bold text-foreground">
+                No Active Rides
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-md">
+                You're online and ready to accept ride requests
+              </p>
+              <div className="flex items-center justify-center gap-2 text-green-600">
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="font-medium">Online and Available</span>
+              </div>
             </div>
+
+            <Button
+              size="lg"
+              className="mt-4"
+              onClick={() => navigate("/driver/available-rides")}
+            >
+              <User className="h-5 w-5 mr-2" />
+              Go to Available Rides
+            </Button>
           </div>
 
-          {/* Bottom Section - What to Expect */}
-          <div className="mt-12 max-w-4xl mx-auto">
+          {/* Right Side - Stats & Quick Actions */}
+          <div className="space-y-6">
+            {/* Quick Actions */}
             <Card className="border border-border">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-card-foreground mb-4 text-center">
-                  What happens when you get a ride request?
+                <h3 className="text-lg font-semibold text-card-foreground mb-4">
+                  Quick Actions
                 </h3>
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="text-center space-y-3">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                      <Phone className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <h4 className="font-semibold text-card-foreground">
-                      1. Notification
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      You'll get an instant notification with ride details
-                    </p>
-                  </div>
-                  <div className="text-center space-y-3">
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                      <MapPin className="h-6 w-6 text-green-600" />
-                    </div>
-                    <h4 className="font-semibold text-card-foreground">
-                      2. Accept & Navigate
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      Accept the ride and navigate to pickup location
-                    </p>
-                  </div>
-                  <div className="text-center space-y-3">
-                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
-                      <User className="h-6 w-6 text-purple-600" />
-                    </div>
-                    <h4 className="font-semibold text-card-foreground">
-                      3. Complete & Earn
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      Complete the ride and get paid instantly
-                    </p>
-                  </div>
+                <div className="space-y-3">
+                  <Button
+                    onClick={() => navigate("/driver/ride-history")}
+                    variant="outline"
+                    className="w-full justify-start"
+                  >
+                    <Clock className="h-4 w-4 mr-2" />
+                    View Earnings History
+                  </Button>
+                  <Button
+                    onClick={() => navigate("/updateProfile")}
+                    variant="outline"
+                    className="w-full justify-start"
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    Update Profile
+                  </Button>
                 </div>
               </CardContent>
             </Card>
+
+            {/* Tips Card */}
+            <Card className="border border-dashed border-yellow-200 bg-yellow-50">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-yellow-800 mb-2">
+                  💡 Tips for More Rides
+                </h3>
+                <ul className="space-y-2 text-sm text-yellow-700">
+                  <li className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
+                    Stay in high-demand areas during peak hours
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
+                    Keep your vehicle clean and well-maintained
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
+                    Maintain a high rating for better matching
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
+        </div>
+
+        {/* Bottom Section - What to Expect */}
+        <div className="mt-12 max-w-4xl mx-auto">
+          <Card className="border border-border">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-card-foreground mb-4 text-center">
+                What happens when you get a ride request?
+              </h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="text-center space-y-3">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+                    <Phone className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <h4 className="font-semibold text-card-foreground">
+                    1. Notification
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    You'll get an instant notification with ride details
+                  </p>
+                </div>
+                <div className="text-center space-y-3">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <MapPin className="h-6 w-6 text-green-600" />
+                  </div>
+                  <h4 className="font-semibold text-card-foreground">
+                    2. Accept & Navigate
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Accept the ride and navigate to pickup location
+                  </p>
+                </div>
+                <div className="text-center space-y-3">
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
+                    <User className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <h4 className="font-semibold text-card-foreground">
+                    3. Complete & Earn
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Complete the ride and get paid instantly
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
@@ -329,15 +324,13 @@ export function DriverTracking() {
   const isAnyLoading =
     isPickingUp || isTransit || isCompleting || isMarkingPaid;
   return (
-    <div className="bg-gradient-to-br from-background to-muted min-h-screen">
-      <div className="px-4 py-6">
+    <div className="">
+      <div className="px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            Ride in Progress
-          </h1>
+          <PageHeader title="Ride in Progress"></PageHeader>
           <Badge
-            className={`${statusConfig.bgColor} ${statusConfig.color} text-lg py-2 px-4`}
+            className={`${statusConfig.bgColor} ${statusConfig.color} text-lg py-2 px-4 mt-3`}
           >
             {statusConfig.label}
             {isAnyLoading && " (Updating...)"}

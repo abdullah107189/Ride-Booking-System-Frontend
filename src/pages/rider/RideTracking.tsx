@@ -18,6 +18,7 @@ import {
   Shield,
 } from "lucide-react";
 import { useGetRidesByDriverQuery } from "@/redux/features/driver/driver.api";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 const mockRideData = {
   _id: "68f9c49e6859c5cd6c64db22",
@@ -133,11 +134,9 @@ export function RideTracking() {
   return (
     <div className="bg-gradient-to-br from-background to-muted ">
       <div className="px-4">
+        <PageHeader title="Ride Tracking"></PageHeader>
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            Ride in Progress
-          </h1>
           <Badge
             className={`${statusConfig.bgColor} ${statusConfig.color} text-lg py-2 px-4`}
           >

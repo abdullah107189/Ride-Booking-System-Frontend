@@ -86,21 +86,12 @@ export function DriverHistory() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-      <div className="container mx-auto px-4 py-8">
+    <div className="">
+      <div className="">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            Ride History
-          </h1>
-          <p className="text-muted-foreground text-lg">
-            Your completed and paid rides
-          </p>
-          <PageHeader title="Ride History"></PageHeader>
-        </div>
-
+        <PageHeader title="Ride History" />
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 mt-4 md:grid-cols-4 gap-6 mb-8">
           <Card className="border border-border">
             <CardContent className="p-6 text-center">
               <div className="text-3xl font-bold text-foreground mb-2">
