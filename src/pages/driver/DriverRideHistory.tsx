@@ -6,7 +6,6 @@ import {
   Clock,
   Calendar,
   DollarSign,
-  Navigation,
   Star,
   Car,
   CheckCircle2,
@@ -14,6 +13,7 @@ import {
   ListStart,
 } from "lucide-react";
 import { useGetDriverRideHistoryQuery } from "@/redux/features/driver/driver.api";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 type RideStatus = "completed" | "paid" | "canceled";
 
@@ -96,6 +96,7 @@ export function DriverHistory() {
           <p className="text-muted-foreground text-lg">
             Your completed and paid rides
           </p>
+          <PageHeader title="Ride History"></PageHeader>
         </div>
 
         {/* Stats Overview */}
