@@ -336,7 +336,7 @@ export function DriverTracking() {
             {isAnyLoading && " (Updating...)"}
           </Badge>
           <div className="mt-2 text-muted-foreground">
-            Rider : {ride?.rider?.name}
+            Cost : {ride?.fare} Taka
           </div>
         </div>
         <div className="grid lg:grid-cols-3 gap-8">

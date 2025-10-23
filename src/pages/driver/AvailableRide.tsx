@@ -2,11 +2,13 @@
 import { RideCard } from "@/components/modules/driver/RideCard";
 import { PageHeader } from "@/components/shared/PageHeader";
 import {
+  driverApi,
   useAcceptRideMutation,
   useGetAvailableRidesQuery,
 } from "@/redux/features/driver/driver.api";
 import type { IRide } from "@/types/ride";
 import { Car, MapPin } from "lucide-react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
@@ -51,14 +53,13 @@ export default function AvailableRides() {
   const [acceptRide, { isLoading: acceptRideLoading }] =
     useAcceptRideMutation();
 
-  if (availableRidesLoading) {
-    return <div>Loading...</div>;
-  }
+  const dispatch = useDispatch();
   const handleAcceptRide = async (rideId: string) => {
     try {
       const res = await acceptRide(rideId).unwrap();
       console.log(res);
       toast(res?.message || "Ride Accepted!");
+      dispatch(driverApi.util.resetApiState());
       navigate(`/driver/tracked-rides`);
     } catch (error) {
       console.log(error);
@@ -70,6 +71,9 @@ export default function AvailableRides() {
     }
   };
 
+  if (availableRidesLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className=" bg-gradient-to-br from-background via-background to-primary/5">
       <PageHeader title="Available Rides"></PageHeader>

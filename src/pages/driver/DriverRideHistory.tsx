@@ -40,12 +40,13 @@ const statusConfigs = {
 
 export function DriverHistory() {
   const {
-    data: rides,
+    data: ridesInfo,
     isLoading,
     error,
   } = useGetDriverRideHistoryQuery(undefined);
 
-  console.log(rides);
+  const { history: rides } = ridesInfo || {};
+  const { driverInfo } = ridesInfo || {};
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
@@ -113,11 +114,7 @@ export function DriverHistory() {
           <Card className="border border-border">
             <CardContent className="p-6 text-center">
               <div className="text-3xl font-bold text-foreground mb-2">
-                ৳
-                {rides.reduce(
-                  (total: number, ride: any) => total + (ride.fare || 0),
-                  0
-                )}
+                ৳{driverInfo?.totalEarnings.toFixed(2)}
               </div>
               <div className="text-sm text-muted-foreground">
                 Total Earnings
@@ -230,7 +227,7 @@ export function DriverHistory() {
                           {statusConfig?.label}
                         </Badge>
                         <div className="text-lg font-bold text-card-foreground">
-                          ৳{ride?.totalEarnings}
+                          ৳{ride?.fare?.toFixed(2) || "N/A"}
                         </div>
                       </div>
 
