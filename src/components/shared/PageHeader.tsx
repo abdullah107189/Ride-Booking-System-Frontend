@@ -70,7 +70,10 @@ export function PageHeader({
 
   return (
     <div
-      className={cn("flex justify-between bg-card p-2 rounded-2xl", className)}
+      className={cn(
+        "flex md:flex-row flex-col items-center  justify-between bg-card p-2 rounded-2xl",
+        className
+      )}
     >
       {/* Right Side - Actions */}
       <div className="flex items-center gap-2">
@@ -119,8 +122,8 @@ export function PageHeader({
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
           <div className="">
             {/* Title & Subtitle */}
-            <div className="flex items-center gap-3 mb-3">
-              <h1 className="text-4xl font-bold text-foreground tracking-tight mr-5">
+            <div className="flex items-center gap-3 md:mb-3">
+              <h1 className="md:text-4xl text-xl font-bold text-foreground tracking-tight md:mr-5">
                 {title}
               </h1>
               {status && (
