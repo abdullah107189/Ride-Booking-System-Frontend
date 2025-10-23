@@ -15,6 +15,7 @@ import { riderSidBarItems } from "./riderSideBarItem";
 import { driverSidBarItems } from "./driverSideBarItem";
 import { adminSidBarItems } from "./adminSideBarItem";
 import CommonDashboard from "@/dashboard/CommontDashboard";
+import AvailableRides from "@/pages/driver/AvailableRide";
 
 export const router = createBrowserRouter([
   {
@@ -51,7 +52,10 @@ export const router = createBrowserRouter([
   {
     path: "/driver",
     Component: withAuth(CommonDashboard, role.DRIVER),
-    children: [...generateRoutes(driverSidBarItems)],
+    children: [
+      { index: true, Component: AvailableRides },
+      ...generateRoutes(driverSidBarItems),
+    ],
   },
   {
     path: "/admin",

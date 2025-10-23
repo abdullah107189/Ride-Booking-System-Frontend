@@ -25,6 +25,7 @@ import {
   useMarkAsPickedUpMutation,
 } from "@/redux/features/driver/driver.api";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 type RideStatus =
   | "requested"
@@ -81,6 +82,7 @@ const statusSteps = [
 ];
 
 export function DriverTracking() {
+  const navigate = useNavigate();
   // Initialize all mutations
   const [markAsPickedUp, { isLoading: isPickingUp }] =
     useMarkAsPickedUpMutation();
@@ -138,41 +140,18 @@ export function DriverTracking() {
                 </div>
               </div>
 
-              <Button size="lg" className="mt-4">
+              <Button
+                size="lg"
+                className="mt-4"
+                onClick={() => navigate("/driver/available-rides")}
+              >
                 <User className="h-5 w-5 mr-2" />
-                Go Online
+                Go to Available Rides
               </Button>
             </div>
 
             {/* Right Side - Stats & Quick Actions */}
             <div className="space-y-6">
-              {/* Stats Card */}
-              <Card className="border border-border">
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold text-card-foreground mb-4">
-                    Today's Summary
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-card-foreground">
-                        0
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        Completed
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-card-foreground">
-                        ৳0
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        Earnings
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
               {/* Quick Actions */}
               <Card className="border border-border">
                 <CardContent className="p-6">
@@ -180,15 +159,19 @@ export function DriverTracking() {
                     Quick Actions
                   </h3>
                   <div className="space-y-3">
-                    <Button variant="outline" className="w-full justify-start">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      Set Preferred Areas
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
+                    <Button
+                      onClick={() => navigate("/driver/ride-history")}
+                      variant="outline"
+                      className="w-full justify-start"
+                    >
                       <Clock className="h-4 w-4 mr-2" />
                       View Earnings History
                     </Button>
-                    <Button variant="outline" className="w-full justify-start">
+                    <Button
+                      onClick={() => navigate("/updateProfile")}
+                      variant="outline"
+                      className="w-full justify-start"
+                    >
                       <User className="h-4 w-4 mr-2" />
                       Update Profile
                     </Button>
@@ -199,7 +182,7 @@ export function DriverTracking() {
               {/* Tips Card */}
               <Card className="border border-dashed border-yellow-200 bg-yellow-50">
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold text-yellow-800 mb-3">
+                  <h3 className="text-lg font-semibold text-yellow-800 mb-2">
                     💡 Tips for More Rides
                   </h3>
                   <ul className="space-y-2 text-sm text-yellow-700">
@@ -586,10 +569,16 @@ export function DriverTracking() {
                   {/* Timeline */}
                   <div className="space-y-3">
                     {ride.statusHistory.map(
-                      (history: { updateStatus: string }, index: number) => {
+                      (
+                        history: { updateStatus: string; timestamp: any },
+                        index: number
+                      ) => {
                         const statusConfig =
                           statusConfigs[history.updateStatus as RideStatus];
                         const isLast = index === ride.statusHistory.length - 1;
+
+                        const rawTimestamp =
+                          history.timestamp?.$date || history.timestamp;
 
                         return (
                           <div key={index} className="flex items-start gap-3">
@@ -607,13 +596,10 @@ export function DriverTracking() {
                                 {statusConfig?.label || history.updateStatus}
                               </span>
                               <span className="text-xs text-muted-foreground">
-                                {new Date(ride.createdAt).toLocaleTimeString(
-                                  [],
-                                  {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  }
-                                )}
+                                {new Date(rawTimestamp).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}
                               </span>
                             </div>
                           </div>

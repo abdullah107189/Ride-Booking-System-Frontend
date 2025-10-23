@@ -11,6 +11,7 @@ import {
   Car,
   CheckCircle2,
   Phone,
+  ListStart,
 } from "lucide-react";
 import { useGetDriverRideHistoryQuery } from "@/redux/features/driver/driver.api";
 
@@ -44,6 +45,7 @@ export function DriverHistory() {
     error,
   } = useGetDriverRideHistoryQuery(undefined);
 
+  console.log(rides);
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
@@ -154,6 +156,9 @@ export function DriverHistory() {
           {rides.map((ride: any) => {
             const statusConfig = statusConfigs[ride.status as RideStatus];
             const StatusIcon = statusConfig?.icon || CheckCircle2;
+            const pickedUpHistory = ride.statusHistory.find(
+              (sh: any) => sh.updateStatus === "picked_up"
+            );
             const completedHistory = ride.statusHistory.find(
               (sh: any) => sh.updateStatus === "completed"
             );
@@ -233,16 +238,32 @@ export function DriverHistory() {
                           {statusConfig?.label}
                         </Badge>
                         <div className="text-lg font-bold text-card-foreground">
-                          ৳{ride.fare}
+                          ৳{ride?.totalEarnings}
                         </div>
                       </div>
 
                       {/* Timeline */}
                       <div className="space-y-2 text-sm">
+                        {pickedUpHistory && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground flex items-center gap-1">
+                              <ListStart className="h-3 w-3" />
+                              Start Trip
+                            </span>
+                            <span className="text-card-foreground">
+                              {new Date(
+                                pickedUpHistory.timestamp
+                              ).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                          </div>
+                        )}
                         {completedHistory && (
                           <div className="flex justify-between items-center">
                             <span className="text-muted-foreground flex items-center gap-1">
-                              <CheckCircle2 className="h-3 w-3" />
+                              <DollarSign className="h-3 w-3" />
                               Completed
                             </span>
                             <span className="text-card-foreground">
@@ -271,6 +292,7 @@ export function DriverHistory() {
                             </span>
                           </div>
                         )}
+
                         <div className="flex justify-between items-center pt-2 border-t border-border">
                           <span className="text-muted-foreground flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
@@ -282,27 +304,6 @@ export function DriverHistory() {
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Quick Actions */}
-                  <div className="flex gap-2 pt-4 mt-4 border-t border-border">
-                    <Badge
-                      variant="outline"
-                      className="flex items-center gap-1"
-                    >
-                      <Navigation className="h-3 w-3" />
-                      {ride.distance || "N/A"} km
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="flex items-center gap-1"
-                    >
-                      <Clock className="h-3 w-3" />
-                      {ride.duration || "N/A"} min
-                    </Badge>
-                    {ride.paymentMethod && (
-                      <Badge variant="outline">{ride.paymentMethod}</Badge>
-                    )}
                   </div>
                 </CardContent>
               </Card>

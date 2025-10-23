@@ -1,8 +1,6 @@
 import type { ISidebarItem } from "@/const";
 import AvailableRide from "@/pages/driver/AvailableRide";
-import {
-  DriverHistory,
-} from "@/pages/driver/DriverRideHistory";
+import { DriverHistory } from "@/pages/driver/DriverRideHistory";
 import { DriverTracking } from "@/pages/driver/DriverTracking";
 import { Car, History, SquareTerminal } from "lucide-react";
 
