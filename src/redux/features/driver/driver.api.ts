@@ -9,7 +9,14 @@ export const driverApi = baseApi.injectEndpoints({
       }),
       providesTags: ["AvailableRides"],
       transformResponse: (response) => response.data,
-    }),                                                     
+    }),
+    acceptRide: builder.mutation({
+      query: (rideId: string) => ({
+        url: `/rides/${rideId}/accept`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["AvailableRides"],
+    }),
   }),
 });
-export const { useGetAvailableRidesQuery } = driverApi;
+export const { useGetAvailableRidesQuery, useAcceptRideMutation } = driverApi;

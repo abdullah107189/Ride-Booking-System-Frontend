@@ -53,9 +53,11 @@ const formatRelativeTime = (timestamp: string): string => {
 
 export function RideCard({
   ride,
+  acceptRideLoading,
   onAccept,
 }: {
   ride: IRide;
+  acceptRideLoading: boolean;
   onAccept: (rideId: string) => void;
 }) {
   const distance = calculateDistance(
@@ -136,6 +138,7 @@ export function RideCard({
           {ride.status === "requested" && (
             <Button
               onClick={() => onAccept(ride._id)}
+              disabled={acceptRideLoading}
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
               size="lg"
             >

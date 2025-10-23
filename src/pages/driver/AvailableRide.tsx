@@ -1,5 +1,8 @@
 import { RideCard } from "@/components/modules/driver/RideCard";
-import { useGetAvailableRidesQuery } from "@/redux/features/driver/driver.api";
+import {
+  useAcceptRideMutation,
+  useGetAvailableRidesQuery,
+} from "@/redux/features/driver/driver.api";
 import type { IRide } from "@/types/ride";
 import { toast } from "sonner";
 
@@ -39,13 +42,24 @@ export default function AvailableRides() {
   const { data: availableRides, isLoading: availableRidesLoading } =
     useGetAvailableRidesQuery(undefined);
   console.log(availableRides);
+
+  const [acceptRide, { isLoading: acceptRideLoading }] =
+    useAcceptRideMutation();
+
   if (availableRidesLoading) {
     return <div>Loading...</div>;
   }
-
-  const handleAcceptRide = (rideId: string) => {
-    console.log(rideId);
-    toast("Ride Accepted!");
+  const handleAcceptRide = async (rideId: string) => {
+    try {
+      const res = await acceptRide(rideId).unwrap();
+      console.log(res);
+      toast(res?.message || "Ride Accepted!");
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error?.data?.message || "Failed to accept the ride. Please try again."
+      );
+    }
   };
 
   return (
@@ -63,7 +77,12 @@ export default function AvailableRides() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {availableRides.map((ride: IRide) => (
-            <RideCard key={ride._id} ride={ride} onAccept={handleAcceptRide} />
+            <RideCard
+              key={ride._id}
+              acceptRideLoading={acceptRideLoading}
+              ride={ride}
+              onAccept={handleAcceptRide}
+            />
           ))}
         </div>
       </div>
