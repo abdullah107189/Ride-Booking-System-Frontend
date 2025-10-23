@@ -17,6 +17,17 @@ export const driverApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["AvailableRides"],
     }),
+    getRidesByDriver: builder.query({
+      query: () => ({
+        url: `/rides/driver-rides`,
+        method: "GET",
+      }),
+      transformResponse: (response) => response.data[0],
+    }),
   }),
 });
-export const { useGetAvailableRidesQuery, useAcceptRideMutation } = driverApi;
+export const {
+  useGetAvailableRidesQuery,
+  useAcceptRideMutation,
+  useGetRidesByDriverQuery,
+} = driverApi;
