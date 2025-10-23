@@ -20,23 +20,7 @@ export function DriverActions({
   onStatusUpdate,
   rideId,
 }: DriverActionsProps) {
-  const handleStatusUpdate = async (newStatus: string) => {
-    try {
-      // API call to update status
-      const response = await fetch(`/api/rides/${rideId}/${newStatus}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        onStatusUpdate(newStatus);
-      }
-    } catch (error) {
-      console.error("Failed to update status:", error);
-    }
-  };
+ 
 
   const getAvailableActions = () => {
     switch (currentStatus) {
@@ -95,7 +79,7 @@ export function DriverActions({
         {actions.map((action) => (
           <Button
             key={action.status}
-            onClick={() => handleStatusUpdate(action.status)}
+           
             className="w-full"
             variant={action.variant}
           >

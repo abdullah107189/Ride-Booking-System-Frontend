@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RideCard } from "@/components/modules/driver/RideCard";
 import {
   useAcceptRideMutation,
   useGetAvailableRidesQuery,
 } from "@/redux/features/driver/driver.api";
 import type { IRide } from "@/types/ride";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
 // Sample Data
@@ -42,6 +44,7 @@ export default function AvailableRides() {
   const { data: availableRides, isLoading: availableRidesLoading } =
     useGetAvailableRidesQuery(undefined);
   console.log(availableRides);
+  const navigate = useNavigate();
 
   const [acceptRide, { isLoading: acceptRideLoading }] =
     useAcceptRideMutation();
@@ -54,10 +57,13 @@ export default function AvailableRides() {
       const res = await acceptRide(rideId).unwrap();
       console.log(res);
       toast(res?.message || "Ride Accepted!");
+      navigate(`/driver/tracked-rides`);
     } catch (error) {
       console.log(error);
+      const errorTyped = error as any;
       toast.error(
-        error?.data?.message || "Failed to accept the ride. Please try again."
+        errorTyped?.data?.message ||
+          "Failed to accept the ride. Please try again."
       );
     }
   };

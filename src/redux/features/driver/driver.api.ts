@@ -10,6 +10,24 @@ export const driverApi = baseApi.injectEndpoints({
       providesTags: ["AvailableRides"],
       transformResponse: (response) => response.data,
     }),
+    getRidesByDriver: builder.query({
+      query: () => ({
+        url: `/rides/driver-rides`,
+        method: "GET",
+      }),
+      transformResponse: (response) => response.data[0],
+      providesTags: ["DriverRides"],
+    }),
+
+    getDriverRideHistory: builder.query({
+      query: () => ({
+        url: `/drivers/driver-ride-history`,
+        method: "GET",
+      }),
+      transformResponse: (response) => response.data,
+      providesTags: ["DriverRideHistory"],
+    }),
+    // ------------------------------------------------------
     acceptRide: builder.mutation({
       query: (rideId: string) => ({
         url: `/rides/${rideId}/accept`,
@@ -17,12 +35,37 @@ export const driverApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["AvailableRides"],
     }),
-    getRidesByDriver: builder.query({
-      query: () => ({
-        url: `/rides/driver-rides`,
-        method: "GET",
+
+    markAsPickedUp: builder.mutation({
+      query: (rideId: string) => ({
+        url: `/rides/${rideId}/picked_up`,
+        method: "PATCH",
       }),
-      transformResponse: (response) => response.data[0],
+      invalidatesTags: ["DriverRides"],
+    }),
+
+    makeTransitTrip: builder.mutation({
+      query: (rideId: string) => ({
+        url: `/rides/${rideId}/in_transit`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["DriverRides"],
+    }),
+
+    completeRide: builder.mutation({
+      query: (rideId: string) => ({
+        url: `/rides/${rideId}/completed`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["DriverRides"],
+    }),
+
+    markAsPaid: builder.mutation({
+      query: (rideId: string) => ({
+        url: `/rides/${rideId}/paid`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["DriverRides"],
     }),
   }),
 });
@@ -30,4 +73,9 @@ export const {
   useGetAvailableRidesQuery,
   useAcceptRideMutation,
   useGetRidesByDriverQuery,
+  useMarkAsPickedUpMutation,
+  useMakeTransitTripMutation,
+  useCompleteRideMutation,
+  useMarkAsPaidMutation,
+  useGetDriverRideHistoryQuery,
 } = driverApi;

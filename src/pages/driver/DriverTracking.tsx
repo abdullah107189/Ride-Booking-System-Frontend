@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useParams } from "react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,8 +14,16 @@ import {
   Package,
   CreditCard,
   Shield,
+  History,
 } from "lucide-react";
-import { useGetRidesByDriverQuery } from "@/redux/features/driver/driver.api";
+import {
+  useCompleteRideMutation,
+  useGetRidesByDriverQuery,
+  useMakeTransitTripMutation,
+  useMarkAsPaidMutation,
+  useMarkAsPickedUpMutation,
+} from "@/redux/features/driver/driver.api";
+import { toast } from "sonner";
 
 type RideStatus =
   | "requested"
@@ -73,18 +80,103 @@ const statusSteps = [
 ];
 
 export function DriverTracking() {
-  const { data: ride, isLoading } = useGetRidesByDriverQuery(undefined);
+  // Initialize all mutations
+  const [markAsPickedUp, { isLoading: isPickingUp }] =
+    useMarkAsPickedUpMutation();
+  const [makeTransitTrip, { isLoading: isTransit }] =
+    useMakeTransitTripMutation();
+  const [completeRide, { isLoading: isCompleting }] = useCompleteRideMutation();
+  const [markAsPaid, { isLoading: isMarkingPaid }] = useMarkAsPaidMutation();
+
+  const {
+    data: ride,
+    isLoading,
+    refetch,
+  } = useGetRidesByDriverQuery(undefined);
+
   console.log(ride);
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
   if (!ride) {
     return <div>Ride not found</div>;
   }
 
+  // status chnage function
+
+  // Define error type
+  type ApiError = {
+    data?: {
+      message?: string;
+    };
+  };
+
+  const handleMarkAsPickedUp = async (rideId: string) => {
+    try {
+      console.log("rideId", rideId);
+      const res = await markAsPickedUp(rideId).unwrap();
+      console.log(res);
+      toast.success(res?.message || "Rider picked up successfully!");
+      refetch();
+    } catch (error: unknown) {
+      console.log(error);
+      const errorMessage =
+        (error as ApiError)?.data?.message ||
+        "Failed to mark as picked up. Please try again.";
+      toast.error(errorMessage);
+    }
+  };
+
+  const handleMakeTransit = async (rideId: string) => {
+    try {
+      const res = await makeTransitTrip(rideId).unwrap();
+      console.log(res);
+      toast.success(res?.message || "Trip started successfully!");
+      refetch();
+    } catch (error: unknown) {
+      console.log(error);
+      const errorMessage =
+        (error as ApiError)?.data?.message ||
+        "Failed to start trip. Please try again.";
+      toast.error(errorMessage);
+    }
+  };
+
+  const handleCompleteRide = async (rideId: string) => {
+    try {
+      const res = await completeRide(rideId).unwrap();
+      console.log(res);
+      toast.success(res?.message || "Ride completed successfully!");
+      refetch();
+    } catch (error: unknown) {
+      console.log(error);
+      const errorMessage =
+        (error as ApiError)?.data?.message ||
+        "Failed to complete ride. Please try again.";
+      toast.error(errorMessage);
+    }
+  };
+
+  const handleMarkAsPaid = async (rideId: string) => {
+    try {
+      const res = await markAsPaid(rideId).unwrap();
+      console.log(res);
+      toast.success(res?.message || "Payment confirmed!");
+      refetch();
+    } catch (error: unknown) {
+      console.log(error);
+      const errorMessage =
+        (error as ApiError)?.data?.message ||
+        "Failed to mark as paid. Please try again.";
+      toast.error(errorMessage);
+    }
+  };
+
   const currentStatus = ride.status as RideStatus;
   const statusConfig = statusConfigs[currentStatus];
-
+  const isAnyLoading =
+    isPickingUp || isTransit || isCompleting || isMarkingPaid;
   return (
     <div className="bg-gradient-to-br from-background to-muted min-h-screen">
       <div className="px-4 py-6">
@@ -97,12 +189,12 @@ export function DriverTracking() {
             className={`${statusConfig.bgColor} ${statusConfig.color} text-lg py-2 px-4`}
           >
             {statusConfig.label}
+            {isAnyLoading && " (Updating...)"}
           </Badge>
-          <div className="mt-2 text-2xl font-semibold text-muted-foreground">
+          <div className="mt-2 text-muted-foreground">
             Rider : {ride?.rider?.name}
           </div>
         </div>
-
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Ride Info & Progress */}
           <div className="lg:col-span-2 space-y-6">
@@ -250,27 +342,60 @@ export function DriverTracking() {
               <CardContent className="space-y-2">
                 {currentStatus === "accepted" && (
                   <>
-                    <Button className="w-full" variant="outline">
+                    <Button
+                      className="w-full"
+                      variant="outline"
+                      onClick={() =>
+                        ride?._id && handleMarkAsPickedUp(ride?._id)
+                      }
+                      disabled={isPickingUp}
+                    >
                       <Package className="h-4 w-4 mr-2" />
-                      Mark as Picked Up
-                    </Button>
-                    <Button className="w-full" variant="outline">
-                      <Car className="h-4 w-4 mr-2" />
-                      Start Trip
+                      {isPickingUp ? "Updating..." : "Start Trip / Picked Up"}
                     </Button>
                   </>
                 )}
+
                 {currentStatus === "picked_up" && (
-                  <Button className="w-full" variant="outline">
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    onClick={() => ride?._id && handleMakeTransit(ride?._id)}
+                    disabled={isTransit}
+                  >
                     <Car className="h-4 w-4 mr-2" />
-                    Start Trip
+                    {isTransit ? "Starting..." : "Start Trip"}
                   </Button>
                 )}
+
                 {currentStatus === "in_transit" && (
-                  <Button className="w-full" variant="default">
+                  <Button
+                    className="w-full"
+                    variant="default"
+                    onClick={() => ride?._id && handleCompleteRide(ride?._id)}
+                    disabled={isCompleting}
+                  >
                     <CheckCircle2 className="h-4 w-4 mr-2" />
-                    Complete Ride
+                    {isCompleting ? "Completing..." : "Complete Ride"}
                   </Button>
+                )}
+
+                {currentStatus === "completed" && (
+                  <Button
+                    className="w-full"
+                    variant="default"
+                    onClick={() => ride?._id && handleMarkAsPaid(ride?._id)}
+                    disabled={isMarkingPaid}
+                  >
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    {isMarkingPaid ? "Updating..." : "Mark as Paid"}
+                  </Button>
+                )}
+
+                {currentStatus === "paid" && (
+                  <div className="text-center text-green-600 font-medium">
+                    Ride Completed Successfully!
+                  </div>
                 )}
               </CardContent>
             </Card>
@@ -282,26 +407,86 @@ export function DriverTracking() {
                   Ride Details
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Requested:</span>
-                  <span className="font-medium">
-                    {new Date(ride.createdAt).toLocaleTimeString()}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Last Updated:</span>
-                  <span className="font-medium">
-                    {new Date(ride.updatedAt).toLocaleTimeString()}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Status Updates:</span>
-                  <span className="font-medium">
-                    {ride.statusHistory.length}
-                  </span>
-                </div>
-              </CardContent>
+              <Card className="border border-border">
+                <CardHeader>
+                  <CardTitle className="text-card-foreground flex items-center gap-2">
+                    <History className="h-5 w-5 text-primary" />
+                    Status History
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {/* Timeline */}
+                  <div className="space-y-3">
+                    {ride.statusHistory.map(
+                      (history: { updateStatus: string }, index: number) => {
+                        const statusConfig =
+                          statusConfigs[history.updateStatus as RideStatus];
+                        const isLast = index === ride.statusHistory.length - 1;
+
+                        return (
+                          <div key={index} className="flex items-start gap-3">
+                            <div className="flex flex-col items-center mt-1">
+                              <div
+                                className={`w-2 h-2 rounded-full ${statusConfig?.bgColor} ${statusConfig?.color}`}
+                              />
+                              {!isLast && (
+                                <div className="w-0.5 h-6 bg-border mt-1" />
+                              )}
+                            </div>
+
+                            <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                              <span className="text-sm font-medium text-card-foreground">
+                                {statusConfig?.label || history.updateStatus}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                {new Date(ride.createdAt).toLocaleTimeString(
+                                  [],
+                                  {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  }
+                                )}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
+
+                  {/* Quick Stats */}
+                  <div className="grid grid-cols-3 gap-3 pt-4 mt-4 border-t border-border">
+                    <div className="text-center">
+                      <div className="font-semibold text-card-foreground">
+                        {ride.statusHistory.length}
+                      </div>
+                      <div className="text-xs text-muted-foreground">Steps</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="font-semibold text-card-foreground">
+                        {new Date(ride.createdAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Started
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="font-semibold text-card-foreground">
+                        {new Date(ride.updatedAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Updated
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </Card>
           </div>
         </div>
