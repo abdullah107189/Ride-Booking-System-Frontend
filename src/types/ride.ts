@@ -1,3 +1,4 @@
+// Types
 export interface IRide {
   _id: string;
   rider: string;
@@ -16,21 +17,18 @@ export interface IRide {
     };
     address: string;
   };
-  status: RideStatus;
+  status:
+    | "requested"
+    | "accepted"
+    | "picked_up"
+    | "in_transit"
+    | "completed"
+    | "canceled"
+    | "paid";
   statusHistory: Array<{
     updateStatus: string;
     timestamp: string;
   }>;
   createdAt: string;
   updatedAt: string;
-}
-
-export enum RideStatus {
-  requested = "requested",
-  accepted = "accepted",
-  picked_up = "picked_up",
-  in_transit = "in_transit",
-  completed = "completed",
-  canceled = "canceled",
-  paid = "paid",
 }

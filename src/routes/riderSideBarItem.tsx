@@ -1,6 +1,7 @@
 import type { ISidebarItem } from "@/const";
+import { RiderDashboard } from "@/dashboard/RiderDashboard";
 import RideRequest from "@/pages/rider/RideRequest";
-import RiderOverview from "@/pages/rider/RiderOverview";
+// import RiderOverview from "@/pages/rider/RiderOverview";
 import { Receipt, SquareTerminal } from "lucide-react";
 
 export const riderSidBarItems: ISidebarItem[] = [
@@ -8,7 +9,7 @@ export const riderSidBarItems: ISidebarItem[] = [
     title: "Ride Overview",
     url: "/rider/overview",
     icon: SquareTerminal,
-    component: RiderOverview,
+    component: RiderDashboard,
   },
   {
     title: "Ride Requests",
