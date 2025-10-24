@@ -8,7 +8,7 @@ export const rideApi = baseApi.injectEndpoints({
         method: "POST",
         data: requestData,
       }),
-      invalidatesTags: ["RIDE"],
+      invalidatesTags: ["RIDES"],
     }),
   }),
 });

@@ -6,8 +6,8 @@ export const baseApi = createApi({
   baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),
   tagTypes: [
-    "USER",
-    "RIDE",
+    "USERS",
+    "RIDES",
     "DriverRideHistory",
     "AvailableRides",
     "DriverRides",
