@@ -64,14 +64,8 @@ export function ProfileEdit() {
     defaultValues: {
       name: "",
       phone: "",
-      vehicleInfo: {
-        licensePlate: "",
-        model: "",
-        carType: "",
-      },
-      currentLocation: {
-        address: "",
-      },
+      vehicleInfo: undefined,
+      currentLocation: undefined,
     },
   });
 
@@ -81,19 +75,17 @@ export function ProfileEdit() {
       form.reset({
         name: user.name,
         phone: user.phone,
-        vehicleInfo: user.vehicleInfo || {
-          licensePlate: "",
-          model: "",
-          carType: "",
-        },
-        currentLocation: user.currentLocation || {
-          address: "",
-        },
+        vehicleInfo:
+          user.role === "driver"
+            ? user.vehicleInfo || { licensePlate: "", model: "", carType: "" }
+            : undefined,
+        currentLocation:
+          user.role === "driver"
+            ? user.currentLocation || { address: "" }
+            : undefined,
       });
     }
   }, [userData, form]);
-
-  console.log(userData);
   const onSubmit = async (data: ProfileFormValues) => {
     try {
       const updateData: any = {
@@ -105,6 +97,7 @@ export function ProfileEdit() {
         updateData.vehicleInfo = data.vehicleInfo;
         updateData.currentLocation = data.currentLocation;
       }
+
       console.log(updateData);
 
       const result = await updateProfile(updateData).unwrap();
