@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Home, Bell, User, Settings, MoreVertical } from "lucide-react";
+import { Home, User, Settings, MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
 import { ModeToggle } from "../mode-toggle";

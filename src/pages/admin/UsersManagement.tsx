@@ -183,14 +183,16 @@ export function UsersManagement() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onClick={() =>
-                            handleBlockUser(user._id, user.isBlocked)
-                          }
-                        >
-                          <Ban className="h-4 w-4 mr-2" />
-                          {user.isBlocked ? "Unblock User" : "Block User"}
-                        </DropdownMenuItem>
+                        {user.role !== "admin" && (
+                          <DropdownMenuItem
+                            onClick={() =>
+                              handleBlockUser(user._id, user.isBlocked)
+                            }
+                          >
+                            <Ban className="h-4 w-4 mr-2" />
+                            {user.isBlocked ? "Unblock User" : "Block User"}
+                          </DropdownMenuItem>
+                        )}
                         {user.role === "driver" && (
                           <DropdownMenuItem
                             onClick={() =>

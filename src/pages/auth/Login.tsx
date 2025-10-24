@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -31,8 +32,6 @@ export function LoginForm() {
   const navigate = useNavigate();
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      console.log("Login data:", data);
-
       // API call
       const result = await login(data).unwrap();
       console.log("Login result:", result);
@@ -43,10 +42,8 @@ export function LoginForm() {
 
       form.reset();
     } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("Login failed", {
-        description: "Please check your email and password.",
-      });
+      const errorAsAny = error as any;
+      toast.error(errorAsAny?.data?.message || "Login failed");
     }
   };
 
