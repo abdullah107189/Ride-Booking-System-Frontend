@@ -19,6 +19,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useGetMeQuery } from "@/redux/features/auth/auth.api";
+import { ApprovalRequest } from "./ApprovalRequest";
 
 export function ProfileView() {
   const navigate = useNavigate();
@@ -173,6 +174,16 @@ export function ProfileView() {
             </CardContent>
           </Card>
 
+          {userData?.role === "driver" && (
+            <div className="mt-8">
+              <ApprovalRequest
+                driverData={userData}
+                refetch={() => {
+                  /* your refetch function */
+                }}
+              />
+            </div>
+          )}
           {/* Driver Specific Information */}
           {userData?.role === "driver" && userData?.vehicleInfo && (
             <Card className="border border-border">

@@ -8,9 +8,12 @@ export const baseApi = createApi({
   tagTypes: [
     "USERS",
     "RIDES",
+    "DRIVERS",
     "DriverRideHistory",
     "AvailableRides",
     "DriverRides",
     "RiderRides",
+    "PendingApprovals",
+    
   ],
 });

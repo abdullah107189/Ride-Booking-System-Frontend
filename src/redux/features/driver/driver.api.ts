@@ -27,6 +27,14 @@ export const driverApi = baseApi.injectEndpoints({
       transformResponse: (response) => response.data,
       providesTags: ["DriverRideHistory"],
     }),
+
+    requestApproval: builder.mutation({
+      query: () => ({
+        url: "/drivers/request-approval",
+        method: "PATCH",
+      }),
+      invalidatesTags: ["DRIVERS"],
+    }),
     // ------------------------------------------------------
     acceptRide: builder.mutation({
       query: (rideId: string) => ({
@@ -78,4 +86,5 @@ export const {
   useCompleteRideMutation,
   useMarkAsPaidMutation,
   useGetDriverRideHistoryQuery,
+  useRequestApprovalMutation,
 } = driverApi;

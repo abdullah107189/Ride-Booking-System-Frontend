@@ -29,7 +29,7 @@ export const adminApi = baseApi.injectEndpoints({
       invalidatesTags: ["USERS"],
     }),
 
-    // Rides
+    // ==============Rides============
     getAllRides: builder.query({
       query: () => ({ url: "/admin/getAllRide", method: "GET" }),
       providesTags: ["RIDES"],
@@ -42,6 +42,28 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["RIDES"],
     }),
+
+    // =============drivers=============
+    getPendingApprovals: builder.query({
+      query: () => ({ url: "/admin/pending-approvals", method: "GET" }),
+      providesTags: ["PendingApprovals"],
+    }),
+
+    approveDriver: builder.mutation({
+      query: (driverId: string) => ({
+        url: `/admin/approve-driver/${driverId}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["PendingApprovals", "USERS"],
+    }),
+
+    rejectDriver: builder.mutation({
+      query: (driverId: string) => ({
+        url: `/admin/reject-driver/${driverId}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["USERS"],
+    }),
   }),
 });
 export const {
@@ -51,4 +73,8 @@ export const {
   useChangeApprovalStatusMutation,
   useGetAllRidesQuery,
   useCancelRideMutation,
+  // status
+  useGetPendingApprovalsQuery,
+  useApproveDriverMutation,
+  useRejectDriverMutation,
 } = adminApi;

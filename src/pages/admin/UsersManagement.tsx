@@ -25,22 +25,30 @@ import {
   Ban,
   CheckCircle,
   Eye,
+  Clock,
+  XCircle,
+  Filter,
+  ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
+  useApproveDriverMutation,
   useChangeBlockStatusMutation,
-  useChangeApprovalStatusMutation,
   useGetAllUsersQuery,
+  useRejectDriverMutation,
 } from "@/redux/features/admin/admin.api";
 import { PageHeader } from "@/components/shared/PageHeader";
 
 export function UsersManagement() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const { data: userData, isLoading } = useGetAllUsersQuery(undefined);
   const [changeBlockStatus] = useChangeBlockStatusMutation();
-  const [changeApprovalStatus] = useChangeApprovalStatusMutation();
+  const [approveDriver] = useApproveDriverMutation();
+  const [rejectDriver] = useRejectDriverMutation();
 
   const users = userData?.users || [];
+
   const handleBlockUser = async (userId: string, currentStatus: boolean) => {
     try {
       await changeBlockStatus(userId).unwrap();
@@ -52,24 +60,92 @@ export function UsersManagement() {
     }
   };
 
-  const handleApproveUser = async (userId: string, currentStatus: boolean) => {
+  const handleApproveDriver = async (driverId: string) => {
     try {
-      await changeApprovalStatus(userId).unwrap();
-      toast.success(
-        `User ${currentStatus ? "unapproved" : "approved"} successfully`
-      );
+      await approveDriver(driverId).unwrap();
+      toast.success("Driver approved successfully");
     } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to update approval status");
+      toast.error(error?.data?.message || "Failed to approve driver");
     }
   };
 
+  const handleRejectDriver = async (driverId: string) => {
+    try {
+      await rejectDriver(driverId).unwrap();
+      toast.success("Driver rejected successfully");
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to reject driver");
+    }
+  };
+
+  // Filter users based on search and status
   const filteredUsers =
-    users?.filter(
-      (user: any) =>
+    users?.filter((user: any) => {
+      const matchesSearch =
         user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.phone?.includes(searchTerm)
-    ) || [];
+        user.phone?.includes(searchTerm);
+
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "pending" && user.approvalStatus === "pending") ||
+        (statusFilter === "approved" && user.isApproved) ||
+        (statusFilter === "rejected" && user.approvalStatus === "rejected") ||
+        (statusFilter === "blocked" && user.isBlocked);
+
+      return matchesSearch && matchesStatus;
+    }) || [];
+
+  // Get approval status badge configuration
+  const getApprovalBadge = (user: any) => {
+    if (user.role !== "driver") {
+      return null;
+    }
+
+    if (user.isApproved) {
+      return {
+        label: "Approved",
+        color: "text-green-600",
+        bgColor: "bg-green-500/10",
+        icon: CheckCircle,
+      };
+    }
+
+    switch (user.approvalStatus) {
+      case "pending":
+        return {
+          label: "Pending Approval",
+          color: "text-yellow-600",
+          bgColor: "bg-yellow-500/10",
+          icon: Clock,
+        };
+      case "rejected":
+        return {
+          label: "Rejected",
+          color: "text-red-600",
+          bgColor: "bg-red-500/10",
+          icon: XCircle,
+        };
+      default:
+        return {
+          label: "Not Requested",
+          color: "text-gray-600",
+          bgColor: "bg-gray-500/10",
+          icon: Clock,
+        };
+    }
+  };
+
+  // Count stats for dashboard
+  const stats = {
+    total: users.length,
+    pending: users.filter((user: any) => user.approvalStatus === "pending")
+      .length,
+    approved: users.filter((user: any) => user.isApproved).length,
+    rejected: users.filter((user: any) => user.approvalStatus === "rejected")
+      .length,
+    blocked: users.filter((user: any) => user.isBlocked).length,
+  };
 
   if (isLoading) {
     return (
@@ -84,8 +160,53 @@ export function UsersManagement() {
 
   return (
     <div>
-      <PageHeader title="Users Management"></PageHeader>
-      <Card className="border border-border mt-4">
+      <PageHeader title="Users Management" />
+
+      {/* Stats Overview */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 ">
+        <Card className="border border-border">
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-foreground">
+              {stats.total}
+            </div>
+            <div className="text-sm text-muted-foreground">Total Users</div>
+          </CardContent>
+        </Card>
+        <Card className="border border-border">
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-yellow-600">
+              {stats.pending}
+            </div>
+            <div className="text-sm text-muted-foreground">Pending</div>
+          </CardContent>
+        </Card>
+        <Card className="border border-border">
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-green-600">
+              {stats.approved}
+            </div>
+            <div className="text-sm text-muted-foreground">Approved</div>
+          </CardContent>
+        </Card>
+        <Card className="border border-border">
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-red-600">
+              {stats.rejected}
+            </div>
+            <div className="text-sm text-muted-foreground">Rejected</div>
+          </CardContent>
+        </Card>
+        <Card className="border border-border">
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-red-600">
+              {stats.blocked}
+            </div>
+            <div className="text-sm text-muted-foreground">Blocked</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="border border-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5 text-primary" />
@@ -93,7 +214,7 @@ export function UsersManagement() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Search Bar */}
+          {/* Search and Filter Bar */}
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
@@ -104,6 +225,23 @@ export function UsersManagement() {
                 className="pl-10"
               />
             </div>
+            <div className="flex gap-2">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              >
+                <option value="all">All Status</option>
+                <option value="pending">Pending Approval</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                <option value="blocked">Blocked</option>
+              </select>
+              <Button variant="outline" className="flex items-center gap-2">
+                <Filter className="h-4 w-4" />
+                Filter
+              </Button>
+            </div>
           </div>
 
           {/* Users Table */}
@@ -113,112 +251,153 @@ export function UsersManagement() {
                 <TableRow>
                   <TableHead>User</TableHead>
                   <TableHead>Role</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Approval</TableHead>
+                  <TableHead>Account Status</TableHead>
+                  <TableHead>Approval Status</TableHead>
+                  <TableHead>Requested</TableHead>
                   <TableHead>Joined</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredUsers.map((user: any) => (
-                  <TableRow key={user._id}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                          <User className="h-5 w-5 text-primary" />
+                {filteredUsers.map((user: any) => {
+                  const approvalBadge = getApprovalBadge(user);
+                  return (
+                    <TableRow key={user._id}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                            <User className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <div className="font-medium text-foreground">
+                              {user.name}
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              {user.email}
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              {user.phone}
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="font-medium text-foreground">
-                            {user.name}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {user.email}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {user.phone}
-                          </div>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          user.role === "driver" ? "default" : "secondary"
-                        }
-                      >
-                        {user.role}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={user.isBlocked ? "destructive" : "default"}
-                        className={
-                          user.isBlocked
-                            ? "bg-red-500/10 text-red-600"
-                            : "bg-green-500/10 text-green-600"
-                        }
-                      >
-                        {user.isBlocked ? "Blocked" : "Active"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {user.role === "driver" && (
+                      </TableCell>
+                      <TableCell>
                         <Badge
-                          variant={user.isApproved ? "default" : "secondary"}
-                          className={
-                            user.isApproved
-                              ? "bg-green-500/10 text-green-600"
-                              : "bg-yellow-500/10 text-yellow-600"
+                          variant={
+                            user.role === "driver"
+                              ? "default"
+                              : user.role === "admin"
+                              ? "secondary"
+                              : "outline"
                           }
                         >
-                          {user.isApproved ? "Approved" : "Pending"}
+                          {user.role}
                         </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm text-muted-foreground">
-                        {new Date(user.createdAt).toLocaleDateString()}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          {user.role !== "admin" && (
-                            <DropdownMenuItem
-                              onClick={() =>
-                                handleBlockUser(user._id, user.isBlocked)
-                              }
-                            >
-                              <Ban className="h-4 w-4 mr-2" />
-                              {user.isBlocked ? "Unblock User" : "Block User"}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={user.isBlocked ? "destructive" : "default"}
+                          className={
+                            user.isBlocked
+                              ? "bg-red-500/10 text-red-600"
+                              : "bg-green-500/10 text-green-600"
+                          }
+                        >
+                          {user.isBlocked ? "Blocked" : "Active"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {user.role === "driver" && approvalBadge && (
+                          <Badge
+                            className={`${approvalBadge.bgColor} ${approvalBadge.color} flex items-center gap-1`}
+                          >
+                            <ShieldCheck className="h-3 w-3" />
+                            {approvalBadge.label}
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {user.role === "driver" && user.approvalRequestedAt && (
+                          <div className="text-sm text-muted-foreground">
+                            {new Date(
+                              user.approvalRequestedAt
+                            ).toLocaleDateString()}
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-sm text-muted-foreground">
+                          {new Date(user.createdAt).toLocaleDateString()}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            {user.role !== "admin" && (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleBlockUser(user._id, user.isBlocked)
+                                }
+                              >
+                                <Ban className="h-4 w-4 mr-2" />
+                                {user.isBlocked ? "Unblock User" : "Block User"}
+                              </DropdownMenuItem>
+                            )}
+
+                            {user.role === "driver" && (
+                              <>
+                                {!user.isApproved &&
+                                  user.approvalStatus === "pending" && (
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleApproveDriver(user._id)
+                                      }
+                                    >
+                                      <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                                      Approve Driver
+                                    </DropdownMenuItem>
+                                  )}
+
+                                {!user.isApproved &&
+                                  user.approvalStatus === "pending" && (
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        handleRejectDriver(user._id)
+                                      }
+                                      className="text-red-600"
+                                    >
+                                      <XCircle className="h-4 w-4 mr-2" />
+                                      Reject Driver
+                                    </DropdownMenuItem>
+                                  )}
+
+                                {user.isApproved && (
+                                  <DropdownMenuItem
+                                    onClick={() => handleRejectDriver(user._id)}
+                                    className="text-red-600"
+                                  >
+                                    <XCircle className="h-4 w-4 mr-2" />
+                                    Revoke Approval
+                                  </DropdownMenuItem>
+                                )}
+                              </>
+                            )}
+
+                            <DropdownMenuItem>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Details
                             </DropdownMenuItem>
-                          )}
-                          {user.role === "driver" && (
-                            <DropdownMenuItem
-                              onClick={() =>
-                                handleApproveUser(user._id, user.isApproved)
-                              }
-                            >
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              {user.isApproved
-                                ? "Unapprove Driver"
-                                : "Approve Driver"}
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuItem>
-                            <Eye className="h-4 w-4 mr-2" />
-                            View Details
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
