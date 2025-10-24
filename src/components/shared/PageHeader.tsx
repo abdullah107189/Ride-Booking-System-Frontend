@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Home, Bell, User, Settings, MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
+import { ModeToggle } from "../mode-toggle";
 
 interface PageHeaderProps {
   title: string;
@@ -81,24 +82,17 @@ export function PageHeader({
           variant="ghost"
           size="icon"
           onClick={() => navigate("/")}
-          className="h-10 w-10 rounded-full border border-border hover:bg-accent"
+          className="h-9 w-9 rounded-full border border-border hover:bg-accent"
         >
           <Home className="h-5 w-5" />
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-10 w-10 rounded-full relative"
-        >
-          <Bell className="h-5 w-5" />
-          <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-background"></span>
-        </Button>
+        <ModeToggle></ModeToggle>
 
         <Button
           variant="ghost"
           size="icon"
           onClick={() => navigate("/profile")}
-          className="h-10 w-10 rounded-full"
+          className="h-9 w-9 rounded-full"
         >
           <User className="h-5 w-5" />
         </Button>
@@ -107,12 +101,12 @@ export function PageHeader({
           variant="ghost"
           size="icon"
           onClick={() => navigate("/settings")}
-          className="h-10 w-10 rounded-full"
+          className="h-9 w-9 rounded-full"
         >
           <Settings className="h-5 w-5" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full">
+        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
           <MoreVertical className="h-5 w-5" />
         </Button>
       </div>
