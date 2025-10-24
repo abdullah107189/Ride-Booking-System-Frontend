@@ -99,7 +99,11 @@ export function PageHeader({
           <Settings className="h-5 w-5" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full border border-border">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9 rounded-full border border-border"
+        >
           <MoreVertical className="h-5 w-5" />
         </Button>
       </div>

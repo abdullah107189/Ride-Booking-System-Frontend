@@ -14,6 +14,7 @@ import { useGetMeQuery } from "@/redux/features/auth/auth.api";
 import { ModeToggle } from "./mode-toggle";
 import { Link, useLocation } from "react-router";
 import { role } from "@/const";
+import Logo from "./shared/Logo";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -32,7 +33,6 @@ const navigationLinks = [
 
 export default function NavbarOrigin() {
   const { data: userInfo, isLoading } = useGetMeQuery(undefined);
-  console.log(userInfo);
   const filteredNavigationLinks = navigationLinks.filter((link) => {
     const userIsLoggedIn = !!userInfo?.role;
     const userRole = userInfo?.role;
@@ -129,12 +129,7 @@ export default function NavbarOrigin() {
           </Popover>
           {/* Main nav */}
           <div className="flex items-center gap-6">
-            <Link
-              to="/"
-              className="text-primary hover:text-primary/90 font-bold text-xl"
-            >
-              RideShare
-            </Link>
+            <Logo></Logo>
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="flex-row items-center gap-4">
