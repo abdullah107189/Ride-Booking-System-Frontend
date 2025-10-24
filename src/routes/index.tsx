@@ -18,7 +18,8 @@ import CommonDashboard from "@/dashboard/CommontDashboard";
 import AvailableRides from "@/pages/driver/AvailableRide";
 import { UsersManagement } from "@/pages/admin/UsersManagement";
 import { RiderOverview } from "@/pages/rider/RiderOverview";
-import ProfilePage from "@/components/shared/profile/ProfilePage";
+import { ProfileView } from "@/components/shared/profile/ProfileView";
+import { ProfileEdit } from "@/components/shared/profile/ProfileEdit";
 
 export const router = createBrowserRouter([
   {
@@ -52,7 +53,11 @@ export const router = createBrowserRouter([
     Component: withAuth(CommonDashboard, role.RIDER),
     children: [
       { index: true, Component: RiderOverview },
-      { path: "profile", Component: ProfilePage },
+      { path: "profile", Component: ProfileView },
+      {
+        path: "profile-edit",
+        Component: ProfileEdit,
+      },
       ...generateRoutes(riderSidBarItems),
     ],
   },
@@ -61,7 +66,11 @@ export const router = createBrowserRouter([
     Component: withAuth(CommonDashboard, role.DRIVER),
     children: [
       { index: true, Component: AvailableRides },
-      { path: "profile", Component: ProfilePage },
+      { path: "profile", Component: ProfileView },
+      {
+        path: "profile-edit",
+        Component: ProfileEdit,
+      },
       ...generateRoutes(driverSidBarItems),
     ],
   },
@@ -70,7 +79,11 @@ export const router = createBrowserRouter([
     Component: withAuth(CommonDashboard, role.ADMIN),
     children: [
       { index: true, Component: UsersManagement },
-      { path: "profile", Component: ProfilePage },
+      { path: "profile", Component: ProfileView },
+      {
+        path: "profile-edit",
+        Component: ProfileEdit,
+      },
       ...generateRoutes(adminSidBarItems),
     ],
   },
