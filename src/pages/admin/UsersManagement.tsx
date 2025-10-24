@@ -27,7 +27,6 @@ import {
   Eye,
   Clock,
   XCircle,
-  Filter,
   ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -163,7 +162,7 @@ export function UsersManagement() {
       <PageHeader title="Users Management" />
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 ">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 my-4">
         <Card className="border border-border">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-foreground">
@@ -237,10 +236,6 @@ export function UsersManagement() {
                 <option value="rejected">Rejected</option>
                 <option value="blocked">Blocked</option>
               </select>
-              <Button variant="outline" className="flex items-center gap-2">
-                <Filter className="h-4 w-4" />
-                Filter
-              </Button>
             </div>
           </div>
 

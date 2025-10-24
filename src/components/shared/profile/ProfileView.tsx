@@ -23,7 +23,7 @@ import { ApprovalRequest } from "./ApprovalRequest";
 
 export function ProfileView() {
   const navigate = useNavigate();
-  const { data: userData, isLoading } = useGetMeQuery(undefined);
+  const { data: userData, isLoading, refetch } = useGetMeQuery(undefined);
 
   if (isLoading) {
     return (
@@ -176,12 +176,7 @@ export function ProfileView() {
 
           {userData?.role === "driver" && (
             <div className="mt-8">
-              <ApprovalRequest
-                driverData={userData}
-                refetch={() => {
-                  /* your refetch function */
-                }}
-              />
+              <ApprovalRequest driverData={userData} refetch={refetch} />
             </div>
           )}
           {/* Driver Specific Information */}
