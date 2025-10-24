@@ -23,7 +23,6 @@ import { useGetMeQuery } from "@/redux/features/auth/auth.api";
 export function ProfileView() {
   const navigate = useNavigate();
   const { data: userData, isLoading } = useGetMeQuery(undefined);
-  console.log("userData:", userData);
 
   if (isLoading) {
     return (

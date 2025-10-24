@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { User, Mail, Car, ArrowLeft, Save } from "lucide-react";
+import { User, Car, ArrowLeft, Save, MailIcon } from "lucide-react";
 import {
   useGetMeQuery,
   useUpdateProfileMutation,
@@ -31,8 +31,13 @@ import { toast } from "sonner";
 
 // Validation Schema
 const profileFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  name: z.string().min(2, "Name must be at least 2 characters").optional(),
+  phone: z
+    .string()
+    .min(10, "Phone number must be at least 10 digits")
+    .optional(),
+  email: z.string().email("Invalid email address").optional(),
+  role: z.string().optional(),
   vehicleInfo: z
     .object({
       licensePlate: z.string().min(1, "License plate is required"),
@@ -71,8 +76,8 @@ export function ProfileEdit() {
   });
 
   useEffect(() => {
-    if (userData?.data) {
-      const user = userData.data;
+    if (userData) {
+      const user = userData;
       form.reset({
         name: user.name,
         phone: user.phone,
@@ -88,6 +93,7 @@ export function ProfileEdit() {
     }
   }, [userData, form]);
 
+  console.log(userData);
   const onSubmit = async (data: ProfileFormValues) => {
     try {
       const updateData: any = {
@@ -95,15 +101,17 @@ export function ProfileEdit() {
         phone: data.phone,
       };
 
-      if (userData?.data?.role === "driver") {
+      if (userData?.role === "driver") {
         updateData.vehicleInfo = data.vehicleInfo;
         updateData.currentLocation = data.currentLocation;
       }
+      console.log(updateData);
 
-      await updateProfile(updateData).unwrap();
+      const result = await updateProfile(updateData).unwrap();
+      console.log(result);
 
       toast.success("Profile updated successfully!");
-      navigate("/dashboard/profile");
+      navigate(-1);
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to update profile");
     }
@@ -117,7 +125,7 @@ export function ProfileEdit() {
     );
   }
 
-  const user = userData?.data;
+  const user = userData;
 
   return (
     <div className="">
@@ -168,17 +176,16 @@ export function ProfileEdit() {
                     )}
                   />
 
-                  <div className="space-y-2">
-                    <FormLabel>Email Address</FormLabel>
-                    <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{user?.email}</span>
+                  <div className="">
+                    <FormLabel>Email</FormLabel>
+                    <div className="mt-2 flex items-center gap-2 p-3 bg-muted rounded-md">
+                      <MailIcon className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm capitalize">{user?.email}</span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Email cannot be changed
+                      Role cannot be changed
                     </p>
                   </div>
-
                   <FormField
                     control={form.control}
                     name="phone"
@@ -264,8 +271,7 @@ export function ProfileEdit() {
                             <SelectContent>
                               <SelectItem value="car">Car</SelectItem>
                               <SelectItem value="bike">Bike</SelectItem>
-                              <SelectItem value="premium">Premium</SelectItem>
-                              <SelectItem value="suv">SUV</SelectItem>
+                              <SelectItem value="cng">Cng</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -299,7 +305,7 @@ export function ProfileEdit() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => navigate("/dashboard/profile")}
+                onClick={() => navigate(-1)}
                 disabled={isUpdating}
               >
                 Cancel
