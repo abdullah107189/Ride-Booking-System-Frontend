@@ -124,7 +124,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
 export default function FeaturesPage() {
   return (
     <section className="py-16 md:py-24 bg-background">
-      <div className="container mx-auto px-4">
+      <div className="mxw">
         {/* Header Section */}
         <div className="max-w-3xl mx-auto text-center mb-12 md:mb-16">
           <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary mb-3">

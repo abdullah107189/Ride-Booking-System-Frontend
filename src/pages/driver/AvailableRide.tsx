@@ -84,7 +84,7 @@ export default function AvailableRides() {
           Available
         </div>
       </div>
-      <main className="container mx-auto px-4 py-8">
+      <main className="mxw py-8">
         {availableRides.length === 0 ? (
           <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
             <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-muted">

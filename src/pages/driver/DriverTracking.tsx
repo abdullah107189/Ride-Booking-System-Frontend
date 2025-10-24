@@ -325,337 +325,329 @@ export function DriverTracking() {
     isPickingUp || isTransit || isCompleting || isMarkingPaid;
   return (
     <div className="">
-      <div className="px-4">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <PageHeader title="Ride in Progress"></PageHeader>
-          <Badge
-            className={`${statusConfig.bgColor} ${statusConfig.color} text-lg py-2 px-4 mt-3`}
-          >
-            {statusConfig.label}
-            {isAnyLoading && " (Updating...)"}
-          </Badge>
-          <div className="mt-2 text-muted-foreground">
-            Cost : {ride?.fare} Taka
-          </div>
+      {/* Header */}
+      <div className="text-center mb-8">
+        <PageHeader title="Ride in Progress"></PageHeader>
+        <Badge
+          className={`${statusConfig.bgColor} ${statusConfig.color} text-lg py-2 px-4 mt-3`}
+        >
+          {statusConfig.label}
+          {isAnyLoading && " (Updating...)"}
+        </Badge>
+        <div className="mt-2 text-muted-foreground">
+          Cost : {ride?.fare} Taka
         </div>
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column - Ride Info & Progress */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Progress Steps */}
-            <Card className="border border-border">
-              <CardHeader>
-                <CardTitle className="text-card-foreground">
-                  Ride Progress
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {statusSteps.map((step, index) => {
-                    const isCompleted =
-                      statusSteps.findIndex((s) => s.key === currentStatus) >=
-                      index;
-                    const isCurrent = step.key === currentStatus;
-                    const Icon = step.icon;
-                    const statusHistoryItem = ride.statusHistory.find(
-                      (sh: any) => sh.updateStatus === step.key
-                    );
+      </div>
+      <div className="grid lg:grid-cols-3 gap-8">
+        {/* Left Column - Ride Info & Progress */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Progress Steps */}
+          <Card className="border border-border">
+            <CardHeader>
+              <CardTitle className="text-card-foreground">
+                Ride Progress
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {statusSteps.map((step, index) => {
+                  const isCompleted =
+                    statusSteps.findIndex((s) => s.key === currentStatus) >=
+                    index;
+                  const isCurrent = step.key === currentStatus;
+                  const Icon = step.icon;
+                  const statusHistoryItem = ride.statusHistory.find(
+                    (sh: any) => sh.updateStatus === step.key
+                  );
 
-                    return (
-                      <div key={step.key} className="flex items-center gap-4">
+                  return (
+                    <div key={step.key} className="flex items-center gap-4">
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          isCompleted
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted text-muted-foreground"
+                        } ${
+                          isCurrent ? "ring-2 ring-primary ring-offset-2" : ""
+                        }`}
+                      >
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1">
                         <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          className={`font-medium ${
                             isCompleted
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-muted text-muted-foreground"
-                          } ${
-                            isCurrent ? "ring-2 ring-primary ring-offset-2" : ""
+                              ? "text-card-foreground"
+                              : "text-muted-foreground"
                           }`}
                         >
-                          <Icon className="h-5 w-5" />
+                          {step.label}
                         </div>
-                        <div className="flex-1">
-                          <div
-                            className={`font-medium ${
-                              isCompleted
-                                ? "text-card-foreground"
-                                : "text-muted-foreground"
-                            }`}
-                          >
-                            {step.label}
+                        {statusHistoryItem && (
+                          <div className="text-sm text-muted-foreground">
+                            {new Date(
+                              statusHistoryItem.timestamp
+                            ).toLocaleTimeString()}
                           </div>
-                          {statusHistoryItem && (
-                            <div className="text-sm text-muted-foreground">
-                              {new Date(
-                                statusHistoryItem.timestamp
-                              ).toLocaleTimeString()}
-                            </div>
-                          )}
-                        </div>
+                        )}
                       </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Route Information */}
-            <Card className="border border-border">
-              <CardHeader>
-                <CardTitle className="text-card-foreground flex items-center gap-2">
-                  <Navigation className="h-5 w-5 text-primary" />
-                  Route
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-card-foreground">
-                      Pickup
-                    </div>
-                    <div className="text-muted-foreground">
-                      {ride.pickupLocation.address}
-                    </div>
+          {/* Route Information */}
+          <Card className="border border-border">
+            <CardHeader>
+              <CardTitle className="text-card-foreground flex items-center gap-2">
+                <Navigation className="h-5 w-5 text-primary" />
+                Route
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
+                <div className="flex-1">
+                  <div className="text-sm font-medium text-card-foreground">
+                    Pickup
+                  </div>
+                  <div className="text-muted-foreground">
+                    {ride.pickupLocation.address}
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-3 h-3 bg-red-500 rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-card-foreground">
-                      Destination
-                    </div>
-                    <div className="text-muted-foreground">
-                      {ride.destinationLocation.address}
-                    </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-3 h-3 bg-red-500 rounded-full mt-2"></div>
+                <div className="flex-1">
+                  <div className="text-sm font-medium text-card-foreground">
+                    Destination
+                  </div>
+                  <div className="text-muted-foreground">
+                    {ride.destinationLocation.address}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-          {/* Right Column - Rider & Actions */}
-          <div className="space-y-6">
-            {/* Rider Information */}
-            <Card className="border border-border">
-              <CardHeader>
-                <CardTitle className="text-card-foreground flex items-center gap-2">
-                  <User className="h-5 w-5 text-primary" />
-                  Rider Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                    <User className="h-8 w-8 text-primary" />
+        {/* Right Column - Rider & Actions */}
+        <div className="space-y-6">
+          {/* Rider Information */}
+          <Card className="border border-border">
+            <CardHeader>
+              <CardTitle className="text-card-foreground flex items-center gap-2">
+                <User className="h-5 w-5 text-primary" />
+                Rider Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                  <User className="h-8 w-8 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-card-foreground mb-1">
+                    {ride.rider.name}
+                  </h3>
+                  <div className="text-sm text-muted-foreground">
+                    {ride.rider.phone}
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-card-foreground mb-1">
-                      {ride.rider.name}
-                    </h3>
-                    <div className="text-sm text-muted-foreground">
-                      {ride.rider.phone}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {ride.rider.email}
-                    </div>
+                  <div className="text-sm text-muted-foreground">
+                    {ride.rider.email}
                   </div>
                 </div>
+              </div>
 
-                {/* Action Buttons */}
-                <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1" size="sm">
-                    <Phone className="h-4 w-4 mr-2" />
-                    Call Rider
-                  </Button>
-                  <Button variant="outline" className="flex-1" size="sm">
-                    <Shield className="h-4 w-4 mr-2" />
-                    Safety
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+              {/* Action Buttons */}
+              <div className="flex gap-2">
+                <Button variant="outline" className="flex-1" size="sm">
+                  <Phone className="h-4 w-4 mr-2" />
+                  Call Rider
+                </Button>
+                <Button variant="outline" className="flex-1" size="sm">
+                  <Shield className="h-4 w-4 mr-2" />
+                  Safety
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Driver Actions */}
-            <Card className="border border-border">
-              <CardHeader>
-                <CardTitle className="text-card-foreground">
-                  Driver Actions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {currentStatus === "accepted" && (
-                  <>
-                    <Button
-                      className="w-full"
-                      variant="outline"
-                      onClick={() =>
-                        ride?._id && handleMarkAsPickedUp(ride?._id)
-                      }
-                      disabled={isPickingUp}
-                    >
-                      <Package className="h-4 w-4 mr-2" />
-                      {isPickingUp ? "Updating..." : "Start Trip / Picked Up"}
-                    </Button>
-                  </>
-                )}
-
-                {currentStatus === "picked_up" && (
+          {/* Driver Actions */}
+          <Card className="border border-border">
+            <CardHeader>
+              <CardTitle className="text-card-foreground">
+                Driver Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {currentStatus === "accepted" && (
+                <>
                   <Button
                     className="w-full"
                     variant="outline"
-                    onClick={() => ride?._id && handleMakeTransit(ride?._id)}
-                    disabled={isTransit}
+                    onClick={() => ride?._id && handleMarkAsPickedUp(ride?._id)}
+                    disabled={isPickingUp}
                   >
-                    <Car className="h-4 w-4 mr-2" />
-                    {isTransit ? "Starting..." : "Start Trip"}
+                    <Package className="h-4 w-4 mr-2" />
+                    {isPickingUp ? "Updating..." : "Start Trip / Picked Up"}
                   </Button>
-                )}
+                </>
+              )}
 
-                {currentStatus === "in_transit" && (
-                  <Button
-                    className="w-full"
-                    variant="default"
-                    onClick={() => ride?._id && handleCompleteRide(ride?._id)}
-                    disabled={isCompleting}
-                  >
-                    <CheckCircle2 className="h-4 w-4 mr-2" />
-                    {isCompleting ? "Completing..." : "Complete Ride"}
-                  </Button>
-                )}
+              {currentStatus === "picked_up" && (
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => ride?._id && handleMakeTransit(ride?._id)}
+                  disabled={isTransit}
+                >
+                  <Car className="h-4 w-4 mr-2" />
+                  {isTransit ? "Starting..." : "Start Trip"}
+                </Button>
+              )}
 
-                {currentStatus === "completed" && (
-                  <Button
-                    className="w-full"
-                    variant="default"
-                    onClick={() => ride?._id && handleMarkAsPaid(ride?._id)}
-                    disabled={isMarkingPaid}
-                  >
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    {isMarkingPaid ? "Updating..." : "Mark as Paid"}
-                  </Button>
-                )}
+              {currentStatus === "in_transit" && (
+                <Button
+                  className="w-full"
+                  variant="default"
+                  onClick={() => ride?._id && handleCompleteRide(ride?._id)}
+                  disabled={isCompleting}
+                >
+                  <CheckCircle2 className="h-4 w-4 mr-2" />
+                  {isCompleting ? "Completing..." : "Complete Ride"}
+                </Button>
+              )}
 
-                {currentStatus === "paid" && (
-                  <div className="text-center text-green-600 font-medium">
-                    Ride Completed Successfully!
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+              {currentStatus === "completed" && (
+                <Button
+                  className="w-full"
+                  variant="default"
+                  onClick={() => ride?._id && handleMarkAsPaid(ride?._id)}
+                  disabled={isMarkingPaid}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  {isMarkingPaid ? "Updating..." : "Mark as Paid"}
+                </Button>
+              )}
 
-            {/* Ride Information */}
+              {currentStatus === "paid" && (
+                <div className="text-center text-green-600 font-medium">
+                  Ride Completed Successfully!
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Ride Information */}
+          <Card className="border border-border">
+            <CardHeader>
+              <CardTitle className="text-card-foreground">
+                Ride Details
+              </CardTitle>
+            </CardHeader>
             <Card className="border border-border">
               <CardHeader>
-                <CardTitle className="text-card-foreground">
-                  Ride Details
+                <CardTitle className="text-card-foreground flex items-center gap-2">
+                  <History className="h-5 w-5 text-primary" />
+                  Status History
                 </CardTitle>
               </CardHeader>
-              <Card className="border border-border">
-                <CardHeader>
-                  <CardTitle className="text-card-foreground flex items-center gap-2">
-                    <History className="h-5 w-5 text-primary" />
-                    Status History
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {/* Timeline */}
-                  <div className="space-y-3">
-                    {ride.statusHistory.map(
-                      (
-                        history: { updateStatus: string; timestamp: any },
-                        index: number
-                      ) => {
-                        const statusConfig =
-                          statusConfigs[history.updateStatus as RideStatus];
-                        const isLast = index === ride.statusHistory.length - 1;
+              <CardContent>
+                {/* Timeline */}
+                <div className="space-y-3">
+                  {ride.statusHistory.map(
+                    (
+                      history: { updateStatus: string; timestamp: any },
+                      index: number
+                    ) => {
+                      const statusConfig =
+                        statusConfigs[history.updateStatus as RideStatus];
+                      const isLast = index === ride.statusHistory.length - 1;
 
-                        const rawTimestamp =
-                          history.timestamp?.$date || history.timestamp;
+                      const rawTimestamp =
+                        history.timestamp?.$date || history.timestamp;
 
-                        return (
-                          <div key={index} className="flex items-start gap-3">
-                            <div className="flex flex-col items-center mt-1">
-                              <div
-                                className={`w-2 h-2 rounded-full ${statusConfig?.bgColor} ${statusConfig?.color}`}
-                              />
-                              {!isLast && (
-                                <div className="w-0.5 h-6 bg-border mt-1" />
-                              )}
-                            </div>
-
-                            <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                              <span className="text-sm font-medium text-card-foreground">
-                                {statusConfig?.label || history.updateStatus}
-                              </span>
-                              <span className="text-xs text-muted-foreground">
-                                {new Date(rawTimestamp).toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                })}
-                              </span>
-                            </div>
+                      return (
+                        <div key={index} className="flex items-start gap-3">
+                          <div className="flex flex-col items-center mt-1">
+                            <div
+                              className={`w-2 h-2 rounded-full ${statusConfig?.bgColor} ${statusConfig?.color}`}
+                            />
+                            {!isLast && (
+                              <div className="w-0.5 h-6 bg-border mt-1" />
+                            )}
                           </div>
-                        );
-                      }
-                    )}
-                  </div>
 
-                  {/* Quick Stats */}
-                  <div className="grid grid-cols-3 gap-3 pt-4 mt-4 border-t border-border">
-                    <div className="text-center">
-                      <div className="font-semibold text-card-foreground">
-                        {ride.statusHistory.length}
-                      </div>
-                      <div className="text-xs text-muted-foreground">Steps</div>
+                          <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                            <span className="text-sm font-medium text-card-foreground">
+                              {statusConfig?.label || history.updateStatus}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {new Date(rawTimestamp).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
+
+                {/* Quick Stats */}
+                <div className="grid grid-cols-3 gap-3 pt-4 mt-4 border-t border-border">
+                  <div className="text-center">
+                    <div className="font-semibold text-card-foreground">
+                      {ride.statusHistory.length}
                     </div>
-                    <div className="text-center">
-                      <div className="font-semibold text-card-foreground">
-                        {new Date(ride.createdAt).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Started
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <div className="font-semibold text-card-foreground">
-                        {new Date(ride.updatedAt).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Updated
-                      </div>
-                    </div>
+                    <div className="text-xs text-muted-foreground">Steps</div>
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="text-center">
+                    <div className="font-semibold text-card-foreground">
+                      {new Date(ride.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
+                    <div className="text-xs text-muted-foreground">Started</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-semibold text-card-foreground">
+                      {new Date(ride.updatedAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
+                    <div className="text-xs text-muted-foreground">Updated</div>
+                  </div>
+                </div>
+              </CardContent>
             </Card>
-          </div>
+          </Card>
         </div>
-
-        {/* Map Placeholder */}
-        <Card className="mt-8 border border-border">
-          <CardContent className="p-6">
-            <div className="h-64 bg-muted rounded-lg flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
-                <p className="text-muted-foreground">
-                  Live map would be integrated here
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Showing route from {ride.pickupLocation.address} to{" "}
-                  {ride.destinationLocation.address}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
+
+      {/* Map Placeholder */}
+      <Card className="mt-8 border border-border">
+        <CardContent className="p-6">
+          <div className="h-64 bg-muted rounded-lg flex items-center justify-center">
+            <div className="text-center">
+              <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
+              <p className="text-muted-foreground">
+                Live map would be integrated here
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Showing route from {ride.pickupLocation.address} to{" "}
+                {ride.destinationLocation.address}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

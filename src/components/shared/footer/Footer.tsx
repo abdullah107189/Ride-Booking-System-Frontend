@@ -20,7 +20,7 @@ export function Footer() {
   return (
     <footer className="bg-muted border-t border-border">
       {/* Main Footer Content */}
-      <div className="container mx-auto px-4 py-12">
+      <div className="mxw py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
@@ -284,7 +284,7 @@ export function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-border bg-background/50">
-        <div className="container mx-auto px-4 py-4">
+        <div className="mxw py-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
             <div className="text-muted-foreground">
               © {new Date().getFullYear()} RideShare. All rights reserved.

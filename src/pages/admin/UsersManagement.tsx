@@ -32,6 +32,7 @@ import {
   useChangeApprovalStatusMutation,
   useGetAllUsersQuery,
 } from "@/redux/features/admin/admin.api";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export function UsersManagement() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -82,149 +83,154 @@ export function UsersManagement() {
   }
 
   return (
-    <Card className="border border-border">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <User className="h-5 w-5 text-primary" />
-          Users Management ({filteredUsers.length})
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {/* Search Bar */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-            <Input
-              placeholder="Search users..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+    <div>
+      <PageHeader title="Users Management"></PageHeader>
+      <Card className="border border-border mt-4">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <User className="h-5 w-5 text-primary" />
+            Users Management ({filteredUsers.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {/* Search Bar */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Input
+                placeholder="Search users..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Users Table */}
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Approval</TableHead>
-                <TableHead>Joined</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredUsers.map((user: any) => (
-                <TableRow key={user._id}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                        <User className="h-5 w-5 text-primary" />
+          {/* Users Table */}
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>User</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Approval</TableHead>
+                  <TableHead>Joined</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredUsers.map((user: any) => (
+                  <TableRow key={user._id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                          <User className="h-5 w-5 text-primary" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-foreground">
+                            {user.name}
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            {user.email}
+                          </div>
+                          <div className="text-sm text-muted-foreground">
+                            {user.phone}
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="font-medium text-foreground">
-                          {user.name}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {user.email}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {user.phone}
-                        </div>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={user.role === "driver" ? "default" : "secondary"}
-                    >
-                      {user.role}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={user.isBlocked ? "destructive" : "default"}
-                      className={
-                        user.isBlocked
-                          ? "bg-red-500/10 text-red-600"
-                          : "bg-green-500/10 text-green-600"
-                      }
-                    >
-                      {user.isBlocked ? "Blocked" : "Active"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {user.role === "driver" && (
+                    </TableCell>
+                    <TableCell>
                       <Badge
-                        variant={user.isApproved ? "default" : "secondary"}
-                        className={
-                          user.isApproved
-                            ? "bg-green-500/10 text-green-600"
-                            : "bg-yellow-500/10 text-yellow-600"
+                        variant={
+                          user.role === "driver" ? "default" : "secondary"
                         }
                       >
-                        {user.isApproved ? "Approved" : "Pending"}
+                        {user.role}
                       </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-sm text-muted-foreground">
-                      {new Date(user.createdAt).toLocaleDateString()}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        {user.role !== "admin" && (
-                          <DropdownMenuItem
-                            onClick={() =>
-                              handleBlockUser(user._id, user.isBlocked)
-                            }
-                          >
-                            <Ban className="h-4 w-4 mr-2" />
-                            {user.isBlocked ? "Unblock User" : "Block User"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={user.isBlocked ? "destructive" : "default"}
+                        className={
+                          user.isBlocked
+                            ? "bg-red-500/10 text-red-600"
+                            : "bg-green-500/10 text-green-600"
+                        }
+                      >
+                        {user.isBlocked ? "Blocked" : "Active"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {user.role === "driver" && (
+                        <Badge
+                          variant={user.isApproved ? "default" : "secondary"}
+                          className={
+                            user.isApproved
+                              ? "bg-green-500/10 text-green-600"
+                              : "bg-yellow-500/10 text-yellow-600"
+                          }
+                        >
+                          {user.isApproved ? "Approved" : "Pending"}
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm text-muted-foreground">
+                        {new Date(user.createdAt).toLocaleDateString()}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          {user.role !== "admin" && (
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleBlockUser(user._id, user.isBlocked)
+                              }
+                            >
+                              <Ban className="h-4 w-4 mr-2" />
+                              {user.isBlocked ? "Unblock User" : "Block User"}
+                            </DropdownMenuItem>
+                          )}
+                          {user.role === "driver" && (
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleApproveUser(user._id, user.isApproved)
+                              }
+                            >
+                              <CheckCircle className="h-4 w-4 mr-2" />
+                              {user.isApproved
+                                ? "Unapprove Driver"
+                                : "Approve Driver"}
+                            </DropdownMenuItem>
+                          )}
+                          <DropdownMenuItem>
+                            <Eye className="h-4 w-4 mr-2" />
+                            View Details
                           </DropdownMenuItem>
-                        )}
-                        {user.role === "driver" && (
-                          <DropdownMenuItem
-                            onClick={() =>
-                              handleApproveUser(user._id, user.isApproved)
-                            }
-                          >
-                            <CheckCircle className="h-4 w-4 mr-2" />
-                            {user.isApproved
-                              ? "Unapprove Driver"
-                              : "Approve Driver"}
-                          </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem>
-                          <Eye className="h-4 w-4 mr-2" />
-                          View Details
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        {filteredUsers.length === 0 && (
-          <div className="text-center py-8">
-            <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground">No users found</p>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
-        )}
-      </CardContent>
-    </Card>
+
+          {filteredUsers.length === 0 && (
+            <div className="text-center py-8">
+              <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">No users found</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

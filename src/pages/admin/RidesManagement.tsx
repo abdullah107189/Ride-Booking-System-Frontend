@@ -24,6 +24,7 @@ import {
   useCancelRideMutation,
   useGetAllRidesQuery,
 } from "@/redux/features/admin/admin.api";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 export function RidesManagement() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,7 +32,6 @@ export function RidesManagement() {
   const [cancelRide] = useCancelRideMutation();
 
   const rides = ridesData?.data || [];
-  console.log(rides);
   const handleCancelRide = async (rideId: string) => {
     try {
       await cancelRide(rideId).unwrap();
@@ -107,132 +107,135 @@ export function RidesManagement() {
   }
 
   return (
-    <Card className="border border-border">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Car className="h-5 w-5 text-primary" />
-          Rides Management ({filteredRides.length})
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {/* Search Bar */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-            <Input
-              placeholder="Search rides..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+    <div>
+      <PageHeader title="Ride Management"></PageHeader>
+      <Card className="border border-border mt-4">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Car className="h-5 w-5 text-primary" />
+            Rides Management ({filteredRides.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {/* Search Bar */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Input
+                placeholder="Search rides..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Rides Table */}
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Ride Info</TableHead>
-                <TableHead>Rider & Driver</TableHead>
-                <TableHead>Fare</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Created</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredRides.map((ride: any) => {
-                const statusConfig = getStatusConfig(ride.status);
-                return (
-                  <TableRow key={ride._id}>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium text-foreground">
-                          {ride.pickupLocation?.address}
-                        </div>
-                        <div className="text-sm text-muted-foreground">→</div>
-                        <div className="font-medium text-foreground">
-                          {ride.destinationLocation?.address}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="space-y-2">
+          {/* Rides Table */}
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Ride Info</TableHead>
+                  <TableHead>Rider & Driver</TableHead>
+                  <TableHead>Fare</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredRides.map((ride: any) => {
+                  const statusConfig = getStatusConfig(ride.status);
+                  return (
+                    <TableRow key={ride._id}>
+                      <TableCell>
                         <div>
-                          <div className="text-sm font-medium">Rider:</div>
-                          <div className="text-sm text-muted-foreground">
-                            {ride.rider?.name || "N/A"}
+                          <div className="font-medium text-foreground">
+                            {ride.pickupLocation?.address}
+                          </div>
+                          <div className="text-sm text-muted-foreground">→</div>
+                          <div className="font-medium text-foreground">
+                            {ride.destinationLocation?.address}
                           </div>
                         </div>
-                        <div>
-                          <div className="text-sm font-medium">Driver:</div>
-                          <div className="text-sm text-muted-foreground">
-                            {ride.driver?.name || "Not assigned"}
+                      </TableCell>
+                      <TableCell>
+                        <div className="space-y-2">
+                          <div>
+                            <div className="text-sm font-medium">Rider:</div>
+                            <div className="text-sm text-muted-foreground">
+                              {ride.rider?.name || "N/A"}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium">Driver:</div>
+                            <div className="text-sm text-muted-foreground">
+                              {ride.driver?.name || "Not assigned"}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-lg font-bold text-green-600">
-                        ৳{ride.fare || "N/A"}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        className={`${statusConfig.bgColor} ${statusConfig.color}`}
-                      >
-                        {statusConfig.label}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm text-muted-foreground">
-                        {new Date(ride.createdAt).toLocaleDateString()}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {new Date(ride.createdAt).toLocaleTimeString()}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Eye className="h-4 w-4 mr-2" />
-                            View Details
-                          </DropdownMenuItem>
-                          {!["completed", "paid", "canceled"].includes(
-                            ride.status
-                          ) && (
-                            <DropdownMenuItem
-                              onClick={() => handleCancelRide(ride._id)}
-                              className="text-red-600"
-                            >
-                              <XCircle className="h-4 w-4 mr-2" />
-                              Cancel Ride
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-lg font-bold text-green-600">
+                          ৳{ride.fare || "N/A"}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          className={`${statusConfig.bgColor} ${statusConfig.color}`}
+                        >
+                          {statusConfig.label}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-sm text-muted-foreground">
+                          {new Date(ride.createdAt).toLocaleDateString()}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {new Date(ride.createdAt).toLocaleTimeString()}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Details
                             </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
-
-        {filteredRides.length === 0 && (
-          <div className="text-center py-8">
-            <Car className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground">No rides found</p>
+                            {!["completed", "paid", "canceled"].includes(
+                              ride.status
+                            ) && (
+                              <DropdownMenuItem
+                                onClick={() => handleCancelRide(ride._id)}
+                                className="text-red-600"
+                              >
+                                <XCircle className="h-4 w-4 mr-2" />
+                                Cancel Ride
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </div>
-        )}
-      </CardContent>
-    </Card>
+
+          {filteredRides.length === 0 && (
+            <div className="text-center py-8">
+              <Car className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">No rides found</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

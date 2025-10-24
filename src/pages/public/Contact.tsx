@@ -68,7 +68,7 @@ export function ContactForm() {
 
   return (
     <section className="py-20 bg-background">
-      <div className="container mx-auto px-4">
+      <div className="mxw">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-16">

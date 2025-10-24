@@ -75,7 +75,7 @@ export function TeamProfiles() {
 
   return (
     <section className="py-20 bg-background">
-      <div className="container mx-auto px-4">
+      <div className="mxw">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-foreground mb-4">
             Meet Our Team
