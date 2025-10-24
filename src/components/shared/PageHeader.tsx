@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Home, User, Settings, MoreVertical } from "lucide-react";
+import { Home, Settings, MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
 import { ModeToggle } from "../mode-toggle";
@@ -94,12 +94,12 @@ export function PageHeader({
           variant="ghost"
           size="icon"
           onClick={() => navigate("/settings")}
-          className="h-9 w-9 rounded-full"
+          className="h-9 w-9 rounded-full border border-border"
         >
           <Settings className="h-5 w-5" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
+        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full border border-border">
           <MoreVertical className="h-5 w-5" />
         </Button>
       </div>

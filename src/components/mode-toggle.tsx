@@ -13,7 +13,7 @@ export function ModeToggle() {
   return (
     <Button
       variant="outline"
-      className="rounded-full"
+      className="rounded-full bg-card "
       size="icon"
       onClick={toggleTheme}
     >

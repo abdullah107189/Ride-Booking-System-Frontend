@@ -18,6 +18,7 @@ import CommonDashboard from "@/dashboard/CommontDashboard";
 import AvailableRides from "@/pages/driver/AvailableRide";
 import { UsersManagement } from "@/pages/admin/UsersManagement";
 import { RiderOverview } from "@/pages/rider/RiderOverview";
+import ProfilePage from "@/components/shared/profile/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,7 @@ export const router = createBrowserRouter([
     Component: withAuth(CommonDashboard, role.RIDER),
     children: [
       { index: true, Component: RiderOverview },
+      { path: "profile", Component: ProfilePage },
       ...generateRoutes(riderSidBarItems),
     ],
   },
@@ -59,6 +61,7 @@ export const router = createBrowserRouter([
     Component: withAuth(CommonDashboard, role.DRIVER),
     children: [
       { index: true, Component: AvailableRides },
+      { path: "profile", Component: ProfilePage },
       ...generateRoutes(driverSidBarItems),
     ],
   },
@@ -67,6 +70,7 @@ export const router = createBrowserRouter([
     Component: withAuth(CommonDashboard, role.ADMIN),
     children: [
       { index: true, Component: UsersManagement },
+      { path: "profile", Component: ProfilePage },
       ...generateRoutes(adminSidBarItems),
     ],
   },

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +26,6 @@ import {
   Mail,
   Phone,
   User,
-  Lock,
   GalleryVerticalEnd,
   Car,
   Bike,
@@ -54,18 +54,6 @@ export function RegistrationForm() {
     confirmPassword: "",
   };
 
-  const driverDefaultValues = {
-    role: "driver" as const,
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    licensePlate: "",
-    model: "",
-    carType: "",
-    address: "",
-  };
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: riderDefaultValues,
@@ -99,7 +87,7 @@ export function RegistrationForm() {
           },
         }),
       };
-      const result = await register(apiData).unwrap();
+      await register(apiData).unwrap();
       navigate("/");
       toast.success("Registration successful! 🎉", {
         description: `Welcome aboard, ${data.name}!`,
@@ -107,10 +95,8 @@ export function RegistrationForm() {
 
       form.reset();
     } catch (error) {
-      console.error("Registration failed:", error);
-      toast.error("Registration failed", {
-        description: "Please try again with different information.",
-      });
+      const anyError = error as any;
+      toast.error(anyError?.data?.message || "Registration failed");
     }
   };
 
@@ -269,7 +255,9 @@ export function RegistrationForm() {
                                 {...field}
                                 onChange={(e) => {
                                   // Convert to uppercase and only allow A-Z, 0-9, and -
-                                  const value = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+                                  const value = e.target.value
+                                    .toUpperCase()
+                                    .replace(/[^A-Z0-9-]/g, "");
                                   field.onChange(value);
                                 }}
                               />
@@ -310,7 +298,10 @@ export function RegistrationForm() {
                               Car Type
                             </FormLabel>
                             <FormControl>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
                                 <SelectTrigger className="bg-background border-input transition-all focus:border-primary">
                                   <SelectValue placeholder="Select vehicle type" />
                                 </SelectTrigger>
