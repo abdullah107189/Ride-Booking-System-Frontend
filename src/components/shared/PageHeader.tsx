@@ -6,6 +6,7 @@ import { Home, User, Settings, MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
 import { ModeToggle } from "../mode-toggle";
+import { HeaderProfile } from "./profile/HeaderProfile";
 
 interface PageHeaderProps {
   title: string;
@@ -88,15 +89,7 @@ export function PageHeader({
         </Button>
         <ModeToggle></ModeToggle>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate("/profile")}
-          className="h-9 w-9 rounded-full"
-        >
-          <User className="h-5 w-5" />
-        </Button>
-
+        <HeaderProfile></HeaderProfile>
         <Button
           variant="ghost"
           size="icon"
