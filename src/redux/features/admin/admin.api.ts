@@ -23,7 +23,7 @@ export const adminApi = baseApi.injectEndpoints({
     }),
     changeApprovalStatus: builder.mutation({
       query: (userId: string) => ({
-        url: `/admin/changeApprovalStatus/${userId}`,
+        url: `/admin/changeApproveStatus/${userId}`,
         method: "PATCH",
       }),
       invalidatesTags: ["USERS"],

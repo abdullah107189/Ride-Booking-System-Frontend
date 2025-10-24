@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Command, LifeBuoy, Receipt, Send, SquareTerminal } from "lucide-react";
+import { Command, LifeBuoy, Send } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
@@ -67,7 +67,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userInfo ? userInfo : data.user} />
       </SidebarFooter>
     </Sidebar>
   );
