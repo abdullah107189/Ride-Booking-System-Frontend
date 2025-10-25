@@ -54,10 +54,7 @@ export function RideHistory() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Ride History"
-        description="View your past rides and transactions"
-      />
+      <PageHeader title="Ride History" />
 
       <Card>
         <CardHeader>
@@ -126,9 +123,6 @@ export function RideHistory() {
                           >
                             {statusBadge.label}
                           </Badge>
-                          <Button variant="outline" size="sm">
-                            Details
-                          </Button>
                         </div>
                       </div>
                     </Card>
