@@ -44,11 +44,6 @@ export function NavMain({
             currentPath === item.url ||
             item.items?.some((subItem) => currentPath === subItem.url);
 
-          // Check if any sub-item is active
-          const isSubItemActive = item.items?.some(
-            (subItem) => currentPath === subItem.url
-          );
-
           return (
             <Collapsible
               key={item.title}
