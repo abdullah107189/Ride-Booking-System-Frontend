@@ -108,12 +108,12 @@ export default function NavbarOrigin() {
 
             <PopoverContent align="start" className=" p-1 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
-                <NavigationMenuList className="flex-col items-start gap-2 md:gap-2">
+                <NavigationMenuList className="flex-col  items-start gap-3 p-3 md:gap-2">
                   {filteredNavigationLinks.map((link, index) => (
                     <NavigationMenuItem className="w-full" key={index}>
                       <Link
                         to={link.href}
-                        className={` py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
+                        className={` py-1.5 px-3 rounded-sm flex items-center justify-center text-sm font-medium transition-colors ${
                           isActive(link.href)
                             ? "bg-muted text-primary"
                             : "text-muted-foreground hover:text-primary bg-muted"
@@ -127,17 +127,19 @@ export default function NavbarOrigin() {
               </NavigationMenu>
             </PopoverContent>
           </Popover>
+
           {/* Main nav */}
           <div className="flex items-center gap-6">
             <Logo></Logo>
+
             {/* Navigation menu */}
-            <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="flex-row items-center gap-4">
+            <NavigationMenu className="max-md:hidden ">
+              <NavigationMenuList className="flex-row  items-center gap-4">
                 {filteredNavigationLinks.map((link, index) => (
-                  <NavigationMenuItem className="w-full" key={index}>
+                  <NavigationMenuItem className="w-full " key={index}>
                     <Link
                       to={link.href}
-                      className={`py-1.5 px-3 rounded-md text-sm font-medium transition-colors ${
+                      className={`py-1.5 px-3 rounded-md  text-sm font-medium transition-colors ${
                         isActive(link.href)
                           ? "bg-muted text-primary"
                           : "text-muted-foreground hover:text-primary bg-muted"

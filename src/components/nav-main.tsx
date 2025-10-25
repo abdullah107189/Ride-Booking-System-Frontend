@@ -40,23 +40,24 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) => {
           // Check if current item is active
-          const isItemActive = currentPath === item.url || 
-            item.items?.some(subItem => currentPath === subItem.url);
-          
+          const isItemActive =
+            currentPath === item.url ||
+            item.items?.some((subItem) => currentPath === subItem.url);
+
           // Check if any sub-item is active
-          const isSubItemActive = item.items?.some(subItem => 
-            currentPath === subItem.url
+          const isSubItemActive = item.items?.some(
+            (subItem) => currentPath === subItem.url
           );
 
           return (
-            <Collapsible 
-              key={item.title} 
-              asChild 
+            <Collapsible
+              key={item.title}
+              asChild
               defaultOpen={isItemActive || item.isActive}
             >
               <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
+                <SidebarMenuButton
+                  asChild
                   tooltip={item.title}
                   isActive={isItemActive}
                   className={cn(
@@ -72,7 +73,7 @@ export function NavMain({
                 {item.items?.length ? (
                   <>
                     <CollapsibleTrigger asChild>
-                      <SidebarMenuAction 
+                      <SidebarMenuAction
                         className={cn(
                           "data-[state=open]:rotate-90 transition-transform",
                           isItemActive && "text-accent-foreground"
@@ -86,15 +87,16 @@ export function NavMain({
                       <SidebarMenuSub>
                         {item.items?.map((subItem) => {
                           const isSubActive = currentPath === subItem.url;
-                          
+
                           return (
                             <SidebarMenuSubItem key={subItem.title}>
-                              <SidebarMenuSubButton 
+                              <SidebarMenuSubButton
                                 asChild
                                 isActive={isSubActive}
                                 className={cn(
                                   "transition-colors duration-200",
-                                  isSubActive && "bg-accent text-accent-foreground"
+                                  isSubActive &&
+                                    "bg-accent text-accent-foreground"
                                 )}
                               >
                                 <Link to={subItem.url.trim()}>

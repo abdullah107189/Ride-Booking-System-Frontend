@@ -20,6 +20,7 @@ import { UsersManagement } from "@/pages/admin/UsersManagement";
 import { RiderOverview } from "@/pages/rider/RiderOverview";
 import { ProfileView } from "@/components/shared/profile/ProfileView";
 import { ProfileEdit } from "@/components/shared/profile/ProfileEdit";
+import NotFoundPage from "@/components/shared/NotFoundPage";
 
 export const router = createBrowserRouter([
   {
@@ -98,5 +99,9 @@ export const router = createBrowserRouter([
   {
     path: "/unauthorized",
     Component: UnauthorizedPage,
+  },
+  {
+    path: "*",
+    Component: NotFoundPage,
   },
 ]);
