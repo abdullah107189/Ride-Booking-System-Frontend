@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { authApi, useLogoutMutation } from "@/redux/features/auth/auth.api";
 import { toast } from "sonner";
-// ✅ Shadcn AlertDialog কম্পোনেন্টগুলো ইম্পোর্ট করা হলো
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,18 +14,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"; // ধরে নিলাম আপনার পথ ঠিক আছে
+} from "@/components/ui/alert-dialog";
 
 export default function Logout() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // isLoggingOut স্টেটটি useLogoutMutation থেকে আসছে, যা একদম ঠিক আছে
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
-  // ❌ showLogoutDialog স্টেট এখন প্রয়োজন নেই, কারণ AlertDialog নিজেই এটি হ্যান্ডেল করে
 
   const handleLogout = async () => {
     try {
-      // এই ফাংশনটি AlertDialogAction এ সরাসরি কল হবে
       await logout(undefined).unwrap();
       dispatch(authApi.util.resetApiState());
       toast.success("Logged out successfully!", {
@@ -41,23 +37,11 @@ export default function Logout() {
     }
   };
 
-
   return (
     <div className="">
       <AlertDialog>
-        {" "}
-        {/* ✅ AlertDialog শুরু */}
-        {/*
-          AlertDialogTrigger: এই বাটনটি ক্লিক করলেই ডায়ালগ ওপেন হবে।
-          আপনার আগের লগআউট বাটনটি এখন AlertDialogTrigger-এর ভেতরে থাকবে।
-        */}
         <AlertDialogTrigger asChild>
-          <Button
-            className="w-full"
-            // onClick={handleLogoutClick} // ❌ আর প্রয়োজন নেই
-            disabled={isLoggingOut}
-            variant="ghost" // মেনু আইটেমের জন্য সাধারণত ghost বাটন ব্যবহার হয়, আপনি চাইলে w-full রাখতে পারেন
-          >
+          <Button className="w-full" disabled={isLoggingOut} variant="ghost">
             <LogOutIcon
               size={16}
               className="mr-2 opacity-60"
@@ -66,7 +50,6 @@ export default function Logout() {
             <span>Logout</span>
           </Button>
         </AlertDialogTrigger>
-        {/* AlertDialogContent: আপনার কাস্টম মোডালের সমস্ত কন্টেন্ট এখন এখানে থাকবে */}
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2 text-xl">
@@ -80,12 +63,10 @@ export default function Logout() {
           </AlertDialogHeader>
 
           <AlertDialogFooter>
-            {/* Cancel Button */}
             <AlertDialogCancel disabled={isLoggingOut}>
               Cancel
             </AlertDialogCancel>
 
-            {/* Logout/Continue Button */}
             <AlertDialogAction
               onClick={handleLogout}
               disabled={isLoggingOut}
@@ -107,8 +88,7 @@ export default function Logout() {
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>{" "}
-      {/* ✅ AlertDialog শেষ */}
+      </AlertDialog>
     </div>
   );
 }
