@@ -5,15 +5,10 @@ import { SimpleRideRequestForm } from "@/components/dashboard/admin/RideRequest"
 export function BookRide() {
   return (
     <div className="space-y-6">
-      <PageHeader 
-        title="Book a Ride" 
-        description="Enter your pickup and destination locations to book a ride"
-      />
-      
+      <PageHeader title="Book a Ride" />
+
       <Card>
-        <CardHeader>
-          <CardTitle>Ride Information</CardTitle>
-        </CardHeader>
+        <CardHeader></CardHeader>
         <CardContent>
           <SimpleRideRequestForm />
         </CardContent>

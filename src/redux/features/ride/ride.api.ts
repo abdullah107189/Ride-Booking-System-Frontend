@@ -47,24 +47,6 @@ export const rideApi = baseApi.injectEndpoints({
       invalidatesTags: ["RIDES"],
     }),
 
-    // Rate ride
-    rateRide: builder.mutation({
-      query: ({
-        rideId,
-        rating,
-        feedback,
-      }: {
-        rideId: string;
-        rating: number;
-        feedback?: string;
-      }) => ({
-        url: `/rides/${rideId}/rate`,
-        method: "POST",
-        data: { rating, feedback },
-      }),
-      invalidatesTags: ["RIDES", "RIDE_HISTORY"],
-    }),
-    
     getRiderStats: builder.query({
       query: () => ({
         url: "/rides/rider/stats",
@@ -79,6 +61,5 @@ export const {
   useGetRidesByRiderQuery,
   useGetRideHistoryQuery,
   useCancelRideMutation,
-  useRateRideMutation,
   useGetRiderStatsQuery,
 } = rideApi;

@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Home, Settings, MoreVertical } from "lucide-react";
+import { Home } from "lucide-react";
 import { useNavigate } from "react-router";
 import type { ReactNode } from "react";
 import { ModeToggle } from "../mode-toggle";
@@ -73,7 +73,7 @@ export function PageHeader({
   return (
     <div
       className={cn(
-        "flex md:flex-row flex-col items-center  justify-between bg-card p-2 rounded-2xl",
+        "flex md:flex-row flex-col items-center  justify-between bg-card border p-2 rounded-2xl",
         className
       )}
     >
@@ -90,22 +90,6 @@ export function PageHeader({
         <ModeToggle></ModeToggle>
 
         <HeaderProfile></HeaderProfile>
-        <Button
-          variant="ghost"
-          size="icon"
-          // onClick={() => navigate("/settings")}
-          className="h-9 w-9 rounded-full border border-border"
-        >
-          <Settings className="h-5 w-5" />
-        </Button>
-
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-9 w-9 rounded-full border border-border"
-        >
-          <MoreVertical className="h-5 w-5" />
-        </Button>
       </div>
 
       {/* Main Header Content */}
@@ -114,7 +98,7 @@ export function PageHeader({
           <div className="">
             {/* Title & Subtitle */}
             <div className="flex items-center gap-3 md:mb-3">
-              <h1 className="md:text-4xl text-xl font-bold text-foreground tracking-tight md:mr-5">
+              <h1 className="md:text-4xl font-mono text-xl font-bold text-foreground tracking-tight md:mr-5">
                 {title}
               </h1>
               {status && (

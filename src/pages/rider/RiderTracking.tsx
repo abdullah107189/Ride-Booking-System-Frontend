@@ -15,10 +15,18 @@ import {
   CreditCard,
   Clock,
   Star,
+  Shield,
+  Repeat,
+  RefreshCw,
+  X,
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { useGetRidesByRiderQuery } from "@/redux/features/ride/ride.api";
+import {
+  useCancelRideMutation,
+  useGetRidesByRiderQuery,
+} from "@/redux/features/ride/ride.api";
+import { toast } from "sonner";
 
 type RideStatus =
   | "requested"
@@ -77,7 +85,8 @@ const statusSteps = [
 export function RiderTracking() {
   const navigate = useNavigate();
 
-  const { data: ride, isLoading } = useGetRidesByRiderQuery(undefined);
+  const { data: ride, isLoading, refetch } = useGetRidesByRiderQuery(undefined);
+  const [cancelRide, { isLoading: isCanceling }] = useCancelRideMutation();
   if (isLoading) {
     return <div>Loading ride status...</div>;
   }
@@ -248,20 +257,146 @@ export function RiderTracking() {
   }
   const isDriverDataAvailable =
     ride?.driver && Object.keys(ride.driver).length > 0;
+
+  const handleCancelRide = async (rideId: string) => {
+    try {
+      await cancelRide(rideId).unwrap();
+      toast.success("Ride cancelled successfully!");
+    } catch (error: any) {
+      console.log(error);
+      toast.error("Failed to cancel ride");
+    }
+  };
+
+  const handleRateRide = async (rideId: string) => {
+    // Open rating modal or navigate to rating page
+    navigate(`/rate-ride/${rideId}`);
+  };
+
+  const handleContactDriver = (driverId: string) => {
+    // Implement call functionality
+    console.log("Calling driver:", driverId);
+  };
+
+  const handleShareLocation = (rideId: string) => {
+    // Implement location sharing
+    console.log("Sharing location for ride:", rideId);
+  };
+
+  const handleSOS = (rideId: string) => {
+    // Implement SOS functionality
+    console.log("SOS activated for ride:", rideId);
+  };
+
+  const handleBookAgain = (ride: any) => {
+    // Pre-fill booking form with same details
+    navigate("/book-ride", {
+      state: {
+        pickup: ride.pickupLocation,
+        destination: ride.destinationLocation,
+      },
+    });
+  };
   return (
     <div className="">
       {/* Header */}
       <div className="text-center mb-8">
         <PageHeader title="Your Ride in Progress"></PageHeader>
-        <Badge
-          className={`${statusConfig.bgColor} ${statusConfig.color} text-lg py-2 px-4 mt-3`}
-        >
-          {statusConfig.label}
-        </Badge>
-        <div className="mt-2 text-muted-foreground">
-          Fare: {ride?.fare} Taka
+        <div className="flex items-center gap-4">
+          <Badge
+            className={`${statusConfig.bgColor} ${statusConfig.color} text-lg py-2 px-4 mt-3`}
+          >
+            {statusConfig.label}
+          </Badge>
+
+          <div className="mt-2 text-muted-foreground">
+            Fare: {ride?.fare} Taka
+          </div>
+
+          {/* Action Buttons Based on Status */}
+          <div className="flex gap-2 ml-auto">
+            {currentStatus === "requested" && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleCancelRide(ride?._id)}
+                disabled={isCanceling}
+              >
+                <X className="h-4 w-4 mr-2" />
+                {isCanceling ? "Canceling..." : "Cancel Ride"}
+              </Button>
+            )}
+
+            {currentStatus === "accepted" && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleContactDriver(ride?.driver?._id)}
+              >
+                <Phone className="h-4 w-4 mr-2" />
+                Call Driver
+              </Button>
+            )}
+
+            {currentStatus === "picked_up" && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleShareLocation(ride?._id)}
+              >
+                <MapPin className="h-4 w-4 mr-2" />
+                Share Location
+              </Button>
+            )}
+
+            {currentStatus === "in_transit" && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleSOS(ride?._id)}
+              >
+                <Shield className="h-4 w-4 mr-2" />
+                SOS
+              </Button>
+            )}
+
+            {currentStatus === "completed" && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => handleRateRide(ride?._id)}
+              >
+                <Star className="h-4 w-4 mr-2" />
+                Rate Ride
+              </Button>
+            )}
+
+            {currentStatus === "paid" && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleBookAgain(ride)}
+              >
+                <Repeat className="h-4 w-4 mr-2" />
+                Book Again
+              </Button>
+            )}
+
+            {/* Always show refresh button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => refetch()}
+              disabled={isLoading}
+            >
+              <RefreshCw
+                className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+              />
+            </Button>
+          </div>
         </div>
       </div>
+
       <div
         className={`grid gap-8 ${
           isDriverDataAvailable ? "lg:grid-cols-3" : "lg:grid-cols-2"

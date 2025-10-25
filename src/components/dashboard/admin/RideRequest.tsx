@@ -102,18 +102,8 @@ export function SimpleRideRequestForm() {
   };
 
   return (
-    <div className="py-5">
+    <div className="">
       <div className="">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            Book Your Ride
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Enter your pickup and destination to get started
-          </p>
-        </div>
-
         <Card className="border border-border shadow-2xl">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl flex items-center gap-2 text-card-foreground">

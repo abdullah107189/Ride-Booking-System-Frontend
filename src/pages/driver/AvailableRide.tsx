@@ -8,6 +8,7 @@ import {
 } from "@/redux/features/driver/driver.api";
 import type { IRide } from "@/types/ride";
 import { Car, MapPin } from "lucide-react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -45,12 +46,17 @@ import { toast } from "sonner";
 // ];
 // Main Component
 export default function AvailableRides() {
-  const { data: availableRides, isLoading: availableRidesLoading } =
-    useGetAvailableRidesQuery(undefined);
+  const {
+    data: availableRides,
+    isLoading: availableRidesLoading,
+    refetch,
+  } = useGetAvailableRidesQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const navigate = useNavigate();
 
-  const [acceptRide, { isLoading: acceptRideLoading,  }] =
+  const [acceptRide, { isLoading: acceptRideLoading }] =
     useAcceptRideMutation();
 
   const dispatch = useDispatch();
@@ -70,6 +76,9 @@ export default function AvailableRides() {
       );
     }
   };
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   if (availableRidesLoading) {
     return <div>Loading...</div>;
   }

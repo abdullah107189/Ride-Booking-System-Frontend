@@ -3,12 +3,7 @@ import { BookRide } from "@/pages/rider/BookRide";
 import { RideHistory } from "@/pages/rider/RideHistory";
 import { RiderOverview } from "@/pages/rider/RiderOverview";
 import { RiderTracking } from "@/pages/rider/RiderTracking";
-import {
-  ClipboardClock,
-  History,
-  Locate,
-  SquareTerminal,
-} from "lucide-react";
+import { ClipboardClock, History, Locate, SquareTerminal } from "lucide-react";
 
 export const riderSidBarItems: ISidebarItem[] = [
   {
