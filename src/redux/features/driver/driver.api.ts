@@ -35,7 +35,9 @@ export const driverApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["DRIVERS"],
     }),
+
     // ------------------------------------------------------
+
     acceptRide: builder.mutation({
       query: (rideId: string) => ({
         url: `/rides/${rideId}/accept`,
