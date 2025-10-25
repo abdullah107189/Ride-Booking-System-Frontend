@@ -19,6 +19,7 @@ import {
   Repeat,
   RefreshCw,
   X,
+  HistoryIcon,
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -92,7 +93,101 @@ export function RiderTracking() {
   }
   console.log("ride----->", ride);
   if (!ride) {
-    return <div>No ride data found.</div>;
+    return (
+      <div className="space-y-8">
+        {/* Header */}
+        <PageHeader title="Ride Tracking"></PageHeader>
+
+        {/* Main Content */}
+        <div className="grid lg:grid-cols-2 gap-8 mxw">
+          {/* Left Side - Illustration & Message */}
+          <Card className="border-0 shadow-lg bg-gradient-to-br from-background to-muted/30">
+            <CardContent className="p-8 text-center">
+              <div className="w-32 h-32 bg-gradient-to-br from-primary/10 to-primary/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Car className="h-16 w-16 text-primary/60" />
+              </div>
+
+              <h2 className="text-2xl font-bold text-foreground mb-4">
+                Ready to Ride?
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                Your ride dashboard is waiting for your next journey. Book a
+                ride and track every step of your trip here.
+              </p>
+
+              <Button
+                onClick={() => navigate("/rider/book-ride")}
+                size="lg"
+                className="w-full"
+              >
+                <Car className="h-5 w-5 mr-2" />
+                Book Your Ride Now
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Right Side - Quick Actions */}
+          <div className="space-y-4">
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-foreground mb-4">
+                  Quick Actions
+                </h3>
+                <div className="space-y-3">
+                  <Button
+                    onClick={() => navigate("/rider/ride-history")}
+                    variant="outline"
+                    className="w-full justify-start"
+                  >
+                    <HistoryIcon className="h-4 w-4 mr-2" />
+                    View Ride History
+                  </Button>
+                  <Button
+                    onClick={() => navigate("/rider/favorites")}
+                    variant="outline"
+                    className="w-full justify-start"
+                  >
+                    <Star className="h-4 w-4 mr-2" />
+                    Favorite Locations
+                  </Button>
+                  <Button
+                    onClick={() => navigate("/rider/payments")}
+                    variant="outline"
+                    className="w-full justify-start"
+                  >
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    Payment Methods
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Tips Card */}
+            <Card className="border border-dashed border-primary/30 bg-primary/5">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-primary mb-2">
+                  💡 Better Ride Experience
+                </h3>
+                <ul className="space-y-2 text-sm text-primary/80">
+                  <li className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5"></div>
+                    Set your pickup location accurately
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5"></div>
+                    Choose the right vehicle type for your needs
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5"></div>
+                    Have your payment method ready
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
   }
   if (!ride) {
     return (
