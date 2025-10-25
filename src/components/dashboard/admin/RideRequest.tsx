@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { MapPin, Navigation, Car, Clock } from "lucide-react";
 import { useRideRequestMutation } from "@/redux/features/ride/ride.api";
 import { useGetMeQuery } from "@/redux/features/auth/auth.api";
+import { useNavigate } from "react-router";
 
 // Validation Schema - Only pickup and destination
 const rideRequestSchema = z.object({
@@ -52,6 +53,7 @@ export function SimpleRideRequestForm() {
     },
   });
 
+  const navigate = useNavigate();
   const [rideRequest, { isLoading: rideRequestLoading }] =
     useRideRequestMutation();
   const { data: riderInfo, isLoading: riderInfoLoading } =
@@ -89,7 +91,7 @@ export function SimpleRideRequestForm() {
       toast.success("Ride Finding! 🚗", {
         description: "Driver will arrive shortly",
       });
-
+      navigate("/rider/tracking");
       form.reset();
     } catch (error: any) {
       console.log(error);

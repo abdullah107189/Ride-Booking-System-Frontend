@@ -6,7 +6,7 @@ import { Link } from "react-router";
 
 export function UnauthorizedPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center p-4 sm:p-6  overflow-hidden">
+    <div className=" flex items-center justify-center p-4 sm:p-6  overflow-hidden">
       <div className="max-w-md w-full mx-auto">
         <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
           <CardContent className="p-6 sm:p-8 text-center">

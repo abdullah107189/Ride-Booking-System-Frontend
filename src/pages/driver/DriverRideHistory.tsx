@@ -49,7 +49,7 @@ export function DriverHistory() {
   const { driverInfo } = ridesInfo || {};
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-muted-foreground">Loading ride history...</p>
@@ -60,7 +60,7 @@ export function DriverHistory() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
+      <div className=" flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600">Failed to load ride history</p>
         </div>

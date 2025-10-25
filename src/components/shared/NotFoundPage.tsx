@@ -26,7 +26,7 @@ export default function NotFoundPage() {
                 <span className="text-white text-xs font-bold">?</span>
               </div>
             </div>
-            
+
             <div className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400 mb-2">
               404
             </div>
@@ -41,8 +41,8 @@ export default function NotFoundPage() {
               You've Reached Unknown Territory
             </h1>
             <p className="text-gray-400 leading-relaxed">
-              The coordinates you're looking for don't exist in our navigation system. 
-              Let's get you back on track.
+              The coordinates you're looking for don't exist in our navigation
+              system. Let's get you back on track.
             </p>
           </div>
 
@@ -63,29 +63,6 @@ export default function NotFoundPage() {
               <Home className="h-4 w-4 mr-2" />
               Return to Base
             </Button>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="pt-6 border-t border-slate-700">
-            <p className="text-sm font-medium text-gray-400 mb-4">Quick Actions</p>
-            <div className="flex justify-center space-x-4">
-              <Button
-                variant="ghost"
-                onClick={() => navigate("/rider")}
-                className="text-primary hover:text-primary/80 hover:bg-primary/10 text-sm"
-                size="sm"
-              >
-                Rider App
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => navigate("/driver")}
-                className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 text-sm"
-                size="sm"
-              >
-                Driver App
-              </Button>
-            </div>
           </div>
         </CardContent>
       </Card>
