@@ -26,13 +26,12 @@ import {
   Mail,
   Phone,
   User,
-  GalleryVerticalEnd,
   Car,
   Bike,
   MapPin,
   Badge,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { formSchema } from "./reg.schema";
 import type z from "zod/v3";
@@ -42,7 +41,6 @@ import Logo from "@/components/shared/Logo";
 
 export function RegistrationForm() {
   type FormValues = z.infer<typeof formSchema>;
-  const [userType, setUserType] = useState<"rider" | "driver">("rider");
 
   const [register, { isLoading }] = useRegisterMutation();
 
@@ -126,7 +124,6 @@ export function RegistrationForm() {
                   }`}
                   onClick={() => {
                     form.setValue("role", "rider");
-                    setUserType("rider");
                   }}
                 >
                   <Bike className="h-4 w-4" />
@@ -143,7 +140,6 @@ export function RegistrationForm() {
                   }`}
                   onClick={() => {
                     form.setValue("role", "driver");
-                    setUserType("driver");
                   }}
                 >
                   <Car className="h-4 w-4" />

@@ -1,9 +1,9 @@
-import { role } from "@/const";
+import { role, type RoleType } from "@/const";
 import { adminSidBarItems } from "@/routes/adminSideBarItem";
 import { driverSidBarItems } from "@/routes/driverSideBarItem";
 import { riderSidBarItems } from "@/routes/riderSideBarItem";
 
-export const getSidebarItems = (userRole: role) => {
+export const getSidebarItems = (userRole: RoleType) => {
   switch (userRole) {
     case role.ADMIN:
       return [...adminSidBarItems];

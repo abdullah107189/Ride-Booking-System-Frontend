@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // components/ride/SimpleRideRequestForm.tsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -42,7 +42,7 @@ const rideRequestSchema = z.object({
 type RideFormData = z.infer<typeof rideRequestSchema>;
 
 export function SimpleRideRequestForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [, setIsSubmitting] = useState(false);
 
   const form = useForm<RideFormData>({
     resolver: zodResolver(rideRequestSchema),

@@ -1,107 +1,105 @@
+import { lazy } from "react";
+import { createBrowserRouter } from "react-router";
 import App from "@/App";
-import UnauthorizedPage from "@/components/shared/UnauthorizedPage";
+
 import { role } from "@/const";
-import { LoginForm } from "@/pages/auth/Login";
-import { RegistrationForm } from "@/pages/auth/Register";
-import About from "@/pages/public/About";
-import { ContactForm } from "@/pages/public/Contact";
-import { FAQSection } from "@/pages/public/FAQ";
-import FeaturesPage from "@/pages/public/features";
-import Home from "@/pages/public/Home";
 import { generateRoutes } from "@/utils/genarateRoute";
 import { withAuth } from "@/utils/withAuth";
-import { createBrowserRouter } from "react-router";
+
 import { riderSidBarItems } from "./riderSideBarItem";
 import { driverSidBarItems } from "./driverSideBarItem";
 import { adminSidBarItems } from "./adminSideBarItem";
-import CommonDashboard from "@/dashboard/CommontDashboard";
-import AvailableRides from "@/pages/driver/AvailableRide";
-import { UsersManagement } from "@/pages/admin/UsersManagement";
-import { RiderOverview } from "@/pages/rider/RiderOverview";
-import { ProfileView } from "@/components/shared/profile/ProfileView";
-import { ProfileEdit } from "@/components/shared/profile/ProfileEdit";
-import NotFoundPage from "@/components/shared/NotFoundPage";
+
+// --- Lazy Loading ---
+
+const LazyUnauthorizedPage = lazy(
+  () => import("@/components/shared/UnauthorizedPage")
+);
+const LazyLoginForm = lazy(() =>
+  import("@/pages/auth/Login").then((m) => ({ default: m.LoginForm }))
+);
+const LazyRegistrationForm = lazy(() =>
+  import("@/pages/auth/Register").then((m) => ({ default: m.RegistrationForm }))
+);
+const LazyAbout = lazy(() => import("@/pages/public/About"));
+const LazyContactForm = lazy(() =>
+  import("@/pages/public/Contact").then((m) => ({ default: m.ContactForm }))
+);
+const LazyFAQSection = lazy(() =>
+  import("@/pages/public/FAQ").then((m) => ({ default: m.FAQSection }))
+);
+const LazyFeaturesPage = lazy(() => import("@/pages/public/features"));
+const LazyHome = lazy(() => import("@/pages/public/Home"));
+const LazyNotFoundPage = lazy(() => import("@/components/shared/NotFoundPage"));
+
+const LazyCommonDashboard = lazy(() => import("@/dashboard/CommontDashboard"));
+const LazyProfileView = lazy(() =>
+  import("@/components/shared/profile/ProfileView").then((m) => ({
+    default: m.ProfileView,
+  }))
+);
+const LazyProfileEdit = lazy(() =>
+  import("@/components/shared/profile/ProfileEdit").then((m) => ({
+    default: m.ProfileEdit,
+  }))
+);
+
+const LazyAvailableRides = lazy(() => import("@/pages/driver/AvailableRide"));
+const LazyUsersManagement = lazy(() =>
+  import("@/pages/admin/UsersManagement").then((m) => ({
+    default: m.UsersManagement,
+  }))
+);
+const LazyRiderOverview = lazy(() =>
+  import("@/pages/rider/RiderOverview").then((m) => ({
+    default: m.RiderOverview,
+  }))
+);
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: App,
     children: [
-      {
-        index: true,
-        Component: Home,
-      },
-      {
-        path: "/about",
-        Component: About,
-      },
-      {
-        path: "/features",
-        Component: FeaturesPage,
-      },
-      {
-        path: "/contact",
-        Component: ContactForm,
-      },
-      {
-        path: "/faq",
-        Component: FAQSection,
-      },
+      { index: true, Component: LazyHome },
+      { path: "/about", Component: LazyAbout },
+      { path: "/features", Component: LazyFeaturesPage },
+      { path: "/contact", Component: LazyContactForm },
+      { path: "/faq", Component: LazyFAQSection },
     ],
   },
   {
     path: "/rider",
-    Component: withAuth(CommonDashboard, role.RIDER),
+    Component: withAuth(LazyCommonDashboard, role.RIDER),
     children: [
-      { index: true, Component: RiderOverview },
-      { path: "profile", Component: ProfileView },
-      {
-        path: "profile-edit",
-        Component: ProfileEdit,
-      },
+      { index: true, Component: LazyRiderOverview },
+      { path: "profile", Component: LazyProfileView },
+      { path: "profile-edit", Component: LazyProfileEdit },
       ...generateRoutes(riderSidBarItems),
     ],
   },
   {
     path: "/driver",
-    Component: withAuth(CommonDashboard, role.DRIVER),
+    Component: withAuth(LazyCommonDashboard, role.DRIVER),
     children: [
-      { index: true, Component: AvailableRides },
-      { path: "profile", Component: ProfileView },
-      {
-        path: "profile-edit",
-        Component: ProfileEdit,
-      },
+      { index: true, Component: LazyAvailableRides },
+      { path: "profile", Component: LazyProfileView },
+      { path: "profile-edit", Component: LazyProfileEdit },
       ...generateRoutes(driverSidBarItems),
     ],
   },
   {
     path: "/admin",
-    Component: withAuth(CommonDashboard, role.ADMIN),
+    Component: withAuth(LazyCommonDashboard, role.ADMIN),
     children: [
-      { index: true, Component: UsersManagement },
-      { path: "profile", Component: ProfileView },
-      {
-        path: "profile-edit",
-        Component: ProfileEdit,
-      },
+      { index: true, Component: LazyUsersManagement },
+      { path: "profile", Component: LazyProfileView },
+      { path: "profile-edit", Component: LazyProfileEdit },
       ...generateRoutes(adminSidBarItems),
     ],
   },
-  {
-    path: "/register",
-    Component: RegistrationForm,
-  },
-  {
-    path: "/login",
-    Component: LoginForm,
-  },
-  {
-    path: "/unauthorized",
-    Component: UnauthorizedPage,
-  },
-  {
-    path: "*",
-    Component: NotFoundPage,
-  },
+  { path: "/register", Component: LazyRegistrationForm },
+  { path: "/login", Component: LazyLoginForm },
+  { path: "/unauthorized", Component: LazyUnauthorizedPage },
+  { path: "*", Component: LazyNotFoundPage },
 ]);

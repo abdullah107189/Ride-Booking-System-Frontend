@@ -44,7 +44,7 @@ export function ContactForm() {
     },
   });
 
-  const onSubmit = async (data: ContactFormValues) => {
+  const onSubmit = async () => {
     try {
       // Simulate API call
 
