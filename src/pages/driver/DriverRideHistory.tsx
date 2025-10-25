@@ -70,8 +70,9 @@ export function DriverHistory() {
 
   if (!rides || rides.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-        <div className="mxw py-8">
+      <div className="">
+        <PageHeader title="Rides History"></PageHeader>
+        <div className="mxw py-5">
           <div className="text-center">
             <Car className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-foreground mb-2">

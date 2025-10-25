@@ -175,22 +175,22 @@ export function DriverTracking() {
             </Card>
 
             {/* Tips Card */}
-            <Card className="border border-dashed border-yellow-200 bg-yellow-50">
+            <Card className="border border-dashed border-primary/30 bg-primary/5">
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-yellow-800 mb-2">
+                <h3 className="text-lg font-semibold text-primary mb-2">
                   💡 Tips for More Rides
                 </h3>
-                <ul className="space-y-2 text-sm text-yellow-700">
+                <ul className="space-y-2 text-sm text-primary/80">
                   <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5"></div>
                     Stay in high-demand areas during peak hours
                   </li>
                   <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5"></div>
                     Keep your vehicle clean and well-maintained
                   </li>
                   <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5"></div>
                     Maintain a high rating for better matching
                   </li>
                 </ul>
