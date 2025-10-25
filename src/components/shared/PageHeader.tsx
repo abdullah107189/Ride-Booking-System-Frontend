@@ -93,7 +93,7 @@ export function PageHeader({
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => navigate("/settings")}
+          // onClick={() => navigate("/settings")}
           className="h-9 w-9 rounded-full border border-border"
         >
           <Settings className="h-5 w-5" />

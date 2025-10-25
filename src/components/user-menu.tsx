@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -77,9 +76,7 @@ export default function UserMenu({
           </DropdownMenuLabel>
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Logout></Logout>
-          </DropdownMenuItem>
+          <Logout></Logout>
         </DropdownMenuContent>
       </DropdownMenu>
     </>

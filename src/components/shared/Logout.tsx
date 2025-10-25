@@ -33,8 +33,13 @@ export default function Logout() {
     setShowLogoutDialog(true);
   };
   return (
-    <div>
-      <Button onClick={handleLogoutClick} disabled={isLoggingOut}>
+    <div className="">
+      <Button
+        className="w-full"
+        
+        onClick={handleLogoutClick}
+        disabled={isLoggingOut}
+      >
         <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
         <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
       </Button>

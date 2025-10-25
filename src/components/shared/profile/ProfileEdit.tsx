@@ -97,11 +97,7 @@ export function ProfileEdit() {
         updateData.vehicleInfo = data.vehicleInfo;
         updateData.currentLocation = data.currentLocation;
       }
-
-      console.log(updateData);
-
-      const result = await updateProfile(updateData).unwrap();
-      console.log(result);
+      await updateProfile(updateData).unwrap();
 
       toast.success("Profile updated successfully!");
       navigate(-1);

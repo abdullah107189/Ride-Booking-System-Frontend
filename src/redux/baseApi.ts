@@ -14,6 +14,6 @@ export const baseApi = createApi({
     "DriverRides",
     "RiderRides",
     "PendingApprovals",
-    
+    "RIDE_HISTORY",
   ],
 });

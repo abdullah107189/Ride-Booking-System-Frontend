@@ -1,502 +1,261 @@
-import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router";
 import {
-  Search,
-  Filter,
   Car,
-  MapPin,
   DollarSign,
-  User,
-  Settings,
-  History,
-  Navigation,
-  Phone,
   Star,
-  Calendar,
-  ArrowUpDown,
+  TrendingUp,
+  MapPin,
+  Navigation,
+  History,
+  User,
+  Clock,
 } from "lucide-react";
-import { SimpleRideRequestForm } from "@/components/dashboard/admin/RideRequest";
 import { PageHeader } from "@/components/shared/PageHeader";
-
-const ongoingRide = {
-  id: "1",
-  driver: {
-    name: "Abdul Karim",
-    phone: "+8801XXXXXXXXX",
-    rating: 4.8,
-    carModel: "Toyota Corolla",
-    licensePlate: "DHA-12345",
-  },
-  pickup: "Banani, Dhaka",
-  destination: "Gulshan, Dhaka",
-  fare: 180,
-  estimatedTime: "8 min",
-  status: "on_the_way",
-};
-
-const recentRides = [
-  {
-    id: "1",
-    date: "2024-01-15",
-    pickup: "Banani",
-    destination: "Gulshan",
-    fare: 160,
-    status: "completed",
-    driver: "Mohammad Ali",
-    rating: 4.5,
-  },
-  {
-    id: "2",
-    date: "2024-01-14",
-    pickup: "Uttara",
-    destination: "Airport",
-    fare: 220,
-    status: "completed",
-    driver: "Rahim Khan",
-    rating: 4.9,
-  },
-  {
-    id: "3",
-    date: "2024-01-13",
-    pickup: "Dhanmondi",
-    destination: "Mirpur",
-    fare: 140,
-    status: "completed",
-    driver: "Sofia Begum",
-    rating: 4.7,
-  },
-];
+import { useGetRidesByRiderQuery } from "@/redux/features/ride/ride.api";
 
 export function RiderOverview() {
-  const [activeTab, setActiveTab] = useState("overview");
-  const [searchQuery, setSearchQuery] = useState("");
+  const { data: rides, isLoading } = useGetRidesByRiderQuery(undefined);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  console.log(rides);
+  // Calculate stats from actual data
+  const stats = {
+    totalRides: rides.length,
+    totalSpent: rides.reduce(
+      (total: number, ride: any) => total + (ride.fare || 0),
+      0
+    ),
+    completedRides: rides.filter(
+      (ride: any) => ride.status === "completed" || ride.status === "paid"
+    ).length,
+    thisMonth: rides.filter((ride: any) => {
+      const rideDate = new Date(ride.createdAt);
+      const currentMonth = new Date().getMonth();
+      return rideDate.getMonth() === currentMonth;
+    }).length,
+  };
+
+  // Get ongoing ride
+  const ongoingRide = rides.find((ride: any) =>
+    ["requested", "accepted", "picked_up", "in_transit"].includes(ride.status)
+  );
+
+  // Get recent rides
+  const recentRides = rides
+    .filter((ride: any) => ["completed", "paid"].includes(ride.status))
+    .slice(0, 3);
 
   return (
-    <div className="">
-      {/* Header */}
-      <PageHeader title="Rider Overview"></PageHeader>
-      <div className="py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
+    <div className="space-y-6">
+      <PageHeader title="Rider Dashboard" />
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Total Rides
+                </p>
+                <p className="text-2xl font-bold">{stats.totalRides}</p>
+              </div>
+              <Car className="h-8 w-8 text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Total Spent
+                </p>
+                <p className="text-2xl font-bold">৳{stats.totalSpent}</p>
+              </div>
+              <DollarSign className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Completed
+                </p>
+                <p className="text-2xl font-bold">{stats.completedRides}</p>
+              </div>
+              <Star className="h-8 w-8 text-yellow-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  This Month
+                </p>
+                <p className="text-2xl font-bold">{stats.thisMonth}</p>
+              </div>
+              <TrendingUp className="h-8 w-8 text-purple-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Ongoing Ride */}
+          {ongoingRide && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Quick Actions</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Navigation className="h-5 w-5 text-blue-500" />
+                  Ongoing Ride
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <Button
-                  variant={activeTab === "overview" ? "default" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveTab("overview")}
-                >
-                  <Navigation className="h-4 w-4 mr-2" />
-                  Overview
-                </Button>
-                <Button
-                  variant={activeTab === "book" ? "default" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveTab("book")}
-                >
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">From</span>
+                    <span className="font-medium">
+                      {ongoingRide.pickupLocation.address}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">To</span>
+                    <span className="font-medium">
+                      {ongoingRide.destinationLocation.address}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Status</span>
+                    <Badge variant="secondary" className="capitalize">
+                      {ongoingRide.status.replace("_", " ")}
+                    </Badge>
+                  </div>
+                  <Button asChild className="w-full">
+                    <Link to="/rider/tracking">
+                      <Navigation className="h-4 w-4 mr-2" />
+                      Track Ride
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Quick Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button asChild className="w-full justify-start">
+                <Link to="/rider/book-ride">
                   <Car className="h-4 w-4 mr-2" />
-                  Book Ride
-                </Button>
-                <Button
-                  variant={activeTab === "history" ? "default" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveTab("history")}
-                >
+                  Book New Ride
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="w-full justify-start"
+              >
+                <Link to="/rider/ride-history">
                   <History className="h-4 w-4 mr-2" />
                   Ride History
-                </Button>
-                <Button
-                  variant={activeTab === "profile" ? "default" : "ghost"}
-                  className="w-full justify-start"
-                  onClick={() => setActiveTab("profile")}
-                >
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="w-full justify-start"
+              >
+                <Link to="/rider/profile">
                   <User className="h-4 w-4 mr-2" />
-                  Profile
-                </Button>
-              </CardContent>
-            </Card>
+                  My Profile
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
 
-            {/* Stats Card */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="text-lg">Your Stats</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-400">
-                    Total Rides
-                  </span>
-                  <span className="font-semibold">47</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-400">
-                    Total Spent
-                  </span>
-                  <span className="font-semibold">৳8,450</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-400">
-                    Avg. Rating
-                  </span>
-                  <span className="font-semibold flex items-center">
-                    4.7{" "}
-                    <Star className="h-4 w-4 ml-1 fill-yellow-400 text-yellow-400" />
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="book">Book Ride</TabsTrigger>
-                <TabsTrigger value="history">Ride History</TabsTrigger>
-                <TabsTrigger value="profile">Profile</TabsTrigger>
-              </TabsList>
-
-              {/* Overview Tab */}
-              <TabsContent value="overview" className="space-y-6">
-                {/* Ongoing Ride */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Navigation className="h-5 w-5 text-blue-500" />
-                      Ongoing Ride
-                    </CardTitle>
-                    <CardDescription>
-                      Your current ride details and tracking
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            From
-                          </span>
-                          <span className="font-medium">
-                            {ongoingRide.pickup}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            To
-                          </span>
-                          <span className="font-medium">
-                            {ongoingRide.destination}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Fare
-                          </span>
-                          <span className="font-medium">
-                            ৳{ongoingRide.fare}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            ETA
-                          </span>
-                          <span className="font-medium">
-                            {ongoingRide.estimatedTime}
-                          </span>
-                        </div>
+        {/* Right Column */}
+        <div className="space-y-6">
+          {/* Recent Rides */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Rides</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {recentRides.length > 0 ? (
+                recentRides.map((ride: any) => (
+                  <div
+                    key={ride._id}
+                    className="flex justify-between items-center p-3 border rounded-lg"
+                  >
+                    <div>
+                      <div className="font-medium text-sm">
+                        {ride.pickupLocation.address} →{" "}
+                        {ride.destinationLocation.address}
                       </div>
-
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Driver
-                          </span>
-                          <span className="font-medium">
-                            {ongoingRide.driver.name}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Vehicle
-                          </span>
-                          <span className="font-medium">
-                            {ongoingRide.driver.carModel}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-600 dark:text-gray-400">
-                            Rating
-                          </span>
-                          <span className="flex items-center font-medium">
-                            {ongoingRide.driver.rating}
-                            <Star className="h-4 w-4 ml-1 fill-yellow-400 text-yellow-400" />
-                          </span>
-                        </div>
-                        <Button className="w-full">
-                          <Phone className="h-4 w-4 mr-2" />
-                          Call Driver
-                        </Button>
+                      <div className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {new Date(ride.createdAt).toLocaleDateString()}
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                    <Badge variant="secondary">৳{ride.fare}</Badge>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  No recent rides
+                </p>
+              )}
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/rider/ride-history">View All History</Link>
+              </Button>
+            </CardContent>
+          </Card>
 
-                {/* Quick Book & Recent Rides */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Quick Book */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Quick Book</CardTitle>
-                      <CardDescription>
-                        Book your frequent destinations quickly
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start"
-                      >
-                        <MapPin className="h-4 w-4 mr-2" />
-                        Home to Office
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start"
-                      >
-                        <MapPin className="h-4 w-4 mr-2" />
-                        Office to Home
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start"
-                      >
-                        <MapPin className="h-4 w-4 mr-2" />
-                        Current to Airport
-                      </Button>
-                    </CardContent>
-                  </Card>
-
-                  {/* Recent Rides */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Recent Rides</CardTitle>
-                      <CardDescription>
-                        Your last 3 completed rides
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      {recentRides.map((ride) => (
-                        <div
-                          key={ride.id}
-                          className="flex justify-between items-center p-3 border rounded-lg"
-                        >
-                          <div>
-                            <div className="font-medium">
-                              {ride.pickup} → {ride.destination}
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                              {ride.date} • ৳{ride.fare}
-                            </div>
-                          </div>
-                          <Badge variant="secondary">Completed</Badge>
-                        </div>
-                      ))}
-                    </CardContent>
-                  </Card>
-                </div>
-              </TabsContent>
-
-              {/* Book Ride Tab */}
-              {/* <TabsContent value="book">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Book a New Ride</CardTitle>
-                    <CardDescription>
-                      Enter your pickup and destination locations
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">
-                            Pickup Location
-                          </label>
-                          <Input placeholder="Enter pickup address..." />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">
-                            Destination
-                          </label>
-                          <Input placeholder="Where do you want to go?" />
-                        </div>
-                      </div>
-                      <Button className="w-full">
-                        <Car className="h-4 w-4 mr-2" />
-                        Confirm & Book Ride
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent> */}
-              <TabsContent value="book">
-                <SimpleRideRequestForm></SimpleRideRequestForm>
-              </TabsContent>
-              {/* Ride History Tab */}
-              <TabsContent value="history">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Ride History</CardTitle>
-                    <CardDescription>
-                      View your past rides and transactions
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {/* Search and Filter */}
-                      <div className="flex flex-col sm:flex-row gap-4">
-                        <div className="relative flex-1">
-                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-                          <Input
-                            placeholder="Search rides..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-10"
-                          />
-                        </div>
-                        <Button variant="outline">
-                          <Filter className="h-4 w-4 mr-2" />
-                          Filter
-                        </Button>
-                        <Button variant="outline">
-                          <Calendar className="h-4 w-4 mr-2" />
-                          Date
-                        </Button>
-                      </div>
-
-                      {/* Ride History List */}
-                      <div className="space-y-3">
-                        {recentRides.map((ride) => (
-                          <Card key={ride.id} className="p-4">
-                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-2">
-                                  <MapPin className="h-4 w-4 text-green-500" />
-                                  <span className="font-medium">
-                                    {ride.pickup}
-                                  </span>
-                                  <ArrowUpDown className="h-4 w-4 text-gray-400" />
-                                  <MapPin className="h-4 w-4 text-red-500" />
-                                  <span className="font-medium">
-                                    {ride.destination}
-                                  </span>
-                                </div>
-                                <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
-                                  <span className="flex items-center gap-1">
-                                    <Calendar className="h-3 w-3" />
-                                    {ride.date}
-                                  </span>
-                                  <span className="flex items-center gap-1">
-                                    <DollarSign className="h-3 w-3" />৳
-                                    {ride.fare}
-                                  </span>
-                                  <span className="flex items-center gap-1">
-                                    <User className="h-3 w-3" />
-                                    {ride.driver}
-                                  </span>
-                                  <span className="flex items-center gap-1">
-                                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                    {ride.rating}
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Badge variant="secondary">Completed</Badge>
-                                <Button variant="outline" size="sm">
-                                  Details
-                                </Button>
-                              </div>
-                            </div>
-                          </Card>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Profile Tab */}
-              <TabsContent value="profile">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Profile Management</CardTitle>
-                    <CardDescription>
-                      Update your personal information and preferences
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-6">
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">
-                            Full Name
-                          </label>
-                          <Input defaultValue="John Doe" />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">
-                            Phone Number
-                          </label>
-                          <Input defaultValue="+8801XXXXXXXXX" />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">Email</label>
-                          <Input defaultValue="john@example.com" type="email" />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">
-                            Emergency Contact
-                          </label>
-                          <Input defaultValue="+8801XXXXXXXXX" />
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <h3 className="font-medium">Change Password</h3>
-                        <div className="space-y-3">
-                          <Input
-                            type="password"
-                            placeholder="Current Password"
-                          />
-                          <Input type="password" placeholder="New Password" />
-                          <Input
-                            type="password"
-                            placeholder="Confirm New Password"
-                          />
-                        </div>
-                      </div>
-
-                      <Button>Save Changes</Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
+          {/* Popular Destinations */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Popular Destinations</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Button variant="outline" className="w-full justify-start">
+                <MapPin className="h-4 w-4 mr-2" />
+                Home to Office
+              </Button>
+              <Button variant="outline" className="w-full justify-start">
+                <MapPin className="h-4 w-4 mr-2" />
+                Office to Home
+              </Button>
+              <Button variant="outline" className="w-full justify-start">
+                <MapPin className="h-4 w-4 mr-2" />
+                Current to Airport
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

@@ -13,19 +13,12 @@ import {
   CircleDashed,
   Package,
   CreditCard,
-  History,
   Clock,
+  Star,
 } from "lucide-react";
-import {
-  useCompleteRideMutation,
-  useGetRidesByDriverQuery,
-  useMakeTransitTripMutation,
-  useMarkAsPaidMutation,
-  useMarkAsPickedUpMutation,
-} from "@/redux/features/driver/driver.api";
-import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { useGetRidesByRiderQuery } from "@/redux/features/ride/ride.api";
 
 type RideStatus =
   | "requested"
@@ -81,29 +74,17 @@ const statusSteps = [
   { key: "paid" as RideStatus, label: "Paid", icon: CreditCard },
 ];
 
-export function DriverTracking() {
+export function RiderTracking() {
   const navigate = useNavigate();
-  // Initialize all mutations
-  const [markAsPickedUp, { isLoading: isPickingUp }] =
-    useMarkAsPickedUpMutation();
-  const [makeTransitTrip, { isLoading: isTransit }] =
-    useMakeTransitTripMutation();
-  const [completeRide, { isLoading: isCompleting }] = useCompleteRideMutation();
-  const [markAsPaid, { isLoading: isMarkingPaid }] = useMarkAsPaidMutation();
 
-  const {
-    data: ride,
-    isLoading,
-    refetch,
-  } = useGetRidesByDriverQuery(undefined);
-
-  console.log(ride);
+  const { data: ride, isLoading } = useGetRidesByRiderQuery(undefined);
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading ride status...</div>;
   }
-
-  // ... your existing imports and code ...
-
+  console.log("ride----->", ride);
+  if (!ride) {
+    return <div>No ride data found.</div>;
+  }
   if (!ride) {
     return (
       <div className="">
@@ -117,8 +98,8 @@ export function DriverTracking() {
               <div className="w-48 h-48 bg-primary/10 rounded-full flex items-center justify-center">
                 <Car className="h-24 w-24 text-primary/60" />
               </div>
-              <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center">
-                <Clock className="h-8 w-8 text-yellow-600" />
+              <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center">
+                <Clock className="h-8 w-8 text-blue-600" />
               </div>
             </div>
 
@@ -127,21 +108,21 @@ export function DriverTracking() {
                 No Active Rides
               </h2>
               <p className="text-xl text-muted-foreground max-w-md">
-                You're online and ready to accept ride requests
+                Ready to book your next ride? Find a driver nearby!
               </p>
-              <div className="flex items-center justify-center gap-2 text-green-600">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="font-medium">Online and Available</span>
+              <div className="flex items-center justify-center gap-2 text-blue-600">
+                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                <span className="font-medium">Ready to Ride</span>
               </div>
             </div>
 
             <Button
               size="lg"
               className="mt-4"
-              onClick={() => navigate("/driver/available-rides")}
+              onClick={() => navigate("/rider/book-ride")}
             >
-              <User className="h-5 w-5 mr-2" />
-              Go to Available Rides
+              <MapPin className="h-5 w-5 mr-2" />
+              Book a New Ride
             </Button>
           </div>
 
@@ -155,43 +136,43 @@ export function DriverTracking() {
                 </h3>
                 <div className="space-y-3">
                   <Button
-                    onClick={() => navigate("/driver/ride-history")}
+                    onClick={() => navigate("/rider/ride-history")}
                     variant="outline"
                     className="w-full justify-start"
                   >
                     <Clock className="h-4 w-4 mr-2" />
-                    View Earnings History
+                    View Ride History
                   </Button>
                   <Button
-                    onClick={() => navigate("/updateProfile")}
+                    onClick={() => navigate("/rider/favorites")}
                     variant="outline"
                     className="w-full justify-start"
                   >
-                    <User className="h-4 w-4 mr-2" />
-                    Update Profile
+                    <Star className="h-4 w-4 mr-2" />
+                    Favorite Drivers
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
             {/* Tips Card */}
-            <Card className="border border-dashed border-yellow-200 bg-yellow-50">
+            <Card className="border border-dashed border-blue-200 bg-blue-50">
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-yellow-800 mb-2">
-                  💡 Tips for More Rides
+                <h3 className="text-lg font-semibold text-blue-800 mb-2">
+                  💡 Tips for Better Rides
                 </h3>
-                <ul className="space-y-2 text-sm text-yellow-700">
+                <ul className="space-y-2 text-sm text-blue-700">
                   <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
-                    Stay in high-demand areas during peak hours
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5"></div>
+                    Be ready at pickup location when driver arrives
                   </li>
                   <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
-                    Keep your vehicle clean and well-maintained
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5"></div>
+                    Confirm your destination with the driver
                   </li>
                   <li className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1.5"></div>
-                    Maintain a high rating for better matching
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5"></div>
+                    Rate your driver after the ride
                   </li>
                 </ul>
               </CardContent>
@@ -199,45 +180,56 @@ export function DriverTracking() {
           </div>
         </div>
 
-        {/* Bottom Section - What to Expect */}
+        {/* Bottom Section - How It Works */}
         <div className="mt-12 max-w-4xl mx-auto">
           <Card className="border border-border">
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold text-card-foreground mb-4 text-center">
-                What happens when you get a ride request?
+                How ride tracking works?
               </h3>
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid md:grid-cols-4 gap-6">
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                    <Phone className="h-6 w-6 text-blue-600" />
+                    <MapPin className="h-6 w-6 text-blue-600" />
                   </div>
                   <h4 className="font-semibold text-card-foreground">
-                    1. Notification
+                    1. Book Ride
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    You'll get an instant notification with ride details
+                    Enter your pickup and destination
                   </p>
                 </div>
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                    <MapPin className="h-6 w-6 text-green-600" />
+                    <User className="h-6 w-6 text-green-600" />
                   </div>
                   <h4 className="font-semibold text-card-foreground">
-                    2. Accept & Navigate
+                    2. Driver Assigned
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    Accept the ride and navigate to pickup location
+                    Get matched with nearby driver
                   </p>
                 </div>
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
-                    <User className="h-6 w-6 text-purple-600" />
+                    <Car className="h-6 w-6 text-purple-600" />
                   </div>
                   <h4 className="font-semibold text-card-foreground">
-                    3. Complete & Earn
+                    3. Track Live
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    Complete the ride and get paid instantly
+                    See driver location and ETA
+                  </p>
+                </div>
+                <div className="text-center space-y-3">
+                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto">
+                    <Star className="h-6 w-6 text-orange-600" />
+                  </div>
+                  <h4 className="font-semibold text-card-foreground">
+                    4. Rate & Pay
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Complete ride and rate driver
                   </p>
                 </div>
               </div>
@@ -247,97 +239,35 @@ export function DriverTracking() {
       </div>
     );
   }
-
-  // status chnage function
-
-  // Define error type
-  type ApiError = {
-    data?: {
-      message?: string;
-    };
-  };
-
-  const handleMarkAsPickedUp = async (rideId: string) => {
-    try {
-      console.log("rideId", rideId);
-      const res = await markAsPickedUp(rideId).unwrap();
-      console.log(res);
-      toast.success(res?.message || "Rider picked up successfully!");
-      refetch();
-    } catch (error: unknown) {
-      console.log(error);
-      const errorMessage =
-        (error as ApiError)?.data?.message ||
-        "Failed to mark as picked up. Please try again.";
-      toast.error(errorMessage);
-    }
-  };
-
-  const handleMakeTransit = async (rideId: string) => {
-    try {
-      const res = await makeTransitTrip(rideId).unwrap();
-      console.log(res);
-      toast.success(res?.message || "Trip started successfully!");
-      refetch();
-    } catch (error: unknown) {
-      console.log(error);
-      const errorMessage =
-        (error as ApiError)?.data?.message ||
-        "Failed to start trip. Please try again.";
-      toast.error(errorMessage);
-    }
-  };
-
-  const handleCompleteRide = async (rideId: string) => {
-    try {
-      const res = await completeRide(rideId).unwrap();
-      console.log(res);
-      toast.success(res?.message || "Ride completed successfully!");
-      refetch();
-    } catch (error: unknown) {
-      console.log(error);
-      const errorMessage =
-        (error as ApiError)?.data?.message ||
-        "Failed to complete ride. Please try again.";
-      toast.error(errorMessage);
-    }
-  };
-
-  const handleMarkAsPaid = async (rideId: string) => {
-    try {
-      const res = await markAsPaid(rideId).unwrap();
-      console.log(res);
-      toast.success(res?.message || "Payment confirmed!");
-      refetch();
-    } catch (error: unknown) {
-      console.log(error);
-      const errorMessage =
-        (error as ApiError)?.data?.message ||
-        "Failed to mark as paid. Please try again.";
-      toast.error(errorMessage);
-    }
-  };
-
   const currentStatus = ride.status as RideStatus;
   const statusConfig = statusConfigs[currentStatus];
-  const isAnyLoading =
-    isPickingUp || isTransit || isCompleting || isMarkingPaid;
+
+  if (!statusConfig) {
+    console.error(`Status config missing for: ${currentStatus}`);
+    return <div>Error: Invalid status configuration.</div>;
+  }
+  const isDriverDataAvailable =
+    ride?.driver && Object.keys(ride.driver).length > 0;
   return (
     <div className="">
       {/* Header */}
       <div className="text-center mb-8">
-        <PageHeader title="Ride in Progress"></PageHeader>
+        <PageHeader title="Your Ride in Progress"></PageHeader>
         <Badge
           className={`${statusConfig.bgColor} ${statusConfig.color} text-lg py-2 px-4 mt-3`}
         >
           {statusConfig.label}
-          {isAnyLoading && " (Updating...)"}
         </Badge>
         <div className="mt-2 text-muted-foreground">
-          Cost : {ride?.fare} Taka
+          Fare: {ride?.fare} Taka
         </div>
       </div>
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div
+        className={`grid gap-8 ${
+          isDriverDataAvailable ? "lg:grid-cols-3" : "lg:grid-cols-2"
+        }`}
+      >
+        {" "}
         {/* Left Column - Ride Info & Progress */}
         <div className="lg:col-span-2 space-y-6">
           {/* Progress Steps */}
@@ -402,7 +332,7 @@ export function DriverTracking() {
             <CardHeader>
               <CardTitle className="text-card-foreground flex items-center gap-2">
                 <Navigation className="h-5 w-5 text-primary" />
-                Route
+                Your Route
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -410,7 +340,7 @@ export function DriverTracking() {
                 <div className="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
                 <div className="flex-1">
                   <div className="text-sm font-medium text-card-foreground">
-                    Pickup
+                    Pickup Location
                   </div>
                   <div className="text-muted-foreground">
                     {ride.pickupLocation.address}
@@ -431,136 +361,95 @@ export function DriverTracking() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Right Column - Rider & Actions */}
-        <div className="space-y-6">
-          {/* Rider Information */}
-          <Card className="border border-border">
-            <CardHeader>
-              <CardTitle className="text-card-foreground flex items-center gap-2">
-                <User className="h-5 w-5 text-primary" />
-                Rider Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                  <User className="h-8 w-8 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-card-foreground mb-1">
-                    {ride.rider.name}
-                  </h3>
-                  <div className="text-sm text-muted-foreground">
-                    {ride.rider.phone}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    {ride.rider.email}
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-2">
-                <a
-                  href={`tel:${ride?.rider?.phone}`}
-                  className="flex-1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    size="sm"
-                    asChild
-                  >
-                    <span className="flex items-center justify-center">
-                      <Phone className="h-4 w-4 mr-2" />
-                      Call Driver
-                    </span>
-                  </Button>
-                </a>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Driver Actions */}
-          <Card className="border border-border">
-            <CardHeader>
-              <CardTitle className="text-card-foreground">
-                Driver Actions
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {currentStatus === "accepted" && (
-                <>
-                  <Button
-                    className="w-full"
-                    variant="outline"
-                    onClick={() => ride?._id && handleMarkAsPickedUp(ride?._id)}
-                    disabled={isPickingUp}
-                  >
-                    <Package className="h-4 w-4 mr-2" />
-                    {isPickingUp ? "Updating..." : "Start Trip / Picked Up"}
-                  </Button>
-                </>
-              )}
-
-              {currentStatus === "picked_up" && (
-                <Button
-                  className="w-full"
-                  variant="outline"
-                  onClick={() => ride?._id && handleMakeTransit(ride?._id)}
-                  disabled={isTransit}
-                >
-                  <Car className="h-4 w-4 mr-2" />
-                  {isTransit ? "Starting..." : "Start Trip"}
-                </Button>
-              )}
-
-              {currentStatus === "in_transit" && (
-                <Button
-                  className="w-full"
-                  variant="default"
-                  onClick={() => ride?._id && handleCompleteRide(ride?._id)}
-                  disabled={isCompleting}
-                >
-                  <CheckCircle2 className="h-4 w-4 mr-2" />
-                  {isCompleting ? "Completing..." : "Complete Ride"}
-                </Button>
-              )}
-
-              {currentStatus === "completed" && (
-                <Button
-                  className="w-full"
-                  variant="default"
-                  onClick={() => ride?._id && handleMarkAsPaid(ride?._id)}
-                  disabled={isMarkingPaid}
-                >
-                  <CreditCard className="h-4 w-4 mr-2" />
-                  {isMarkingPaid ? "Updating..." : "Mark as Paid"}
-                </Button>
-              )}
-
-              {currentStatus === "paid" && (
-                <div className="text-center text-green-600 font-medium">
-                  Ride Completed Successfully!
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Ride Information */}
-          <Card className="border border-border">
-            <CardHeader>
-              <CardTitle className="text-card-foreground">
-                Ride Details
-              </CardTitle>
-            </CardHeader>
+        {/* Right Column - Driver Info & Actions */}
+        {isDriverDataAvailable && (
+          <div className="space-y-6">
+            {/* Driver Information */}
             <Card className="border border-border">
               <CardHeader>
                 <CardTitle className="text-card-foreground flex items-center gap-2">
-                  <History className="h-5 w-5 text-primary" />
+                  <User className="h-5 w-5 text-primary" />
+                  Your Driver
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {ride.driver ? (
+                  <>
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                        <User className="h-8 w-8 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-card-foreground mb-1">
+                          {ride.driver.name}
+                        </h3>
+                        <div className="text-sm text-muted-foreground">
+                          {ride.driver.phone}
+                        </div>
+                        <div className="flex items-center gap-1 mt-1">
+                          <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                          <span className="text-sm text-muted-foreground">
+                            {ride.driver.rating || "4.8"} •{" "}
+                            {ride.driver.totalTrips || "100+"} trips
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Vehicle Info */}
+                    <div className="bg-muted/50 rounded-lg p-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Car className="h-4 w-4 text-primary" />
+                        <span className="font-medium text-card-foreground">
+                          {ride.driver.vehicle?.model || "Toyota Corolla"}
+                        </span>
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {ride.driver.vehicle?.color || "White"} •{" "}
+                        {ride.driver.vehicle?.licensePlate || "DHK-1234"}
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-2">
+                      <a
+                        href={`tel:${ride?.drier?.number}`}
+                        className="flex-1"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                          size="sm"
+                          asChild
+                        >
+                          <span className="flex items-center justify-center">
+                            <Phone className="h-4 w-4 mr-2" />
+                            Call Driver
+                          </span>
+                        </Button>
+                      </a>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-4">
+                    <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-2">
+                      <Clock className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <p className="text-muted-foreground">
+                      Waiting for driver assignment...
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Ride Information */}
+            <Card className="border border-border">
+              <CardHeader>
+                <CardTitle className="text-card-foreground flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-primary" />
                   Status History
                 </CardTitle>
               </CardHeader>
@@ -636,8 +525,33 @@ export function DriverTracking() {
                 </div>
               </CardContent>
             </Card>
-          </Card>
-        </div>
+
+            {/* Ride Actions for Rider */}
+            {currentStatus === "completed" && (
+              <Card className="border border-border">
+                <CardHeader>
+                  <CardTitle className="text-card-foreground">
+                    Rate Your Ride
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-center space-x-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className="h-8 w-8 text-yellow-400 cursor-pointer hover:scale-110 transition-transform"
+                      />
+                    ))}
+                  </div>
+                  <Button className="w-full">
+                    <Star className="h-4 w-4 mr-2" />
+                    Submit Rating
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,14 @@
 import type { ISidebarItem } from "@/const";
-import RideRequest from "@/pages/rider/RideRequest";
+import { BookRide } from "@/pages/rider/BookRide";
+import { RideHistory } from "@/pages/rider/RideHistory";
 import { RiderOverview } from "@/pages/rider/RiderOverview";
-import { Receipt, SquareTerminal } from "lucide-react";
+import { RiderTracking } from "@/pages/rider/RiderTracking";
+import {
+  ClipboardClock,
+  History,
+  Locate,
+  SquareTerminal,
+} from "lucide-react";
 
 export const riderSidBarItems: ISidebarItem[] = [
   {
@@ -11,9 +18,21 @@ export const riderSidBarItems: ISidebarItem[] = [
     component: RiderOverview,
   },
   {
-    title: "Ride Requests",
-    url: "/rider/ride-requests",
-    icon: Receipt,
-    component: RideRequest,
+    title: "Ride Book",
+    icon: ClipboardClock,
+    url: "/rider/book-ride",
+    component: BookRide,
+  },
+  {
+    title: "Ride Tracking",
+    icon: Locate,
+    url: "/rider/tracking",
+    component: RiderTracking,
+  },
+  {
+    title: "Ride History",
+    icon: History,
+    url: "/rider/ride-history",
+    component: RideHistory,
   },
 ];
