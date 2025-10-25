@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { IRide } from "@/types/ride";
+import { useGetMeQuery } from "@/redux/features/auth/auth.api";
 
 // Utils
 const calculateDistance = (
@@ -82,6 +83,12 @@ export function RideCard({
     }
   };
 
+  const { data: driverInfo, isLoading: driverInfoLoading } =
+    useGetMeQuery(undefined);
+  if (driverInfoLoading) {
+    <p>Loading...</p>;
+  }
+  console.log(driverInfo);
   return (
     <Card className="group transition-all duration-300 hover:shadow-[var(--shadow-card-hover)] border-border bg-card">
       <CardContent className="p-4">
@@ -138,7 +145,7 @@ export function RideCard({
           {ride.status === "requested" && (
             <Button
               onClick={() => onAccept(ride._id)}
-              disabled={acceptRideLoading}
+              disabled={acceptRideLoading || driverInfo?.isWorking}
               className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
               size="lg"
             >

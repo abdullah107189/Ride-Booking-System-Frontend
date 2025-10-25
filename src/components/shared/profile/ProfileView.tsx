@@ -24,7 +24,7 @@ import { ApprovalRequest } from "./ApprovalRequest";
 export function ProfileView() {
   const navigate = useNavigate();
   const { data: userData, isLoading, refetch } = useGetMeQuery(undefined);
-
+console.log("profile page user : ", userData);
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">

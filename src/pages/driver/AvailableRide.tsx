@@ -47,10 +47,10 @@ import { toast } from "sonner";
 export default function AvailableRides() {
   const { data: availableRides, isLoading: availableRidesLoading } =
     useGetAvailableRidesQuery(undefined);
-  console.log(availableRides);
+
   const navigate = useNavigate();
 
-  const [acceptRide, { isLoading: acceptRideLoading }] =
+  const [acceptRide, { isLoading: acceptRideLoading,  }] =
     useAcceptRideMutation();
 
   const dispatch = useDispatch();
@@ -70,7 +70,6 @@ export default function AvailableRides() {
       );
     }
   };
-
   if (availableRidesLoading) {
     return <div>Loading...</div>;
   }

@@ -17,11 +17,7 @@ interface DriverActionsProps {
 
 export function DriverActions({
   currentStatus,
-  onStatusUpdate,
-  rideId,
 }: DriverActionsProps) {
- 
-
   const getAvailableActions = () => {
     switch (currentStatus) {
       case "accepted":
@@ -79,7 +75,6 @@ export function DriverActions({
         {actions.map((action) => (
           <Button
             key={action.status}
-           
             className="w-full"
             variant={action.variant}
           >
