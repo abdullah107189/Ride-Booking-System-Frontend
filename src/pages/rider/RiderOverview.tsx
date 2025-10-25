@@ -12,15 +12,19 @@ import {
   Navigation,
   History,
   User,
-  Clock,
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { useGetRidesByRiderQuery } from "@/redux/features/ride/ride.api";
+import {
+  useGetRiderStatsQuery,
+  useGetRidesByRiderQuery,
+} from "@/redux/features/ride/ride.api";
 
 export function RiderOverview() {
   const { data: rides, isLoading } = useGetRidesByRiderQuery(undefined);
+  const { data: statsData, isLoading: riderStatusLoading } =
+    useGetRiderStatsQuery(undefined);
 
-  if (isLoading) {
+  if (isLoading || riderStatusLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -28,33 +32,28 @@ export function RiderOverview() {
     );
   }
 
-  console.log(rides);
+  console.log({ rides, statsData });
   // Calculate stats from actual data
+
   const stats = {
-    totalRides: rides.length,
-    totalSpent: rides.reduce(
-      (total: number, ride: any) => total + (ride.fare || 0),
-      0
-    ),
-    completedRides: rides.filter(
-      (ride: any) => ride.status === "completed" || ride.status === "paid"
-    ).length,
-    thisMonth: rides.filter((ride: any) => {
-      const rideDate = new Date(ride.createdAt);
-      const currentMonth = new Date().getMonth();
-      return rideDate.getMonth() === currentMonth;
-    }).length,
+    totalRides: statsData?.data?.totalRides || 0,
+    completedRides: statsData?.data?.completedRides || 0,
+    totalSpent: statsData?.data?.totalSpent || 0,
+    thisMonthRides: statsData?.data?.thisMonthRides || 0,
+    favoriteDestination: statsData?.data?.favoriteDestination || "No rides yet",
+    monthlyData: statsData?.data?.monthlyData || [],
   };
+  // Usage in component
+  console.log(stats.totalRides); // 15
+  console.log(stats.completedRides); // 12
+  console.log(stats.totalSpent); // 1850
+  console.log(stats.thisMonthRides); // 3
+  console.log(stats.favoriteDestination); // "bonani"
 
   // Get ongoing ride
-  const ongoingRide = rides.find((ride: any) =>
-    ["requested", "accepted", "picked_up", "in_transit"].includes(ride.status)
-  );
-
-  // Get recent rides
-  const recentRides = rides
-    .filter((ride: any) => ["completed", "paid"].includes(ride.status))
-    .slice(0, 3);
+  const ONGOING_STATUSES = ["requested", "accepted", "picked_up", "in_transit"];
+  const isOngoing = rides && ONGOING_STATUSES.includes(rides.status);
+  const ongoingRide = isOngoing ? rides : undefined;
 
   return (
     <div className="space-y-6">
@@ -111,7 +110,7 @@ export function RiderOverview() {
                 <p className="text-sm font-medium text-muted-foreground">
                   This Month
                 </p>
-                <p className="text-2xl font-bold">{stats.thisMonth}</p>
+                <p className="text-2xl font-bold">{stats.thisMonthRides}</p>
               </div>
               <TrendingUp className="h-8 w-8 text-purple-600" />
             </div>
@@ -200,42 +199,6 @@ export function RiderOverview() {
 
         {/* Right Column */}
         <div className="space-y-6">
-          {/* Recent Rides */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Rides</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {recentRides.length > 0 ? (
-                recentRides.map((ride: any) => (
-                  <div
-                    key={ride._id}
-                    className="flex justify-between items-center p-3 border rounded-lg"
-                  >
-                    <div>
-                      <div className="font-medium text-sm">
-                        {ride.pickupLocation.address} →{" "}
-                        {ride.destinationLocation.address}
-                      </div>
-                      <div className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {new Date(ride.createdAt).toLocaleDateString()}
-                      </div>
-                    </div>
-                    <Badge variant="secondary">৳{ride.fare}</Badge>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-muted-foreground text-center py-4">
-                  No recent rides
-                </p>
-              )}
-              <Button asChild variant="outline" className="w-full">
-                <Link to="/rider/ride-history">View All History</Link>
-              </Button>
-            </CardContent>
-          </Card>
-
           {/* Popular Destinations */}
           <Card>
             <CardHeader>
