@@ -1,8 +1,10 @@
 // components/CTASection.tsx
 import { Button } from "@/components/ui/button";
 import { Smartphone, Download } from "lucide-react";
+import { useNavigate } from "react-router";
 
 export function CTASection() {
+  const navigate = useNavigate();
   return (
     <section className="py-20 bg-gradient-to-r from-accent to-[oklch(0.70_0.12_145)] text-accent-foreground">
       <div className="mxw">
@@ -26,6 +28,7 @@ export function CTASection() {
               <Button
                 size="lg"
                 variant="outline"
+                onClick={() => navigate("/about")}
                 className="border-background text-foreground hover:bg-background hover:text-foreground"
               >
                 Learn More
