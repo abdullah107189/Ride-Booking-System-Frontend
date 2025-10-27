@@ -1,73 +1,102 @@
-# React + TypeScript + Vite
+# 🚗 RideShare - Complete Ride Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack ride-sharing platform built with **React 19**, **TypeScript**, **Redux Toolkit**, and **Tailwind CSS**. Featuring separate dashboards for Riders, Drivers, and Administrators with real-time ride tracking, payment processing, and comprehensive management capabilities.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🎓 Assignment Project - Advanced Web Technologies
 
-## React Compiler
+### 📋 Project Overview
+This project implements a complete ride-sharing ecosystem with three distinct user roles, real-time tracking, secure authentication, and comprehensive administrative controls as per the assignment requirements.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Core Features Implemented
 
-## Expanding the ESLint configuration
+### 🌐 Public Landing Pages (No Authentication Required)
+- **Homepage** - 5+ distinct sections: Hero Banner, How-it-works, Features, Testimonials, CTA
+- **About Us** - Company background, mission, and team information
+- **Features** - Detailed breakdown of Rider, Driver, and Admin capabilities
+- **Contact** - Fully validated contact form with simulated submission
+- **FAQ** - Searchable frequently asked questions section
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🔐 Authentication & Authorization System
+- **JWT-based Authentication** - Secure login/registration with role selection
+- **Role-based Access Control** - Rider, Driver, and Admin specific dashboards
+- **Account Status Handling** - Blocked/suspended user redirection
+- **Driver Online/Offline Status** - Control ride acceptance availability
+- **Persistent Sessions** - Maintain authentication state across browser sessions
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🚴‍♂️ Rider Features
+- **Ride Booking** - Pickup/destination selection with fare estimation
+- **Real-time Tracking** - Live ride status updates with driver details
+- **Ride History** - Paginated list with search and filter capabilities
+- **Profile Management** - Edit personal information and change password
+- **Payment Methods** - Secure payment option management
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 🚗 Driver Features
+- **Availability Toggle** - Online/Offline status control
+- **Ride Acceptance** - Accept/reject incoming ride requests
+- **Ride Management** - Status updates (Accepted → Picked Up → In Transit → Completed)
+- **Earnings Dashboard** - Visual charts for daily/weekly/monthly earnings
+- **Vehicle Management** - Update vehicle details and documents
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 👨‍💼 Admin Features
+- **User Management** - Comprehensive user CRUD operations with search/filter
+- **Ride Oversight** - View all platform rides with advanced filtering
+- **Analytics Dashboard** - Data visualizations for platform metrics
+- **System Monitoring** - Platform performance and activity tracking
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 🆘 Safety Features
+- **Emergency SOS Button** - Visible during active rides
+- **Live Location Sharing** - Real-time GPS location sharing with emergency contacts
+- **Multiple Emergency Options** - Police, emergency contacts, location sharing
+- **Safety Settings** - Configurable emergency contacts and preferences
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🛠 Complete Tech Stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Frontend Framework & Language
+- **React 19** - Latest React with concurrent features and hooks
+- **TypeScript** - Full type safety with strict configuration
+- **React Router v7** - Declarative routing with protected routes
+
+### State Management & API
+- **Redux Toolkit** - Modern Redux with simplified syntax
+- **RTK Query** - Powerful data fetching and caching
+- **Axios** - HTTP client for API communications
+
+### UI & Styling
+- **Tailwind CSS v4** - Utility-first CSS framework with custom configuration
+- **Shadcn/ui** - Reusable component library built on Radix UI
+- **Radix UI Primitives** - Unstyled, accessible component foundations
+- **Lucide React** - Beautiful & consistent icons
+- **Framer Motion** - Smooth animations and transitions
+
+### Forms & Validation
+- **React Hook Form** - High-performance form management
+- **Zod** - TypeScript-first schema validation
+- **@hookform/resolvers** - Zod integration for form validation
+
+### Notifications & UX
+- **Sonner** - Beautiful toast notifications
+- **Skeleton Loaders** - Loading states for better UX
+- **Error Boundaries** - Graceful error handling
+
+### Build Tools & Development
+- **Vite** - Fast development server and build tool
+- **TypeScript ESLint** - Code quality and type checking
+- **Tailwind CSS Vite Plugin** - Optimized CSS processing
+
+## 🚀 Quick Start Guide
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- Modern web browser
+
+![RideShare Banner](https://res.cloudinary.com/dx8td9daf/image/upload/v1761540252/14220155-92c8-4471-82d6-c5ad3780b59d_ukrlii.jpg)
+
+### Installation & Setup
+
+1. **Clone and Install**
+   ```bash
+   git clone https://github.com/abdullah107189/Ride-Booking-System-Frontend.git
+   cd ride-management-system-frontend
+   npm install
