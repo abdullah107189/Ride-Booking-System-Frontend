@@ -219,7 +219,6 @@ export function EarningsDashboard() {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    // CustomPieLabelRenderProps ব্যবহার করা হয়েছে
                     label={
                       ((props: CustomPieLabelRenderProps) =>
                         `${props.name} (${(props.percent * 100).toFixed(
