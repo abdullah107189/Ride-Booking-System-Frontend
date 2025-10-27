@@ -97,7 +97,6 @@ export function DriverTracking() {
     refetch,
   } = useGetRidesByDriverQuery(undefined);
 
-  console.log(ride);
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -259,9 +258,7 @@ export function DriverTracking() {
 
   const handleMarkAsPickedUp = async (rideId: string) => {
     try {
-      console.log("rideId", rideId);
       const res = await markAsPickedUp(rideId).unwrap();
-      console.log(res);
       toast.success(res?.message || "Rider picked up successfully!");
       refetch();
     } catch (error: unknown) {
@@ -276,7 +273,6 @@ export function DriverTracking() {
   const handleMakeTransit = async (rideId: string) => {
     try {
       const res = await makeTransitTrip(rideId).unwrap();
-      console.log(res);
       toast.success(res?.message || "Trip started successfully!");
       refetch();
     } catch (error: unknown) {
@@ -291,7 +287,6 @@ export function DriverTracking() {
   const handleCompleteRide = async (rideId: string) => {
     try {
       const res = await completeRide(rideId).unwrap();
-      console.log(res);
       toast.success(res?.message || "Ride completed successfully!");
       refetch();
     } catch (error: unknown) {
@@ -306,7 +301,6 @@ export function DriverTracking() {
   const handleMarkAsPaid = async (rideId: string) => {
     try {
       const res = await markAsPaid(rideId).unwrap();
-      console.log(res);
       toast.success(res?.message || "Payment confirmed!");
       refetch();
     } catch (error: unknown) {

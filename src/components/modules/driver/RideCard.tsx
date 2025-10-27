@@ -88,7 +88,6 @@ export function RideCard({
   if (driverInfoLoading) {
     <p>Loading...</p>;
   }
-  console.log(driverInfo);
   return (
     <Card className="group transition-all duration-300 hover:shadow-[var(--shadow-card-hover)] border-border bg-card">
       <CardContent className="p-4">

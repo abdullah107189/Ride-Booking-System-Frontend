@@ -91,7 +91,6 @@ export function RiderTracking() {
   if (isLoading) {
     return <div>Loading ride status...</div>;
   }
-  console.log("ride----->", ride);
   if (!ride) {
     return (
       <div className="space-y-8">
@@ -368,21 +367,6 @@ export function RiderTracking() {
     navigate(`/rate-ride/${rideId}`);
   };
 
-  const handleContactDriver = (driverId: string) => {
-    // Implement call functionality
-    console.log("Calling driver:", driverId);
-  };
-
-  const handleShareLocation = (rideId: string) => {
-    // Implement location sharing
-    console.log("Sharing location for ride:", rideId);
-  };
-
-  const handleSOS = (rideId: string) => {
-    // Implement SOS functionality
-    console.log("SOS activated for ride:", rideId);
-  };
-
   const handleBookAgain = (ride: any) => {
     // Pre-fill booking form with same details
     navigate("/book-ride", {
@@ -423,33 +407,21 @@ export function RiderTracking() {
             )}
 
             {currentStatus === "accepted" && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleContactDriver(ride?.driver?._id)}
-              >
+              <Button variant="outline" size="sm">
                 <Phone className="h-4 w-4 mr-2" />
                 Call Driver
               </Button>
             )}
 
             {currentStatus === "picked_up" && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleShareLocation(ride?._id)}
-              >
+              <Button variant="outline" size="sm">
                 <MapPin className="h-4 w-4 mr-2" />
                 Share Location
               </Button>
             )}
 
             {currentStatus === "in_transit" && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleSOS(ride?._id)}
-              >
+              <Button variant="outline" size="sm">
                 <Shield className="h-4 w-4 mr-2" />
                 SOS
               </Button>

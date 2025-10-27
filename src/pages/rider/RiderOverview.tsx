@@ -32,7 +32,6 @@ export function RiderOverview() {
     );
   }
 
-  console.log({ rides, statsData });
   // Calculate stats from actual data
 
   const stats = {
@@ -43,12 +42,6 @@ export function RiderOverview() {
     favoriteDestination: statsData?.data?.favoriteDestination || "No rides yet",
     monthlyData: statsData?.data?.monthlyData || [],
   };
-  // Usage in component
-  console.log(stats.totalRides); // 15
-  console.log(stats.completedRides); // 12
-  console.log(stats.totalSpent); // 1850
-  console.log(stats.thisMonthRides); // 3
-  console.log(stats.favoriteDestination); // "bonani"
 
   // Get ongoing ride
   const ONGOING_STATUSES = ["requested", "accepted", "picked_up", "in_transit"];

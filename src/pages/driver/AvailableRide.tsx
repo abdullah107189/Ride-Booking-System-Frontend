@@ -63,7 +63,6 @@ export default function AvailableRides() {
   const handleAcceptRide = async (rideId: string) => {
     try {
       const res = await acceptRide(rideId).unwrap();
-      console.log(res);
       toast(res?.message || "Ride Accepted!");
       dispatch(driverApi.util.resetApiState());
       navigate(`/driver/tracked-rides`);

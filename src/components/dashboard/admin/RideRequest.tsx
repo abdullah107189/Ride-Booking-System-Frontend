@@ -86,7 +86,6 @@ export function SimpleRideRequestForm() {
         },
       };
       const res = await rideRequest(rideRequestData).unwrap();
-      console.log("Ride request:", res);
 
       toast.success("Ride Finding! 🚗", {
         description: "Driver will arrive shortly",

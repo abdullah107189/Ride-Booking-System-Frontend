@@ -20,11 +20,11 @@ import {
 } from "lucide-react";
 import { useGetMeQuery } from "@/redux/features/auth/auth.api";
 import { ApprovalRequest } from "./ApprovalRequest";
+import { ChangePasswordForm } from "./changePasswordForm";
 
 export function ProfileView() {
   const navigate = useNavigate();
   const { data: userData, isLoading, refetch } = useGetMeQuery(undefined);
-console.log("profile page user : ", userData);
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -307,6 +307,8 @@ console.log("profile page user : ", userData);
               </div>
             </CardContent>
           </Card>
+          {/* Add Change Password Form */}
+          <ChangePasswordForm />
         </div>
       </div>
     </div>
