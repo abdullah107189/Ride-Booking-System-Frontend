@@ -38,7 +38,21 @@ export const adminApi = baseApi.injectEndpoints({
 
     // ==============Rides============
     getAllRides: builder.query({
-      query: () => ({ url: "/admin/getAllRide", method: "GET" }),
+      query: (params?: {
+        page?: number;
+        limit?: number;
+        status?: string;
+        riderName?: string;
+        driverName?: string;
+        startDate?: string;
+        endDate?: string;
+        minFare?: number;
+        maxFare?: number;
+      }) => ({
+        url: "/admin/getAllRide",
+        method: "GET",
+        params: params || {},
+      }),
       providesTags: ["RIDES"],
       transformResponse: (res) => res.data,
     }),
