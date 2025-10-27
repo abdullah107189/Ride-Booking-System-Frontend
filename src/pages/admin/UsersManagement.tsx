@@ -28,11 +28,14 @@ import {
   Clock,
   XCircle,
   ShieldCheck,
+  Wifi,
+  WifiOff,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
   useApproveDriverMutation,
   useChangeBlockStatusMutation,
+  useChangeOnlineStatusMutation,
   useGetAllUsersQuery,
   useRejectDriverMutation,
 } from "@/redux/features/admin/admin.api";
@@ -45,6 +48,10 @@ export function UsersManagement() {
   const [changeBlockStatus] = useChangeBlockStatusMutation();
   const [approveDriver] = useApproveDriverMutation();
   const [rejectDriver] = useRejectDriverMutation();
+  const [changeOnlineStatus] = useChangeOnlineStatusMutation();
+  const [changeOnlineStatusLoading, setChangeOnlineStatusLoading] = useState<
+    string | null
+  >(null);
 
   const users = userData?.users || [];
 
@@ -59,6 +66,22 @@ export function UsersManagement() {
     }
   };
 
+  const handleToggleOnlineStatus = async (
+    userId: string,
+    currentStatus: boolean
+  ) => {
+    setChangeOnlineStatusLoading(userId);
+    try {
+      await changeOnlineStatus(userId).unwrap();
+      toast.success(
+        `User set ${currentStatus ? "offline" : "online"} successfully`
+      );
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to update online status");
+    } finally {
+      setChangeOnlineStatusLoading(null);
+    }
+  };
   const handleApproveDriver = async (driverId: string) => {
     try {
       await approveDriver(driverId).unwrap();
@@ -138,6 +161,7 @@ export function UsersManagement() {
   // Count stats for dashboard
   const stats = {
     total: users.length,
+    online: users.filter((user: any) => user.isOnline).length,
     pending: users.filter((user: any) => user.approvalStatus === "pending")
       .length,
     approved: users.filter((user: any) => user.isApproved).length,
@@ -169,6 +193,14 @@ export function UsersManagement() {
               {stats.total}
             </div>
             <div className="text-sm text-muted-foreground">Total Users</div>
+          </CardContent>
+        </Card>
+        <Card className="border border-border">
+          <CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-green-600">
+              {stats.online}
+            </div>
+            <div className="text-sm text-muted-foreground">Online</div>
           </CardContent>
         </Card>
         <Card className="border border-border">
@@ -247,6 +279,7 @@ export function UsersManagement() {
                   <TableHead>User</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead>Account Status</TableHead>
+                  <TableHead>Online Status</TableHead>
                   <TableHead>Approval Status</TableHead>
                   <TableHead>Requested</TableHead>
                   <TableHead>Joined</TableHead>
@@ -299,6 +332,43 @@ export function UsersManagement() {
                           }
                         >
                           {user.isBlocked ? "Blocked" : "Active"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant="outline"
+                          className={`flex items-center gap-1 w-20 justify-center cursor-pointer transition-all ${
+                            changeOnlineStatusLoading === user._id
+                              ? "bg-muted text-muted-foreground border-muted-foreground/20"
+                              : user.isOnline
+                              ? "bg-green-500/10 text-green-600 border-green-200 hover:bg-green-500/20"
+                              : "bg-gray-500/10 text-gray-600 border-gray-200 hover:bg-gray-500/20"
+                          }`}
+                          onClick={() =>
+                            handleToggleOnlineStatus(user._id, user.isOnline)
+                          }
+                        >
+                          {changeOnlineStatusLoading === user._id ? (
+                            // Specific loader for this button only
+                            <div className="flex items-center gap-1">
+                              <div className="w-3 h-3 border-2 border-muted-foreground/30 border-t-muted-foreground rounded-full animate-spin"></div>
+                              <span className="text-xs">Updating</span>
+                            </div>
+                          ) : (
+                            <>
+                              {user.isOnline ? (
+                                <>
+                                  <Wifi className="h-3 w-3" />
+                                  Online
+                                </>
+                              ) : (
+                                <>
+                                  <WifiOff className="h-3 w-3" />
+                                  Offline
+                                </>
+                              )}
+                            </>
+                          )}
                         </Badge>
                       </TableCell>
                       <TableCell>

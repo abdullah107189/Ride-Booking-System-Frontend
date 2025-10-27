@@ -28,6 +28,13 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["USERS"],
     }),
+    changeOnlineStatus: builder.mutation({
+      query: (userId: string) => ({
+        url: `/admin/change-online-status/${userId}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["USERS"],
+    }),
 
     // ==============Rides============
     getAllRides: builder.query({
@@ -70,6 +77,7 @@ export const {
   useGetDriverRequestsQuery,
   useGetAllUsersQuery,
   useChangeBlockStatusMutation,
+  useChangeOnlineStatusMutation,
   useChangeApprovalStatusMutation,
   useGetAllRidesQuery,
   useCancelRideMutation,
