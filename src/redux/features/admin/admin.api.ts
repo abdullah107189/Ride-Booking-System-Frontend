@@ -71,6 +71,12 @@ export const adminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["USERS"],
     }),
+    getEarningsStats: builder.query({
+      query: (timeRange?: "daily" | "weekly" | "monthly") => ({
+        url: `/admin/earnings-stats?timeRange=${timeRange || "monthly"}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 export const {
@@ -81,6 +87,7 @@ export const {
   useChangeApprovalStatusMutation,
   useGetAllRidesQuery,
   useCancelRideMutation,
+  useGetEarningsStatsQuery,
   // status
   useGetPendingApprovalsQuery,
   useApproveDriverMutation,
