@@ -23,9 +23,10 @@ export default function Logout() {
 
   const handleLogout = async () => {
     try {
-      await logout(undefined).unwrap();
+      const res = await logout(undefined).unwrap();
+      console.log(res);
       dispatch(authApi.util.resetApiState());
-      toast.success("Logged out successfully!", {
+      toast.success(res.message || "Logged out successfully!", {
         description: "You have been logged out.",
       });
       navigate("/");
