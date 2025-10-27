@@ -20,16 +20,15 @@ export const rideApi = baseApi.injectEndpoints({
       providesTags: ["RIDES"],
     }),
 
-    // Get ride history for rider
     getRideHistory: builder.query({
       query: (params?: {
         page?: number;
         limit?: number;
         status?: string;
+        search?: string;
         startDate?: string;
-        endDate?: string;
-        sortBy?: string;
-        sortOrder?: string;
+        minFare?: number;
+        maxFare?: number;
       }) => ({
         url: "/rides/history",
         method: "GET",
