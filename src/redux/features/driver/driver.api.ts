@@ -20,9 +20,30 @@ export const driverApi = baseApi.injectEndpoints({
     }),
 
     getDriverRideHistory: builder.query({
-      query: () => ({
+      query: (params?: {
+        page?: number;
+        limit?: number;
+        status?: string;
+        search?: string;
+        startDate?: string;
+        endDate?: string;
+        minFare?: number;
+        maxFare?: number;
+      }) => ({
         url: `/drivers/driver-ride-history`,
         method: "GET",
+        params: params
+          ? {
+              page: params.page,
+              limit: params.limit,
+              status: params.status,
+              search: params.search,
+              startDate: params.startDate,
+              endDate: params.endDate,
+              minFare: params.minFare,
+              maxFare: params.maxFare,
+            }
+          : {},
       }),
       transformResponse: (response) => response.data,
       providesTags: ["DriverRideHistory"],
