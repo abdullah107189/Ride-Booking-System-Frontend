@@ -36,6 +36,12 @@ export const driverApi = baseApi.injectEndpoints({
       invalidatesTags: ["DRIVERS"],
     }),
 
+    getDriverEarningsStats: builder.query({
+      query: (timeRange?: "daily" | "weekly" | "monthly") => ({
+        url: `/drivers/earnings-stats?timeRange=${timeRange || "monthly"}`,
+        method: "GET",
+      }),
+    }),
     // ------------------------------------------------------
 
     acceptRide: builder.mutation({
@@ -89,4 +95,5 @@ export const {
   useMarkAsPaidMutation,
   useGetDriverRideHistoryQuery,
   useRequestApprovalMutation,
+  useGetDriverEarningsStatsQuery,
 } = driverApi;

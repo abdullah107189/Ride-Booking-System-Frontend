@@ -1,8 +1,9 @@
 import type { ISidebarItem } from "@/const";
 import AvailableRide from "@/pages/driver/AvailableRide";
+import DriverEarnings from "@/pages/driver/DriverEarnings";
 import { DriverHistory } from "@/pages/driver/DriverRideHistory";
 import { DriverTracking } from "@/pages/driver/DriverTracking";
-import { Car, History, SquareTerminal } from "lucide-react";
+import { Car, DollarSign, History, SquareTerminal } from "lucide-react";
 
 export const driverSidBarItems: ISidebarItem[] = [
   {
@@ -22,5 +23,11 @@ export const driverSidBarItems: ISidebarItem[] = [
     url: "/driver/ride-history",
     icon: History,
     component: DriverHistory,
+  },
+  {
+    title: "My Earnings",
+    url: "/driver/earnings",
+    icon: DollarSign,
+    component: DriverEarnings,
   },
 ];
