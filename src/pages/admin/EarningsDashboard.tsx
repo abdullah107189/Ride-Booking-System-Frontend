@@ -230,7 +230,7 @@ export function EarningsDashboard() {
                     fill="#8884d8"
                     dataKey="value"
                   >
-                    {vehicleChartData.map((entry: any, index: number) => (
+                    {vehicleChartData.map((index: number) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={COLORS[index % COLORS.length]}

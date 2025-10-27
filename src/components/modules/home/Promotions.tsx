@@ -1,7 +1,6 @@
 // components/Promotions.tsx
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar, Gift, Car, Zap } from "lucide-react";
+import { Gift, Car, Zap } from "lucide-react";
 
 const promotions = [
   {
