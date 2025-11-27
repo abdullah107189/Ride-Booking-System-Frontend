@@ -1,33 +1,48 @@
 // components/HeroSection.tsx
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+// Image variable for the full-screen background
 import heroSection from "@/assets/heroSection.jpg";
 import { useNavigate } from "react-router";
 
 export function HeroSection() {
   const navigate = useNavigate();
   return (
-    <section className="relative bg-gradient-to-br from-primary to-[oklch(0.65_0.15_250)] text-primary-foreground py-12 sm:py-16 md:py-20 lg:py-24">
-      <div className="mxw sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 items-center">
-          <div className="space-y-6 sm:space-y-8">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight sm:leading-tight">
+    // 1. Full-screen section with relative positioning
+    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+      {/* 2. Absolute positioned Background Image */}
+      <img
+        src={heroSection}
+        alt="Ride Management System Hero Image"
+        // Ensure image covers the entire section
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+
+      {/* 3. Dark Overlay for better text contrast */}
+      <div className="absolute inset-0 bg-black/70"></div>
+
+      {/* 4. Content Container (relative z-index to stay on top) */}
+      <div className="relative z-10 mxw px-4 sm:px-6 lg:px-8 py-20 sm:py-24 md:py-32 w-full">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="space-y-6 sm:space-y-8 text-white">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-tight">
               Ride With
-              <span className="text-background block sm:inline">
+              <span className="text-yellow-400 block sm:inline">
                 {" "}
                 Confidence
               </span>
               & Comfort
             </h1>
-            <p className="sm:text-lg md:text-xl text-foreground max-w-lg leading-relaxed">
+            <p className="sm:text-lg md:text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
               Book your ride in seconds. Experience premium transportation
               services with verified drivers and real-time tracking.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+
+            <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
               <Button
                 onClick={() => navigate("/rider/book-ride")}
                 size="lg"
-                className="bg-background text-foreground hover:bg-muted font-semibold w-full sm:w-auto"
+                className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-bold text-base sm:w-auto transition duration-300 shadow-xl hover:shadow-2xl"
               >
                 Book Now
                 <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
@@ -36,37 +51,38 @@ export function HeroSection() {
                 size="lg"
                 onClick={() => navigate("/about")}
                 variant="outline"
-                className="duration-100 transition border-background hover:bg-background hover:text-foreground text-muted-foreground w-full sm:w-auto"
+                className="duration-300 transition border-white text-white hover:bg-white hover:text-gray-900 font-semibold text-base sm:w-auto bg-transparent backdrop-blur-sm"
               >
-                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 transform rotate-180" />
                 About us
               </Button>
             </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-4 sm:gap-6 md:gap-8 text-sm">
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold">10K+</div>
-                <div className="text-foreground text-xs sm:text-sm">
-                  Happy Riders
-                </div>
+          </div>
+
+          {/* Stats Section - Moved under the main text block */}
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 md:gap-16 text-sm text-white">
+            <div className="text-center">
+              <div className="text-2xl sm:text-3xl font-bold text-yellow-400">
+                10K+
               </div>
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold">500+</div>
-                <div className="text-foreground text-xs sm:text-sm">
-                  Verified Drivers
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold">50+</div>
-                <div className="text-foreground text-xs sm:text-sm">Cities</div>
+              <div className="text-gray-200 text-xs sm:text-sm">
+                Happy Riders
               </div>
             </div>
-          </div>
-          <div className="relative order-first lg:order-last">
-            <img
-              src={heroSection}
-              alt="Ride Management System Hero Image"
-              className="w-full h-auto max-w-md mx-auto lg:max-w-none rounded-lg shadow-2xl"
-            />
+            <div className="text-center">
+              <div className="text-2xl sm:text-3xl font-bold text-yellow-400">
+                500+
+              </div>
+              <div className="text-gray-200 text-xs sm:text-sm">
+                Verified Drivers
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl sm:text-3xl font-bold text-yellow-400">
+                50+
+              </div>
+              <div className="text-gray-200 text-xs sm:text-sm">Cities</div>
+            </div>
           </div>
         </div>
       </div>
