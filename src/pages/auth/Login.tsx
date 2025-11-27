@@ -12,16 +12,26 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Mail, LogIn } from "lucide-react";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { loginSchema, type LoginFormValues } from "./login.schema";
 import { Link, useNavigate } from "react-router";
 import loginImage from "@/assets/Journey-cuate.png";
 import PasswordInput from "@/components/passwordInput";
 import Logo from "@/components/shared/Logo";
+import { useState } from "react";
+import { Mail, LogIn, Copy, Check, X } from "lucide-react";
+// Test credentials
+const TEST_CREDENTIALS = [
+  { role: "Admin", email: "admin@gmail.com", password: "asdfAa!1" },
+  { role: "Rider", email: "rider@gmail.com", password: "asdfAa!1" },
+  { role: "Driver", email: "driver@gmail.com", password: "asdfAa!1" },
+];
 
 export function LoginForm() {
   const [login, { isLoading }] = useLoginMutation();
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [isQuickLoginOpen, setIsQuickLoginOpen] = useState(false); // New state for modal
+  const navigate = useNavigate();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -30,7 +40,7 @@ export function LoginForm() {
       password: "",
     },
   });
-  const navigate = useNavigate();
+
   const onSubmit = async (data: LoginFormValues) => {
     try {
       // API call
@@ -39,12 +49,26 @@ export function LoginForm() {
       toast.success("Login successful! 🎉", {
         description: `Welcome back!`,
       });
-
       form.reset();
     } catch (error) {
       const errorAsAny = error as any;
       toast.error(errorAsAny?.data?.message || "Login failed");
     }
+  };
+
+  const handleQuickLogin = (email: string, password: string) => {
+    form.setValue("email", email);
+    form.setValue("password", password);
+    toast.info("Credentials filled!", {
+      description: "Click Sign In to login",
+    });
+  };
+
+  const copyToClipboard = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    toast.success("Copied to clipboard!");
+    setTimeout(() => setCopiedField(null), 2000);
   };
 
   return (
@@ -139,6 +163,139 @@ export function LoginForm() {
                   )}
                 </Button>
 
+                {/* Quick Login Section */}
+                <div className="border-t pt-6 mt-6">
+                  <div className="text-center mb-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setIsQuickLoginOpen(true)}
+                      className="w-full border-primary text-primary hover:bg-primary transition-all"
+                    >
+                      🚀 Quick Test Login
+                    </Button>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      For testing purposes only
+                    </p>
+                  </div>
+                </div>
+
+                {/* Quick Login Modal */}
+                {isQuickLoginOpen && (
+                  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-card rounded-lg max-w-md w-full p-6 animate-in fade-in-90 zoom-in-90">
+                      {/* Header */}
+                      <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-bold">Quick Test Login</h2>
+                        <button
+                          onClick={() => setIsQuickLoginOpen(false)}
+                          className="p-1 hover:bg-gray-100 rounded transition-colors"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      <p className="mb-4 text-sm">
+                        Choose a role to automatically fill credentials
+                      </p>
+
+                      {/* Credentials List */}
+                      <div className="space-y-3">
+                        {TEST_CREDENTIALS.map((cred, index) => (
+                          <div
+                            key={cred.role}
+                            className="border rounded-lg p-3 bg-muted/30 hover:bg-muted/50 transition-colors"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="font-medium text-sm bg-primary/10 text-primary px-2 py-1 rounded">
+                                {cred.role}
+                              </span>
+                              <Button
+                                type="button"
+                                size="sm"
+                                onClick={() => {
+                                  handleQuickLogin(cred.email, cred.password);
+                                  setIsQuickLoginOpen(false);
+                                }}
+                                className="h-7 text-xs bg-primary hover:bg-primary/90"
+                              >
+                                Use This
+                              </Button>
+                            </div>
+
+                            <div className="space-y-2">
+                              {/* Email with copy */}
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-muted-foreground w-12">
+                                  Email:
+                                </span>
+                                <code className="flex-1 text-xs bg-background px-2 py-1 rounded border">
+                                  {cred.email}
+                                </code>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6"
+                                  onClick={() =>
+                                    copyToClipboard(
+                                      cred.email,
+                                      `email-${index}`
+                                    )
+                                  }
+                                >
+                                  {copiedField === `email-${index}` ? (
+                                    <Check className="h-3 w-3 text-green-600" />
+                                  ) : (
+                                    <Copy className="h-3 w-3" />
+                                  )}
+                                </Button>
+                              </div>
+
+                              {/* Password with copy */}
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-muted-foreground w-12">
+                                  Pass:
+                                </span>
+                                <code className="flex-1 text-xs bg-background px-2 py-1 rounded border">
+                                  {cred.password}
+                                </code>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6"
+                                  onClick={() =>
+                                    copyToClipboard(
+                                      cred.password,
+                                      `password-${index}`
+                                    )
+                                  }
+                                >
+                                  {copiedField === `password-${index}` ? (
+                                    <Check className="h-3 w-3 text-green-600" />
+                                  ) : (
+                                    <Copy className="h-3 w-3" />
+                                  )}
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Close Button */}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsQuickLoginOpen(false)}
+                        className="w-full mt-4"
+                      >
+                        Close
+                      </Button>
+                    </div>
+                  </div>
+                )}
                 {/* Divider */}
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
@@ -152,7 +309,7 @@ export function LoginForm() {
                 </div>
 
                 {/* Social Login Buttons */}
-                <Button variant="outline" type="button" className="w-full">
+                {/* <Button variant="outline" type="button" className="w-full">
                   <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                     <path
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -172,7 +329,7 @@ export function LoginForm() {
                     />
                   </svg>
                   Google
-                </Button>
+                </Button> */}
 
                 {/* Sign Up Link */}
                 <p className="text-center text-sm text-muted-foreground">
